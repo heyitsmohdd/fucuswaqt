@@ -2,10 +2,10 @@
 
 import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
-import { SoundMixer } from '@/components/SoundMixer';
 import { TaskInput } from '@/components/TaskInput';
 import { StreakCounter } from '@/components/StreakCounter';
 import { BackgroundSwitcher } from '@/components/BackgroundSwitcher';
+import { IconDock } from '@/components/IconDock';
 import { useAppStore } from '@/stores/appStore';
 import { VIDEO_BACKGROUNDS } from '@/constants';
 
@@ -17,6 +17,9 @@ export default function Home() {
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Background Video */}
       <BackgroundVideo videoUrl={currentVideo.url} />
+
+      {/* Icon Dock */}
+      <IconDock />
 
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
@@ -33,7 +36,6 @@ export default function Home() {
 
         {/* Bottom Section */}
         <div className="w-full flex flex-col items-center gap-4">
-          <SoundMixer />
           <BackgroundSwitcher />
         </div>
       </div>
