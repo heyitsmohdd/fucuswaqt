@@ -2,16 +2,17 @@
 
 import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
-import { TaskInput } from '@/components/TaskInput';
+import { TaskTrigger } from '@/components/TaskTrigger';
 import { StreakCounter } from '@/components/StreakCounter';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
 import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
+import { TaskModal } from '@/components/TaskModal';
 import { useAppStore } from '@/stores/appStore';
 import { VIDEO_BACKGROUNDS } from '@/constants';
 
 export default function Home() {
-  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker } = useAppStore();
+  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal } = useAppStore();
   const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentVideoId) || VIDEO_BACKGROUNDS[0];
 
   return (
@@ -28,6 +29,9 @@ export default function Home() {
       {/* Background Picker Modal */}
       <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
 
+      {/* Task Modal */}
+      <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
+
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
         {/* Top Bar */}
@@ -37,8 +41,8 @@ export default function Home() {
 
         {/* Center Content */}
         <div className="flex flex-col items-center gap-8">
+          <TaskTrigger />
           <Timer />
-          <TaskInput />
         </div>
 
         {/* Bottom Section - Empty for now */}
