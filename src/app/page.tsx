@@ -7,11 +7,12 @@ import { StreakCounter } from '@/components/StreakCounter';
 import { BackgroundSwitcher } from '@/components/BackgroundSwitcher';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
+import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
 import { useAppStore } from '@/stores/appStore';
 import { VIDEO_BACKGROUNDS } from '@/constants';
 
 export default function Home() {
-  const { currentVideoId, isSoundMixerOpen, closeSoundMixer } = useAppStore();
+  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker } = useAppStore();
   const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentVideoId) || VIDEO_BACKGROUNDS[0];
 
   return (
@@ -24,6 +25,9 @@ export default function Home() {
 
       {/* Sound Mixer Modal */}
       <SoundMixerModal isOpen={isSoundMixerOpen} onClose={closeSoundMixer} />
+
+      {/* Background Picker Modal */}
+      <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
 
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
