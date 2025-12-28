@@ -4,7 +4,7 @@ import { CloudRain, Music, Image } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 
 export function IconDock() {
-    const { openSoundMixer, openBackgroundPicker } = useAppStore();
+    const { openSoundMixer, openBackgroundPicker, openMusicModal } = useAppStore();
 
     return (
         <div className="fixed bottom-6 left-6 z-20">
@@ -20,6 +20,7 @@ export function IconDock() {
 
                 {/* Music Note Icon */}
                 <button
+                    onClick={openMusicModal}
                     className="group relative w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all"
                     aria-label="Music"
                 >

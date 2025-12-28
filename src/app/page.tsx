@@ -8,11 +8,12 @@ import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
 import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
 import { TaskModal } from '@/components/TaskModal';
+import { MusicModal } from '@/components/MusicModal';
 import { useAppStore } from '@/stores/appStore';
 import { VIDEO_BACKGROUNDS } from '@/constants';
 
 export default function Home() {
-  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal } = useAppStore();
+  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal } = useAppStore();
   const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentVideoId) || VIDEO_BACKGROUNDS[0];
 
   return (
@@ -31,6 +32,9 @@ export default function Home() {
 
       {/* Task Modal */}
       <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
+
+      {/* Music Modal */}
+      <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
 
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">

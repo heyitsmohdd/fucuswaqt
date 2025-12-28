@@ -15,6 +15,7 @@ interface AppState {
     isSoundMixerOpen: boolean;
     isBackgroundPickerOpen: boolean;
     isTaskModalOpen: boolean;
+    isMusicModalOpen: boolean;
     setCurrentVideo: (id: string) => void;
     incrementStreak: () => void;
     addTask: (text: string) => void;
@@ -27,6 +28,8 @@ interface AppState {
     closeBackgroundPicker: () => void;
     openTaskModal: () => void;
     closeTaskModal: () => void;
+    openMusicModal: () => void;
+    closeMusicModal: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -39,6 +42,7 @@ export const useAppStore = create<AppState>()(
             isSoundMixerOpen: false,
             isBackgroundPickerOpen: false,
             isTaskModalOpen: false,
+            isMusicModalOpen: false,
 
             setCurrentVideo: (id: string) => set({ currentVideoId: id }),
 
@@ -84,6 +88,10 @@ export const useAppStore = create<AppState>()(
             openTaskModal: () => set({ isTaskModalOpen: true }),
 
             closeTaskModal: () => set({ isTaskModalOpen: false }),
+
+            openMusicModal: () => set({ isMusicModalOpen: true }),
+
+            closeMusicModal: () => set({ isMusicModalOpen: false }),
         }),
         {
             name: 'pomodoro-app-storage',
