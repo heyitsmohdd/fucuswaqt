@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { X, GripVertical, Plus } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
+import { cn } from '@/lib/utils';
 
 interface TaskModalProps {
     isOpen: boolean;
@@ -10,7 +11,7 @@ interface TaskModalProps {
 }
 
 export function TaskModal({ isOpen, onClose }: TaskModalProps) {
-    const { tasks, currentTask, setCurrentTask, addTask, removeTask } = useAppStore();
+    const { tasks, currentTask, setCurrentTask, addTask, toggleTask, removeTask } = useAppStore();
     const [isAddingTask, setIsAddingTask] = useState(false);
 
     // Close modal on Escape key
@@ -52,12 +53,16 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-2xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
+            <div className="relative w-full max-w-2xl bg-black/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-4 border-b border-white/10">
-                    <div className="flex gap-4">
-                        <h2 className="text-xl font-bold text-white">Tasks</h2>
-                        <span className="text-xl text-white/40">Events</span>
+                    <div className="flex gap-6">
+                        <button className="text-lg font-semibold text-white border-b-2 border-white pb-1">
+                            Tasks
+                        </button>
+                        <button className="text-lg text-white/40">
+                            Events
+                        </button>
                     </div>
                     <button
                         onClick={onClose}
@@ -82,19 +87,26 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                     {/* Task List */}
                     {tasks.length > 0 && (
                         <div className="space-y-2 mb-4">
-                            {tasks.map((task, index) => (
+                            {tasks.map((task) => (
                                 <div
-                                    key={index}
+                                    key={task.id}
                                     className="flex items-center gap-3 p-3 bg-white/5 rounded-lg group hover:bg-white/10 transition-colors"
                                 >
                                     <GripVertical className="w-4 h-4 text-white/30" />
                                     <input
                                         type="checkbox"
-                                        className="w-4 h-4 rounded bg-white/10 border-white/30"
+                                        checked={task.completed}
+                                        onChange={() => toggleTask(task.id)}
+                                        className="w-4 h-4 rounded bg-transparent border-2 border-white/30 checked:bg-white checked:border-white cursor-pointer"
                                     />
-                                    <span className="text-white text-sm flex-1">{task}</span>
+                                    <span className={cn(
+                                        "text-white text-sm flex-1",
+                                        task.completed && "line-through text-white/50"
+                                    )}>
+                                        {task.text}
+                                    </span>
                                     <button
-                                        onClick={() => removeTask(index)}
+                                        onClick={() => removeTask(task.id)}
                                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <X className="w-4 h-4 text-white/60 hover:text-white" />

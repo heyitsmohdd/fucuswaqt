@@ -1,19 +1,26 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface Task {
+    id: string;
+    text: string;
+    completed: boolean;
+}
+
 interface AppState {
     currentVideoId: string;
     streakDays: number;
-    tasks: string[];
+    tasks: Task[];
     currentTask: string;
     isSoundMixerOpen: boolean;
     isBackgroundPickerOpen: boolean;
     isTaskModalOpen: boolean;
     setCurrentVideo: (id: string) => void;
     incrementStreak: () => void;
-    addTask: (task: string) => void;
+    addTask: (text: string) => void;
     setCurrentTask: (task: string) => void;
-    removeTask: (index: number) => void;
+    toggleTask: (id: string) => void;
+    removeTask: (id: string) => void;
     openSoundMixer: () => void;
     closeSoundMixer: () => void;
     openBackgroundPicker: () => void;
@@ -37,10 +44,14 @@ export const useAppStore = create<AppState>()(
 
             incrementStreak: () => set((state) => ({ streakDays: state.streakDays + 1 })),
 
-            addTask: (task: string) => {
-                if (task.trim()) {
+            addTask: (text: string) => {
+                if (text.trim()) {
                     set((state) => ({
-                        tasks: [...state.tasks, task.trim()],
+                        tasks: [...state.tasks, {
+                            id: Date.now().toString(),
+                            text: text.trim(),
+                            completed: false
+                        }],
                         currentTask: ''
                     }));
                 }
@@ -48,9 +59,17 @@ export const useAppStore = create<AppState>()(
 
             setCurrentTask: (task: string) => set({ currentTask: task }),
 
-            removeTask: (index: number) => {
+            toggleTask: (id: string) => {
                 set((state) => ({
-                    tasks: state.tasks.filter((_, i) => i !== index)
+                    tasks: state.tasks.map((task) =>
+                        task.id === id ? { ...task, completed: !task.completed } : task
+                    )
+                }));
+            },
+
+            removeTask: (id: string) => {
+                set((state) => ({
+                    tasks: state.tasks.filter((task) => task.id !== id)
                 }));
             },
 
