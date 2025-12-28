@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Music, Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface MusicModalProps {
     isOpen: boolean;
@@ -47,8 +48,6 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         return () => document.removeEventListener('keydown', handleEscape);
     }, [isOpen, isChangingUrl, onClose]);
 
-    if (!isOpen) return null;
-
     const videoId = extractYouTubeId(videoUrl);
 
     const handleChangeClick = () => {
@@ -77,18 +76,19 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                onClick={onClose}
-            />
-
+        <div
+            className={cn(
+                'fixed bottom-24 left-6 z-50 w-80 transition-all duration-300 ease-in-out',
+                isOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 translate-y-4 pointer-events-none'
+            )}
+        >
             {/* Modal */}
-            <div className="relative w-full max-w-2xl bg-black/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl">
+            <div className="bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 pb-4">
-                    <h2 className="text-xl font-bold text-white">YouTube</h2>
+                <div className="flex items-center justify-between p-4 pb-3">
+                    <h2 className="text-lg font-bold text-white">YouTube</h2>
 
                     {/* Change Button or Input Field */}
                     <div className="flex items-center gap-2">
@@ -99,49 +99,48 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={handleInputKeyDown}
-                                    placeholder="URL from YT, Spotify, Ap..."
-                                    className="px-4 py-2 bg-black/60 text-white text-sm rounded-lg border border-white/20 outline-none focus:border-white/40 w-64"
+                                    placeholder="URL from YT..."
+                                    className="px-3 py-1.5 bg-black/60 text-white text-xs rounded-lg border border-white/20 outline-none focus:border-white/40 w-32"
                                     autoFocus
                                 />
                                 <button
                                     onClick={handleConfirmChange}
-                                    className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
                                     aria-label="Confirm"
                                 >
-                                    <Check className="w-5 h-5 text-white" />
+                                    <Check className="w-4 h-4 text-white" />
                                 </button>
                                 <button
                                     onClick={handleCancelChange}
-                                    className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
                                     aria-label="Cancel"
                                 >
-                                    <X className="w-5 h-5 text-white" />
+                                    <X className="w-4 h-4 text-white" />
                                 </button>
                             </>
                         ) : (
-                            <button
-                                onClick={handleChangeClick}
-                                className="flex items-center gap-2 px-3 py-2 text-white/60 hover:text-white transition-colors"
-                            >
-                                <Music className="w-4 h-4" />
-                                <span className="text-sm">Change</span>
-                            </button>
-                        )}
-
-                        {!isChangingUrl && (
-                            <button
-                                onClick={onClose}
-                                className="p-2 rounded-lg hover:bg-white/10 transition-colors ml-2"
-                                aria-label="Close"
-                            >
-                                <X className="w-5 h-5 text-white" />
-                            </button>
+                            <>
+                                <button
+                                    onClick={handleChangeClick}
+                                    className="flex items-center gap-1.5 px-2 py-1 text-white/60 hover:text-white transition-colors"
+                                >
+                                    <Music className="w-3 h-3" />
+                                    <span className="text-xs">Change</span>
+                                </button>
+                                <button
+                                    onClick={onClose}
+                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                    aria-label="Close"
+                                >
+                                    <X className="w-4 h-4 text-white" />
+                                </button>
+                            </>
                         )}
                     </div>
                 </div>
 
                 {/* Video Player */}
-                <div className="px-6 pb-6">
+                <div className="px-4 pb-4">
                     <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                         <iframe
                             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`}
