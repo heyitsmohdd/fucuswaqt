@@ -36,6 +36,36 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   },
 ];
 
+export interface ImageBackground {
+  id: string;
+  name: string;
+  url: string;
+}
+
+// Static image backgrounds - using Unsplash images
+export const IMAGE_BACKGROUNDS: ImageBackground[] = [
+  {
+    id: 'nature',
+    name: 'Nature',
+    url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1920&auto=format&fit=crop',
+  },
+  {
+    id: 'city',
+    name: 'City',
+    url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1920&auto=format&fit=crop',
+  },
+  {
+    id: 'forest',
+    name: 'Forest',
+    url: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=1920&auto=format&fit=crop',
+  },
+  {
+    id: 'cozy',
+    name: 'Cozy',
+    url: 'https://images.unsplash.com/photo-1485470733090-0a44848d82cb?q=80&w=1920&auto=format&fit=crop',
+  },
+];
+
 // Audio tracks - using placeholder URLs (replace with actual lofi ambiance tracks)
 export const AUDIO_TRACKS: AudioTrack[] = [
   {

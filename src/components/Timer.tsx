@@ -34,41 +34,41 @@ export function Timer() {
 
     return (
         <div className="flex flex-col items-center gap-8">
-            {/* Mode Switcher */}
-            <div className="flex gap-2">
+            {/* Mode Indicators - Dots */}
+            <div className="flex gap-3 items-center">
                 <button
                     onClick={() => switchMode('focus')}
                     className={cn(
-                        'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                        'w-3 h-3 rounded-full transition-all',
                         mode === 'focus'
-                            ? 'glass-light text-white'
-                            : 'text-gray-400 hover:text-white'
+                            ? 'bg-white'
+                            : 'bg-white/30 hover:bg-white/50'
                     )}
-                >
-                    Focus
-                </button>
+                    aria-label="Focus mode"
+                    title="Focus"
+                />
                 <button
                     onClick={() => switchMode('break')}
                     className={cn(
-                        'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                        'w-3 h-3 rounded-full transition-all',
                         mode === 'break'
-                            ? 'glass-light text-white'
-                            : 'text-gray-400 hover:text-white'
+                            ? 'bg-white'
+                            : 'bg-white/30 hover:bg-white/50'
                     )}
-                >
-                    Short Break
-                </button>
+                    aria-label="Short break mode"
+                    title="Short Break"
+                />
                 <button
                     onClick={() => switchMode('longBreak')}
                     className={cn(
-                        'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                        'w-3 h-3 rounded-full transition-all',
                         mode === 'longBreak'
-                            ? 'glass-light text-white'
-                            : 'text-gray-400 hover:text-white'
+                            ? 'bg-white'
+                            : 'bg-white/30 hover:bg-white/50'
                     )}
-                >
-                    Long Break
-                </button>
+                    aria-label="Long break mode"
+                    title="Long Break"
+                />
             </div>
 
             {/* Timer Display */}

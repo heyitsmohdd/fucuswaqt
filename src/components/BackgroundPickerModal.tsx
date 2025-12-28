@@ -1,14 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { X, Play } from 'lucide-react';
+import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
+import { useAppStore } from '@/stores/appStore';
+import { cn } from '@/lib/utils';
 
 interface BackgroundPickerModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+type TabType = 'motion' | 'stills';
+
 export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModalProps) {
+    const [activeTab, setActiveTab] = useState<TabType>('motion');
+    const { setCurrentVideo } = useAppStore();
+
     // Close modal on Escape key
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
@@ -22,6 +30,17 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     }, [isOpen, onClose]);
 
     if (!isOpen) return null;
+
+    const handleVideoSelect = (videoId: string) => {
+        setCurrentVideo(videoId);
+        onClose();
+    };
+
+    const handleImageSelect = (imageId: string) => {
+        // TODO: Implement image background selection in next step
+        console.log('Selected image:', imageId);
+        onClose();
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -45,11 +64,102 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                     </button>
                 </div>
 
-                {/* Body - Empty for now, will be filled in future steps */}
-                <div className="px-6 pb-6">
-                    <div className="min-h-[300px] flex items-center justify-center">
-                        <p className="text-white/50 text-sm">Background selection content will be added here</p>
+                {/* Tab Navigation */}
+                <div className="px-6">
+                    <div className="flex gap-8 border-b border-white/10">
+                        <button
+                            onClick={() => setActiveTab('motion')}
+                            className={cn(
+                                'pb-3 px-2 text-sm font-medium transition-all relative',
+                                activeTab === 'motion'
+                                    ? 'text-white'
+                                    : 'text-white/50 hover:text-white/70'
+                            )}
+                        >
+                            Motion
+                            {activeTab === 'motion' && (
+                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-full" />
+                            )}
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('stills')}
+                            className={cn(
+                                'pb-3 px-2 text-sm font-medium transition-all relative',
+                                activeTab === 'stills'
+                                    ? 'text-white'
+                                    : 'text-white/50 hover:text-white/70'
+                            )}
+                        >
+                            Stills
+                            {activeTab === 'stills' && (
+                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-full" />
+                            )}
+                        </button>
                     </div>
+                </div>
+
+                {/* Body */}
+                <div className="px-6 py-6">
+                    {/* Motion Tab Content */}
+                    {activeTab === 'motion' && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {VIDEO_BACKGROUNDS.map((video) => (
+                                <button
+                                    key={video.id}
+                                    onClick={() => handleVideoSelect(video.id)}
+                                    className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
+                                >
+                                    {/* Video Preview - Using first frame as thumbnail */}
+                                    <video
+                                        src={video.url}
+                                        className="w-full h-full object-cover"
+                                        muted
+                                        playsInline
+                                    />
+
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                            <Play className="w-6 h-6 text-white ml-1" />
+                                        </div>
+                                    </div>
+
+                                    {/* Title */}
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                                        <p className="text-white font-medium text-sm">{video.name}</p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Stills Tab Content */}
+                    {activeTab === 'stills' && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {IMAGE_BACKGROUNDS.map((image) => (
+                                <button
+                                    key={image.id}
+                                    onClick={() => handleImageSelect(image.id)}
+                                    className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
+                                >
+                                    {/* Image */}
+                                    <img
+                                        src={image.url}
+                                        alt={image.name}
+                                        className="w-full h-full object-cover"
+                                    />
+
+                                    {/* Overlay on hover */}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+
+                                    {/* Title */}
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                                        <p className="text-white font-medium text-sm">{image.name}</p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

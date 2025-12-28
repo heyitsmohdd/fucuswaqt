@@ -4,7 +4,6 @@ import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
 import { TaskInput } from '@/components/TaskInput';
 import { StreakCounter } from '@/components/StreakCounter';
-import { BackgroundSwitcher } from '@/components/BackgroundSwitcher';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
 import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
@@ -42,9 +41,8 @@ export default function Home() {
           <TaskInput />
         </div>
 
-        {/* Bottom Section */}
+        {/* Bottom Section - Empty for now */}
         <div className="w-full flex flex-col items-center gap-4">
-          <BackgroundSwitcher />
         </div>
       </div>
     </div>
