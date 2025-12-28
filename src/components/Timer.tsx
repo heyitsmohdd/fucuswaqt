@@ -72,12 +72,7 @@ export function Timer() {
             </div>
 
             {/* Timer Display */}
-            <div
-                className={cn(
-                    'text-[8rem] md:text-[10rem] font-bold text-white leading-none tracking-tight',
-                    isRunning && 'pulse-glow'
-                )}
-            >
+            <div className="text-[8rem] md:text-[10rem] font-bold text-white leading-none tracking-tight">
                 {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
             </div>
 
