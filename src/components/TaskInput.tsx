@@ -28,14 +28,14 @@ export function TaskInput() {
             {/* Task List */}
             {tasks.length > 0 && (
                 <div className="glass rounded-xl p-4 space-y-2">
-                    {tasks.map((task, index) => (
+                    {tasks.map((task) => (
                         <div
-                            key={index}
+                            key={task.id}
                             className="flex items-center justify-between gap-3 p-3 bg-white/5 rounded-lg group"
                         >
-                            <span className="text-gray-200 text-sm flex-1">{task}</span>
+                            <span className="text-gray-200 text-sm flex-1">{task.text}</span>
                             <button
-                                onClick={() => removeTask(index)}
+                                onClick={() => removeTask(task.id)}
                                 className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-white"
                             >
                                 <X className="w-4 h-4" />
