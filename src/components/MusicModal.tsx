@@ -29,7 +29,7 @@ const extractYouTubeId = (url: string): string => {
 
 export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     const [isChangingUrl, setIsChangingUrl] = useState(false);
-    const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=jfKfPfyJRdk'); // Lofi hip hop radio
+    const [videoUrl, setVideoUrl] = useState('https://youtu.be/uyTtCdaEux8?si=E9KEDBOkM2qjtfKu'); // Lofi hip hop radio
     const [inputValue, setInputValue] = useState('');
 
     // Close modal on Escape key

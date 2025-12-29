@@ -10,6 +10,7 @@ import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
 import { TaskModal } from '@/components/TaskModal';
 import { MusicModal } from '@/components/MusicModal';
 import { FullScreenToggle } from '@/components/FullScreenToggle';
+import { QuoteWidget } from '@/components/QuoteWidget';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
@@ -54,6 +55,9 @@ export default function Home() {
 
       {/* Music Modal */}
       <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
+
+      {/* Quote Widget (only when timer is running) */}
+      <QuoteWidget />
 
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
