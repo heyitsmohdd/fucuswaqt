@@ -15,44 +15,44 @@ export interface AudioTrack {
 // Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {
-    id: 'rainy-window',
-    name: 'Rainy Window',
-    url: '/videos/rain-lofi.mp4',
+    id: 'flowers',
+    name: 'Flowers',
+    url: '/videos/flowers.mp4',
   },
   {
-    id: 'city-night',
-    name: 'City Night',
-    url: '/videos/city-night.mp4',
+    id: 'jungle-walk',
+    name: 'Jungle Walk',
+    url: '/videos/jungle-walk.mp4',
   },
   {
-    id: 'forest-calm',
-    name: 'Forest Calm',
-    url: '/videos/forest-calm.mp4',
+    id: 'sea',
+    name: 'Sea',
+    url: '/videos/sea.mp4',
   },
   {
-    id: 'cafe-vibes',
-    name: 'Cafe Vibes',
-    url: '/videos/cafe-vibes.mp4',
+    id: 'sky-loop',
+    name: 'Sky Loop',
+    url: '/videos/sky-loop.mp4',
   },
   {
-    id: 'space-travel',
-    name: 'Space Travel',
-    url: '/videos/space-travel.mp4',
+    id: 'sky',
+    name: 'Sky',
+    url: '/videos/sky.mp4',
   },
   {
-    id: 'library-focus',
-    name: 'Library Focus',
-    url: '/videos/library-focus.mp4',
+    id: 'sleeping-in-flowers',
+    name: 'Sleeping in Flowers',
+    url: '/videos/sleeping-in-flowers.mp4',
   },
   {
-    id: 'ocean-sunset',
-    name: 'Ocean Sunset',
-    url: '/videos/ocean-sunset.mp4',
+    id: 'three-loop',
+    name: 'Three Loop',
+    url: '/videos/three-loop.mp4',
   },
   {
-    id: 'train-journey',
-    name: 'Train Journey',
-    url: '/videos/train-journey.mp4',
+    id: 'train-view',
+    name: 'Train View',
+    url: '/videos/train-view.mp4',
   },
 ];
 
