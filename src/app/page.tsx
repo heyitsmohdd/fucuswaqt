@@ -12,17 +12,33 @@ import { MusicModal } from '@/components/MusicModal';
 import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
-import { VIDEO_BACKGROUNDS } from '@/constants';
+import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
 
 export default function Home() {
-  const { currentVideoId, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal } = useAppStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal } = useAppStore();
   const { isRunning } = useTimerStore();
-  const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentVideoId) || VIDEO_BACKGROUNDS[0];
+
+  const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentBackgroundId);
+  const currentImage = IMAGE_BACKGROUNDS.find(i => i.id === currentBackgroundId);
+  const backgroundUrl = currentBackgroundType === 'video'
+    ? (currentVideo?.url || VIDEO_BACKGROUNDS[0].url)
+    : (currentImage?.url || IMAGE_BACKGROUNDS[0].url);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      {/* Background Video */}
-      <BackgroundVideo videoUrl={currentVideo.url} />
+      {/* Background Video or Image */}
+      {currentBackgroundType === 'video' ? (
+        <BackgroundVideo videoUrl={backgroundUrl} />
+      ) : (
+        <>
+          <div
+            className="fixed inset-0 w-full h-full bg-cover bg-center z-0 transition-opacity duration-500"
+            style={{ backgroundImage: `url(${backgroundUrl})` }}
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="fixed inset-0 bg-black/30 z-[1]" />
+        </>
+      )}
 
       {/* Icon Dock */}
       <IconDock />

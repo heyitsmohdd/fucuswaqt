@@ -15,7 +15,7 @@ type TabType = 'motion' | 'stills';
 
 export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModalProps) {
     const [activeTab, setActiveTab] = useState<TabType>('motion');
-    const { setCurrentVideo } = useAppStore();
+    const { setCurrentVideo, setCurrentBackground } = useAppStore();
 
     // Close modal on Escape key
     useEffect(() => {
@@ -37,8 +37,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     };
 
     const handleImageSelect = (imageId: string) => {
-        // TODO: Implement image background selection in next step
-        console.log('Selected image:', imageId);
+        setCurrentBackground(imageId, 'image');
         onClose();
     };
 

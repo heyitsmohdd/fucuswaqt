@@ -9,6 +9,8 @@ export interface Task {
 
 interface AppState {
     currentVideoId: string;
+    currentBackgroundType: 'video' | 'image';
+    currentBackgroundId: string;
     streakDays: number;
     tasks: Task[];
     currentTask: string;
@@ -17,6 +19,7 @@ interface AppState {
     isTaskModalOpen: boolean;
     isMusicModalOpen: boolean;
     setCurrentVideo: (id: string) => void;
+    setCurrentBackground: (id: string, type: 'video' | 'image') => void;
     incrementStreak: () => void;
     addTask: (text: string) => void;
     setCurrentTask: (task: string) => void;
@@ -35,7 +38,9 @@ interface AppState {
 export const useAppStore = create<AppState>()(
     persist(
         (set) => ({
-            currentVideoId: 'rainy-window',
+            currentVideoId: 'flowers',
+            currentBackgroundType: 'video',
+            currentBackgroundId: 'flowers',
             streakDays: 0,
             tasks: [],
             currentTask: '',
@@ -44,7 +49,9 @@ export const useAppStore = create<AppState>()(
             isTaskModalOpen: false,
             isMusicModalOpen: false,
 
-            setCurrentVideo: (id: string) => set({ currentVideoId: id }),
+            setCurrentVideo: (id: string) => set({ currentVideoId: id, currentBackgroundId: id, currentBackgroundType: 'video' }),
+
+            setCurrentBackground: (id: string, type: 'video' | 'image') => set({ currentBackgroundId: id, currentBackgroundType: type }),
 
             incrementStreak: () => set((state) => ({ streakDays: state.streakDays + 1 })),
 

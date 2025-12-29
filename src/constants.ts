@@ -62,27 +62,27 @@ export interface ImageBackground {
   url: string;
 }
 
-// Static image backgrounds - using Unsplash images
+// Static image backgrounds - using local images
 export const IMAGE_BACKGROUNDS: ImageBackground[] = [
+  {
+    id: 'cat',
+    name: 'Cat',
+    url: '/images/cat.jpg',
+  },
+  {
+    id: 'goku',
+    name: 'Goku',
+    url: '/images/goku.jpg',
+  },
+  {
+    id: 'masajid',
+    name: 'Masajid',
+    url: '/images/masajid2.jpg',
+  },
   {
     id: 'nature',
     name: 'Nature',
-    url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1920&auto=format&fit=crop',
-  },
-  {
-    id: 'city',
-    name: 'City',
-    url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1920&auto=format&fit=crop',
-  },
-  {
-    id: 'forest',
-    name: 'Forest',
-    url: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=1920&auto=format&fit=crop',
-  },
-  {
-    id: 'cozy',
-    name: 'Cozy',
-    url: 'https://images.unsplash.com/photo-1485470733090-0a44848d82cb?q=80&w=1920&auto=format&fit=crop',
+    url: '/images/nature2.jpg',
   },
 ];
 
