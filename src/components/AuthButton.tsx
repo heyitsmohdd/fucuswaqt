@@ -30,7 +30,7 @@ export function AuthButton() {
 
     const handleSignIn = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
+            provider: 'github',
             options: {
                 redirectTo: `${window.location.origin}/auth/callback`,
             },

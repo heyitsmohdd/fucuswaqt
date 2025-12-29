@@ -2,11 +2,14 @@
 
 import { useEffect } from 'react';
 import { useTimerStore } from '@/stores/timerStore';
+import { useAppStore } from '@/stores/appStore';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { updateStreak } from '@/actions/updateStreak';
 
 export function Timer() {
     const { isRunning, timeLeft, mode, startTimer, pauseTimer, resetTimer, tick, switchMode } = useTimerStore();
+    const { setStreak } = useAppStore();
 
     // Countdown interval
     useEffect(() => {
@@ -18,6 +21,29 @@ export function Timer() {
 
         return () => clearInterval(interval);
     }, [isRunning, tick]);
+
+    // Handle streak update when focus session completes
+    useEffect(() => {
+        const handleSessionComplete = async () => {
+            if (timeLeft === 0 && mode === 'focus') {
+                // Focus session just completed, update streak
+                try {
+                    const result = await updateStreak();
+                    if (result.success && result.profile) {
+                        setStreak(result.profile.current_streak);
+                        console.log('✅ Streak updated:', result.profile.current_streak);
+                    } else {
+                        console.error('❌ Failed to update streak:', result.error);
+                    }
+                } catch (error) {
+                    console.error('❌ Error updating streak:', error);
+                }
+            }
+        };
+
+        handleSessionComplete();
+    }, [timeLeft, mode, setStreak]);
+
 
     // Update document title
     useEffect(() => {

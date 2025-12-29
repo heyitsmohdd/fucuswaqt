@@ -21,6 +21,7 @@ interface AppState {
     setCurrentVideo: (id: string) => void;
     setCurrentBackground: (id: string, type: 'video' | 'image') => void;
     incrementStreak: () => void;
+    setStreak: (days: number) => void;
     addTask: (text: string) => void;
     setCurrentTask: (task: string) => void;
     toggleTask: (id: string) => void;
@@ -54,6 +55,8 @@ export const useAppStore = create<AppState>()(
             setCurrentBackground: (id: string, type: 'video' | 'image') => set({ currentBackgroundId: id, currentBackgroundType: type }),
 
             incrementStreak: () => set((state) => ({ streakDays: state.streakDays + 1 })),
+
+            setStreak: (days: number) => set({ streakDays: days }),
 
             addTask: (text: string) => {
                 if (text.trim()) {
