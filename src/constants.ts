@@ -86,37 +86,37 @@ export const IMAGE_BACKGROUNDS: ImageBackground[] = [
   },
 ];
 
-// Audio tracks - using placeholder URLs (replace with actual lofi ambiance tracks)
+// Audio tracks - using local custom sounds
 export const AUDIO_TRACKS: AudioTrack[] = [
   {
     id: 'rain',
     name: 'Rain',
     icon: 'CloudRain',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2390/2390-preview.mp3', // Placeholder
+    url: 'https://assets.mixkit.co/active_storage/sfx/2390/2390-preview.mp3',
   },
   {
     id: 'fire',
     name: 'Fireplace',
     icon: 'Flame',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2494/2494-preview.mp3', // Placeholder
+    url: '/sounds/fire-sound.mp3',
   },
   {
     id: 'cafe',
     name: 'Coffee Shop',
     icon: 'Coffee',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2393/2393-preview.mp3', // Placeholder
+    url: '/sounds/drip-coffee.mp3',
   },
   {
     id: 'waves',
     name: 'Ocean Waves',
     icon: 'Waves',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2394/2394-preview.mp3', // Placeholder
+    url: '/sounds/sea-waves.mp3',
   },
   {
     id: 'birds',
     name: 'Forest Birds',
     icon: 'Bird',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2396/2396-preview.mp3', // Placeholder
+    url: '/sounds/birds-sound.mp3',
   },
 ];
 
