@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pomodoro Timer - Focus",
-  description: "An atmospheric lofi Pomodoro timer to help you focus and be productive",
+  title: "FocusWaqt",
+  description: "Master your time with FocusWaqt.",
 };
 
 export default function RootLayout({

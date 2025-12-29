@@ -149,7 +149,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
 
                     {/* Footer Text */}
                     <p className="text-center text-white/30 text-xs mt-4">
-                        Add up to 3 tasks. Upgrade to Plus to add more.
+                        Add up to 3 tasks.
                     </p>
                 </div>
             </div>
