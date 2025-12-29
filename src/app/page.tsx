@@ -73,11 +73,13 @@ export default function Home() {
       <QuoteWidget />
 
       {/* Main Content Container */}
-      <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
+      <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 pt-20 md:p-8">
         {/* Top Bar */}
-        <div className="w-full flex justify-end items-center gap-3 mr-6">
+        <div className="w-full flex justify-end items-center gap-3">
           <StreakCounter />
           <AuthButton />
+
+          <div className="w-10" />
         </div>
 
         {/* Fullscreen Toggle (only when timer is running) - Bottom Right */}
