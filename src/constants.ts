@@ -12,27 +12,47 @@ export interface AudioTrack {
   url: string;
 }
 
-// Video backgrounds - using Pexels stock videos
+// Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {
     id: 'rainy-window',
     name: 'Rainy Window',
-    url: 'https://videos.pexels.com/video-files/6473896/6473896-uhd_2732_1440_25fps.mp4',
-  },
-  {
-    id: 'lofi-cafe',
-    name: 'Cozy Cafe',
-    url: 'https://videos.pexels.com/video-files/7562101/7562101-uhd_2560_1440_25fps.mp4',
-  },
-  {
-    id: 'forest',
-    name: 'Forest',
-    url: 'https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4',
+    url: '/videos/rain-lofi.mp4',
   },
   {
     id: 'city-night',
     name: 'City Night',
-    url: 'https://videos.pexels.com/video-files/2611250/2611250-uhd_2560_1440_30fps.mp4',
+    url: '/videos/city-night.mp4',
+  },
+  {
+    id: 'forest-calm',
+    name: 'Forest Calm',
+    url: '/videos/forest-calm.mp4',
+  },
+  {
+    id: 'cafe-vibes',
+    name: 'Cafe Vibes',
+    url: '/videos/cafe-vibes.mp4',
+  },
+  {
+    id: 'space-travel',
+    name: 'Space Travel',
+    url: '/videos/space-travel.mp4',
+  },
+  {
+    id: 'library-focus',
+    name: 'Library Focus',
+    url: '/videos/library-focus.mp4',
+  },
+  {
+    id: 'ocean-sunset',
+    name: 'Ocean Sunset',
+    url: '/videos/ocean-sunset.mp4',
+  },
+  {
+    id: 'train-journey',
+    name: 'Train Journey',
+    url: '/videos/train-journey.mp4',
   },
 ];
 
