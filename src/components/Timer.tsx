@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTimerStore } from '@/stores/timerStore';
 import { useAppStore } from '@/stores/appStore';
 import { Play, Pause, RotateCcw } from 'lucide-react';
@@ -10,6 +10,7 @@ import { updateStreak } from '@/actions/updateStreak';
 export function Timer() {
     const { isRunning, timeLeft, mode, startTimer, pauseTimer, resetTimer, tick, switchMode } = useTimerStore();
     const { setStreak } = useAppStore();
+    const streakUpdatedRef = useRef(false);
 
     // Countdown interval
     useEffect(() => {
@@ -22,16 +23,27 @@ export function Timer() {
         return () => clearInterval(interval);
     }, [isRunning, tick]);
 
+    // Reset the streak update flag when timer is reset or mode changes
+    useEffect(() => {
+        streakUpdatedRef.current = false;
+    }, [mode, isRunning]);
+
     // Handle streak update when focus session completes
     useEffect(() => {
         const handleSessionComplete = async () => {
-            if (timeLeft === 0 && mode === 'focus') {
-                // Focus session just completed, update streak
+            // Only trigger once when:
+            // 1. Timer hits 0
+            // 2. Mode is 'focus'
+            // 3. Haven't already updated streak for this session
+            if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
+                streakUpdatedRef.current = true; // Mark as updated
+                console.log('🔥 Focus session completed! Updating streak...');
+
                 try {
                     const result = await updateStreak();
                     if (result.success && result.profile) {
                         setStreak(result.profile.current_streak);
-                        console.log('✅ Streak updated:', result.profile.current_streak);
+                        console.log('✅ Streak updated successfully:', result.profile.current_streak);
                     } else {
                         console.error('❌ Failed to update streak:', result.error);
                     }

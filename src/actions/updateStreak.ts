@@ -84,7 +84,6 @@ export async function updateStreak(): Promise<UpdateStreakResult> {
                 current_streak: newStreak,
                 longest_streak: newLongestStreak,
                 last_study_date: todayStr,
-                updated_at: new Date().toISOString(),
             })
             .eq('id', user.id)
             .select()

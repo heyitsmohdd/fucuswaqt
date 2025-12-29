@@ -5,6 +5,7 @@ import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
 import { TaskTrigger } from '@/components/TaskTrigger';
 import { StreakCounter } from '@/components/StreakCounter';
+import { AuthButton } from '@/components/AuthButton';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
 import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
@@ -74,13 +75,14 @@ export default function Home() {
       {/* Main Content Container */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between p-6 md:p-8">
         {/* Top Bar */}
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-end items-center gap-3 mr-6">
           <StreakCounter />
+          <AuthButton />
         </div>
 
-        {/* Fullscreen Toggle (only when timer is running) */}
+        {/* Fullscreen Toggle (only when timer is running) - Bottom Right */}
         {isRunning && (
-          <div className="absolute top-6 right-6 z-50">
+          <div className="absolute bottom-6 right-6 z-50">
             <FullScreenToggle />
           </div>
         )}

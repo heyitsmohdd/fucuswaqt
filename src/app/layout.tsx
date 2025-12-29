@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AuthButton } from "@/components/AuthButton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,10 +20,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        {/* Auth Button - Fixed in top-left corner */}
-        <div className="fixed top-6 left-6 z-50">
-          <AuthButton />
-        </div>
         {children}
       </body>
     </html>

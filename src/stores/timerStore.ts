@@ -48,6 +48,7 @@ export const useTimerStore = create<TimerState>((set, get) => ({
         if (newTimeLeft <= 0) {
             // Timer completed
             set({
+                timeLeft: 0, // Set to 0 so display shows 00:00
                 isRunning: false,
                 completedSessions: mode === 'focus' ? completedSessions + 1 : completedSessions
             });
