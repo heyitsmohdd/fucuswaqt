@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { X, GripVertical, Plus } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
+import { useTasks } from '@/hooks/useTasks';
 import { cn } from '@/lib/utils';
 
 interface TaskModalProps {
@@ -11,7 +12,8 @@ interface TaskModalProps {
 }
 
 export function TaskModal({ isOpen, onClose }: TaskModalProps) {
-    const { tasks, currentTask, setCurrentTask, addTask, toggleTask, removeTask } = useAppStore();
+    const { currentTask, setCurrentTask } = useAppStore();
+    const { tasks, loading, addTask, toggleTask, removeTask } = useTasks();
     const [isAddingTask, setIsAddingTask] = useState(false);
 
     // Close modal on Escape key
@@ -28,9 +30,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
 
     if (!isOpen) return null;
 
-    const handleAddTask = () => {
+    const handleAddTask = async () => {
         if (currentTask.trim()) {
-            addTask(currentTask);
+            await addTask(currentTask);
             setIsAddingTask(false);
         }
     };
@@ -95,15 +97,15 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     <GripVertical className="w-4 h-4 text-white/30" />
                                     <input
                                         type="checkbox"
-                                        checked={task.completed}
+                                        checked={task.is_completed}
                                         onChange={() => toggleTask(task.id)}
                                         className="w-4 h-4 rounded bg-transparent border-2 border-white/30 checked:bg-white checked:border-white cursor-pointer"
                                     />
                                     <span className={cn(
                                         "text-white text-sm flex-1",
-                                        task.completed && "line-through text-white/50"
+                                        task.is_completed && "line-through text-white/50"
                                     )}>
-                                        {task.text}
+                                        {task.title}
                                     </span>
                                     <button
                                         onClick={() => removeTask(task.id)}

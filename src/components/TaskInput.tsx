@@ -1,11 +1,13 @@
 'use client';
 
 import { useAppStore } from '@/stores/appStore';
+import { useTasks } from '@/hooks/useTasks';
 import { KeyboardEvent } from 'react';
 import { X } from 'lucide-react';
 
 export function TaskInput() {
-    const { currentTask, tasks, setCurrentTask, addTask, removeTask } = useAppStore();
+    const { currentTask, setCurrentTask } = useAppStore();
+    const { tasks, addTask, removeTask } = useTasks();
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -33,7 +35,7 @@ export function TaskInput() {
                             key={task.id}
                             className="flex items-center justify-between gap-3 p-3 bg-white/5 rounded-lg group"
                         >
-                            <span className="text-gray-200 text-sm flex-1">{task.text}</span>
+                            <span className="text-gray-200 text-sm flex-1">{task.title}</span>
                             <button
                                 onClick={() => removeTask(task.id)}
                                 className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-white"

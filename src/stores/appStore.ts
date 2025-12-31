@@ -3,8 +3,10 @@ import { persist } from 'zustand/middleware';
 
 export interface Task {
     id: string;
-    text: string;
-    completed: boolean;
+    title: string;
+    is_completed: boolean;
+    user_id?: string;
+    created_at?: string;
 }
 
 interface AppState {
@@ -63,8 +65,8 @@ export const useAppStore = create<AppState>()(
                     set((state) => ({
                         tasks: [...state.tasks, {
                             id: Date.now().toString(),
-                            text: text.trim(),
-                            completed: false
+                            title: text.trim(),
+                            is_completed: false
                         }],
                         currentTask: ''
                     }));
@@ -76,7 +78,7 @@ export const useAppStore = create<AppState>()(
             toggleTask: (id: string) => {
                 set((state) => ({
                     tasks: state.tasks.map((task) =>
-                        task.id === id ? { ...task, completed: !task.completed } : task
+                        task.id === id ? { ...task, is_completed: !task.is_completed } : task
                     )
                 }));
             },
