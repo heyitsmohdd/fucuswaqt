@@ -5,6 +5,7 @@ import { X, GripVertical, Plus } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { useTasks } from '@/hooks/useTasks';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface TaskModalProps {
     isOpen: boolean;
@@ -62,7 +63,10 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                         <button className="text-lg font-semibold text-white border-b-2 border-white pb-1">
                             Tasks
                         </button>
-                        <button className="text-lg text-white/40">
+                        <button
+                            onClick={() => toast('📅 Live Calendar feature is coming soon!')}
+                            className="text-lg text-white/40 hover:text-white/60 transition-colors"
+                        >
                             Events
                         </button>
                     </div>
