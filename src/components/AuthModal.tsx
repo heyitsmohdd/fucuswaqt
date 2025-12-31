@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { Github, X, Chrome } from 'lucide-react';
+import { X } from 'lucide-react';
+import CubeLogin from './CubeLogin';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -10,36 +9,6 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
-    const supabase = createClient();
-    const [loading, setLoading] = useState(false);
-
-    const handleLogin = async (provider: 'github' | 'google') => {
-        try {
-            setLoading(true);
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider,
-                options: {
-                    // This forces Supabase to redirect back to the current domain (localhost OR Vercel)
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
-                    },
-                },
-            });
-
-            if (error) {
-                console.error('OAuth error:', error.message);
-                alert(`Login failed: ${error.message}`);
-                setLoading(false);
-            }
-            // Note: If successful, user will be redirected, so no need to setLoading(false)
-        } catch (err) {
-            console.error('Unexpected error during login:', err);
-            setLoading(false);
-        }
-    };
-
     if (!isOpen) return null;
 
     return (
@@ -57,7 +26,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     <button
                         onClick={onClose}
                         className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
-                        disabled={loading}
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -68,46 +36,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         <p className="text-white/60 text-sm">Track your streaks and sync across devices</p>
                     </div>
 
-                    {/* Buttons */}
-                    <div className="space-y-3">
-                        {/* GitHub Button */}
-                        <button
-                            onClick={() => handleLogin('github')}
-                            disabled={loading}
-                            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? (
-                                <>
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>Connecting...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Github className="w-5 h-5" />
-                                    <span>Continue with GitHub</span>
-                                </>
-                            )}
-                        </button>
-
-                        {/* Google Button */}
-                        <button
-                            onClick={() => handleLogin('google')}
-                            disabled={loading}
-                            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white hover:bg-gray-100 border border-gray-300 rounded-xl text-black font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? (
-                                <>
-                                    <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                                    <span>Connecting...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Chrome className="w-5 h-5" />
-                                    <span>Continue with Google</span>
-                                </>
-                            )}
-                        </button>
-                    </div>
+                    {/* 3D Cube Login Component */}
+                    <CubeLogin />
                 </div>
             </div>
         </>
