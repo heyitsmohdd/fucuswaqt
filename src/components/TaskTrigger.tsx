@@ -7,7 +7,7 @@ export function TaskTrigger() {
     const { openTaskModal, tasks } = useAppStore();
 
     // Find the most recent uncompleted task
-    const activeTask = tasks.find(task => !task.completed);
+    const activeTask = tasks.find(task => !task.is_completed);
     const showFocusMode = activeTask !== undefined;
 
     return (
@@ -19,7 +19,7 @@ export function TaskTrigger() {
                 <>
                     <Flag className="w-6 h-6" />
                     <span className="text-2xl font-semibold">
-                        {activeTask.text}
+                        {activeTask.title}
                     </span>
                 </>
             ) : (
