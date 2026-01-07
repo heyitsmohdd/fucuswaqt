@@ -1,7 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
-import CubeLogin from './CubeLogin';
+import SimpleLogin from './SimpleLogin';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -22,7 +22,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div
-                    className="relative bg-black/80 backdrop-blur-xl border border-white/20 rounded-2xl w-full max-w-md p-8 shadow-2xl"
+                    className="relative bg-black rounded-xl border border-white/10 w-full max-w-[480px] py-12 px-10 shadow-2xl"
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="auth-modal-title"
@@ -30,20 +30,30 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     {/* Close button */}
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+                        className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
                         aria-label="Close authentication modal"
                     >
                         <X className="w-5 h-5" />
                     </button>
 
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <h2 id="auth-modal-title" className="text-2xl font-bold text-white mb-2">Sign in to save progress</h2>
-                        <p className="text-white/60 text-sm">Track your streaks and sync across devices</p>
+                    <div className="text-center mb-10">
+                        <h2 id="auth-modal-title" className="text-3xl font-bold text-white mb-3">Sign in</h2>
+                        <p className="text-gray-400 text-base">Login to count your streak</p>
                     </div>
 
-                    {/* 3D Cube Login Component */}
-                    <CubeLogin />
+                    {/* Simple Login Component */}
+                    <SimpleLogin />
+
+                    {/* Decorative Skip Link (Visual only for now, or closes modal) */}
+                    <div className="mt-8 text-center">
+                        <button
+                            onClick={onClose}
+                            className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                        >
+                            Skip login →
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
