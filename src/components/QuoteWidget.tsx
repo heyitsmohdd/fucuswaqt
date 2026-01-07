@@ -5,6 +5,8 @@ import { Settings, X, Trash2, Plus } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useTimerStore } from '@/stores/timerStore';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+import { QUOTE_MAX_LENGTH } from '@/constants';
 
 const DEFAULT_QUOTES = [
     "Take it one step at a time.",
@@ -58,10 +60,20 @@ export function QuoteWidget() {
 
     const handleAddQuote = () => {
         const trimmed = newQuote.trim();
-        if (trimmed && !quotes.includes(trimmed)) {
-            setQuotes([...quotes, trimmed]);
-            setNewQuote('');
+        if (!trimmed) return;
+
+        if (trimmed.length > QUOTE_MAX_LENGTH) {
+            toast.error(`Quote must be ${QUOTE_MAX_LENGTH} characters or less`);
+            return;
         }
+
+        if (quotes.includes(trimmed)) {
+            toast.error('This quote already exists');
+            return;
+        }
+
+        setQuotes([...quotes, trimmed]);
+        setNewQuote('');
     };
 
     const handleDeleteQuote = (index: number) => {
@@ -152,6 +164,7 @@ export function QuoteWidget() {
                                         onChange={(e) => setNewQuote(e.target.value)}
                                         onKeyPress={handleKeyPress}
                                         placeholder="Enter your quote or dua..."
+                                        maxLength={QUOTE_MAX_LENGTH}
                                         className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
                                     />
                                     <button
@@ -167,6 +180,12 @@ export function QuoteWidget() {
                                         <Plus className="w-5 h-5" />
                                     </button>
                                 </div>
+                                <span className={cn(
+                                    "text-xs text-right block",
+                                    newQuote.length > QUOTE_MAX_LENGTH ? "text-red-400" : "text-white/40"
+                                )}>
+                                    {newQuote.length}/{QUOTE_MAX_LENGTH}
+                                </span>
                             </div>
 
                             {/* Quote List */}

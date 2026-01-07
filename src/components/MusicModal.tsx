@@ -3,17 +3,24 @@
 import { useState, useEffect } from 'react';
 import { X, Music, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface MusicModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+// Validate if a URL is a valid YouTube URL
+const isValidYouTubeUrl = (url: string): boolean => {
+    const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]{11}([&?].*)?$/;
+    return pattern.test(url.trim());
+};
+
 // Helper function to extract YouTube video ID from URL
-const extractYouTubeId = (url: string): string => {
+const extractYouTubeId = (url: string): string | null => {
     const patterns = [
-        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\?]+)/,
-        /youtube\.com\/embed\/([^&\?]+)/,
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
     ];
 
     for (const pattern of patterns) {
@@ -23,8 +30,7 @@ const extractYouTubeId = (url: string): string => {
         }
     }
 
-    // If no match, assume the input is already a video ID
-    return url;
+    return null;
 };
 
 export function MusicModal({ isOpen, onClose }: MusicModalProps) {
@@ -56,9 +62,18 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     };
 
     const handleConfirmChange = () => {
-        if (inputValue.trim()) {
-            setVideoUrl(inputValue.trim());
+        const trimmedInput = inputValue.trim();
+        if (!trimmedInput) {
+            toast.error('Please enter a YouTube URL');
+            return;
         }
+
+        if (!isValidYouTubeUrl(trimmedInput)) {
+            toast.error('Please enter a valid YouTube URL (e.g., youtube.com/watch?v=... or youtu.be/...)');
+            return;
+        }
+
+        setVideoUrl(trimmedInput);
         setIsChangingUrl(false);
     };
 

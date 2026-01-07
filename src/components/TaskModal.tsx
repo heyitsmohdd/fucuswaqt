@@ -7,6 +7,7 @@ import { useAppStore } from '@/stores/appStore';
 import { useTasks } from '@/hooks/useTasks';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { TASK_MAX_LENGTH } from '@/constants';
 
 interface TaskModalProps {
     isOpen: boolean;
@@ -33,10 +34,16 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
     if (!isOpen) return null;
 
     const handleAddTask = async () => {
-        if (currentTask.trim()) {
-            await addTask(currentTask);
-            setIsAddingTask(false);
+        const trimmed = currentTask.trim();
+        if (!trimmed) return;
+
+        if (trimmed.length > TASK_MAX_LENGTH) {
+            toast.error(`Task must be ${TASK_MAX_LENGTH} characters or less`);
+            return;
         }
+
+        await addTask(currentTask);
+        setIsAddingTask(false);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -125,23 +132,32 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
 
                     {/* Add Task Input (when active) */}
                     {isAddingTask && (
-                        <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg mb-4">
-                            <GripVertical className="w-4 h-4 text-white/30" />
-                            <input
-                                type="checkbox"
-                                className="w-4 h-4 rounded bg-white/10 border-white/30"
-                                disabled
-                            />
-                            <input
-                                type="text"
-                                value={currentTask}
-                                onChange={(e) => setCurrentTask(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                onBlur={handleAddTask}
-                                placeholder="Task name..."
-                                className="flex-1 bg-transparent text-white text-sm outline-none placeholder-white/40"
-                                autoFocus
-                            />
+                        <div className="flex flex-col gap-1 mb-4">
+                            <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg">
+                                <GripVertical className="w-4 h-4 text-white/30" />
+                                <input
+                                    type="checkbox"
+                                    className="w-4 h-4 rounded bg-white/10 border-white/30"
+                                    disabled
+                                />
+                                <input
+                                    type="text"
+                                    value={currentTask}
+                                    onChange={(e) => setCurrentTask(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    onBlur={handleAddTask}
+                                    placeholder="Task name..."
+                                    maxLength={TASK_MAX_LENGTH}
+                                    className="flex-1 bg-transparent text-white text-sm outline-none placeholder-white/40"
+                                    autoFocus
+                                />
+                            </div>
+                            <span className={cn(
+                                "text-xs text-right pr-2",
+                                currentTask.length > TASK_MAX_LENGTH ? "text-red-400" : "text-white/40"
+                            )}>
+                                {currentTask.length}/{TASK_MAX_LENGTH}
+                            </span>
                         </div>
                     )}
 

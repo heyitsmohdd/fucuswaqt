@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAppStore, Task } from '@/stores/appStore';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
+import { TASK_MAX_LENGTH } from '@/constants';
 
 export function useTasks() {
     const { tasks, addTask: addTaskToStore, toggleTask: toggleTaskInStore, removeTask: removeTaskFromStore } = useAppStore();
@@ -58,7 +59,11 @@ export function useTasks() {
 
     // Add task (with Supabase sync if logged in)
     const addTask = async (text: string) => {
-        if (!text.trim()) return;
+        const trimmed = text.trim();
+        if (!trimmed) return;
+
+        // Validate length (UI should have shown error, this is a safeguard)
+        if (trimmed.length > TASK_MAX_LENGTH) return;
 
         if (user) {
             // If logged in, add to Supabase first

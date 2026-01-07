@@ -12,6 +12,10 @@ export interface AudioTrack {
   url: string;
 }
 
+// Input validation constants
+export const TASK_MAX_LENGTH = 200;
+export const QUOTE_MAX_LENGTH = 300;
+
 // Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {
