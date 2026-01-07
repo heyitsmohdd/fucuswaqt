@@ -1,3 +1,5 @@
+import { EXTERNAL_AUDIO } from '@/lib/mediaConstants';
+
 export interface VideoBackground {
   id: string;
   name: string;
@@ -91,12 +93,13 @@ export const IMAGE_BACKGROUNDS: ImageBackground[] = [
 ];
 
 // Audio tracks - using local custom sounds
+
 export const AUDIO_TRACKS: AudioTrack[] = [
   {
     id: 'rain',
     name: 'Rain',
     icon: 'CloudRain',
-    url: 'https://assets.mixkit.co/active_storage/sfx/2390/2390-preview.mp3',
+    url: EXTERNAL_AUDIO.RAIN_SOUND,
   },
   {
     id: 'fire',
@@ -120,7 +123,7 @@ export const AUDIO_TRACKS: AudioTrack[] = [
     id: 'birds',
     name: 'Forest Birds',
     icon: 'Bird',
-    url: '/sounds/birds-sound.mp3',
+    url: '/sounds/birds-sound-2.mp3',
   },
 ];
 
