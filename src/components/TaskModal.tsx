@@ -64,16 +64,28 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-2xl bg-black/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
+            <div
+                className="relative w-full max-w-2xl bg-black/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="task-modal-title"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-4 border-b border-white/10">
-                    <div className="flex gap-6">
-                        <button className="text-lg font-semibold text-white border-b-2 border-white pb-1">
+                    <div className="flex gap-6" role="tablist">
+                        <button
+                            className="text-lg font-semibold text-white border-b-2 border-white pb-1"
+                            role="tab"
+                            aria-selected="true"
+                            id="task-modal-title"
+                        >
                             Tasks
                         </button>
                         <button
                             onClick={() => toast('📅 Live Calendar feature is coming soon!')}
                             className="text-lg text-white/40 hover:text-white/60 transition-colors"
+                            role="tab"
+                            aria-selected="false"
                         >
                             Events
                         </button>
@@ -81,9 +93,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                     <button
                         onClick={onClose}
                         className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
-                        aria-label="Close modal"
+                        aria-label="Close task manager"
                     >
-                        <X className="w-6 h-6 text-white/80" />
+                        <X className="w-6 h-6 text-white/80" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -106,12 +118,13 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     key={task.id}
                                     className="flex items-center gap-3 p-3 bg-white/5 rounded-lg group hover:bg-white/10 transition-colors"
                                 >
-                                    <GripVertical className="w-4 h-4 text-white/30" />
+                                    <GripVertical className="w-4 h-4 text-white/30" aria-hidden="true" />
                                     <input
                                         type="checkbox"
                                         checked={task.is_completed}
                                         onChange={() => toggleTask(task.id)}
                                         className="w-4 h-4 rounded bg-transparent border-2 border-white/30 checked:bg-white checked:border-white cursor-pointer"
+                                        aria-label={`Mark "${DOMPurify.sanitize(task.title)}" as ${task.is_completed ? 'incomplete' : 'complete'}`}
                                     />
                                     <span className={cn(
                                         "text-white text-sm flex-1",
@@ -122,8 +135,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     <button
                                         onClick={() => removeTask(task.id)}
                                         className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                        aria-label={`Delete task "${DOMPurify.sanitize(task.title)}"`}
                                     >
-                                        <X className="w-4 h-4 text-white/60 hover:text-white" />
+                                        <X className="w-4 h-4 text-white/60 hover:text-white" aria-hidden="true" />
                                     </button>
                                 </div>
                             ))}

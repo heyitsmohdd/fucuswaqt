@@ -94,16 +94,21 @@ export function SoundMixerModal({ isOpen, onClose }: SoundMixerModalProps) {
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-md bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
+            <div
+                className="relative w-full max-w-md bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="sound-mixer-title"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-4">
-                    <h2 className="text-2xl font-bold text-white">White Noises</h2>
+                    <h2 id="sound-mixer-title" className="text-2xl font-bold text-white">White Noises</h2>
                     <button
                         onClick={onClose}
                         className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
-                        aria-label="Close modal"
+                        aria-label="Close sound mixer"
                     >
-                        <X className="w-6 h-6 text-white/80" />
+                        <X className="w-6 h-6 text-white/80" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -148,6 +153,10 @@ export function SoundMixerModal({ isOpen, onClose }: SoundMixerModalProps) {
                                             style={{
                                                 background: `linear-gradient(to right, rgba(255,255,255,0.4) ${getVolume(track.id) * 100}%, rgba(255,255,255,0.1) ${getVolume(track.id) * 100}%)`
                                             }}
+                                            aria-label={`${track.name} volume control`}
+                                            aria-valuenow={Math.round(getVolume(track.id) * 100)}
+                                            aria-valuemin={0}
+                                            aria-valuemax={100}
                                         />
                                     )}
                                 </div>

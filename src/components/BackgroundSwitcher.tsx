@@ -21,8 +21,11 @@ export function BackgroundSwitcher() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="glass-light rounded-full p-3 hover:bg-white/20 transition-all"
                 title="Change background"
+                aria-label="Change background scene"
+                aria-expanded={isOpen}
+                aria-haspopup="listbox"
             >
-                <MonitorPlay className="w-6 h-6 text-white" />
+                <MonitorPlay className="w-6 h-6 text-white" aria-hidden="true" />
             </button>
 
             {isOpen && (

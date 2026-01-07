@@ -44,6 +44,7 @@ export default function CubeLogin() {
                 className={`${styles.control} ${styles.blockCube}`}
                 onClick={() => handleLogin('google')}
                 disabled={loading}
+                aria-label={loading ? 'Connecting to Google' : 'Log in with Google'}
             >
                 <div className={styles.bgTop}><div className={styles.bgInner}></div></div>
                 <div className={styles.bgRight}><div className={styles.bgInner}></div></div>
@@ -58,6 +59,7 @@ export default function CubeLogin() {
                 className={`${styles.control} ${styles.blockCube}`}
                 onClick={() => handleLogin('github')}
                 disabled={loading}
+                aria-label={loading ? 'Connecting to GitHub' : 'Log in with GitHub'}
             >
                 <div className={styles.bgTop}><div className={styles.bgInner}></div></div>
                 <div className={styles.bgRight}><div className={styles.bgInner}></div></div>

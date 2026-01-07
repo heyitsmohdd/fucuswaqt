@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { X, Play } from 'lucide-react';
+import { X, Play, Loader2 } from 'lucide-react';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
 import { useAppStore } from '@/stores/appStore';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,8 @@ type TabType = 'motion' | 'stills';
 
 export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModalProps) {
     const [activeTab, setActiveTab] = useState<TabType>('motion');
+    const [loadedVideos, setLoadedVideos] = useState<Set<string>>(new Set());
+    const [isSelecting, setIsSelecting] = useState(false);
     const { setCurrentVideo, setCurrentBackground } = useAppStore();
 
     // Close modal on Escape key
@@ -32,13 +34,24 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
 
     if (!isOpen) return null;
 
-    const handleVideoSelect = (videoId: string) => {
+    const handleVideoLoad = (videoId: string) => {
+        setLoadedVideos(prev => new Set(prev).add(videoId));
+    };
+
+    const handleVideoSelect = async (videoId: string) => {
+        setIsSelecting(true);
         setCurrentVideo(videoId);
+        // Small delay to show loading state
+        await new Promise(resolve => setTimeout(resolve, 300));
+        setIsSelecting(false);
         onClose();
     };
 
-    const handleImageSelect = (imageId: string) => {
+    const handleImageSelect = async (imageId: string) => {
+        setIsSelecting(true);
         setCurrentBackground(imageId, 'image');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        setIsSelecting(false);
         onClose();
     };
 
@@ -51,16 +64,21 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-4xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
+            <div
+                className="relative w-full max-w-4xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="background-picker-title"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-4">
-                    <h2 className="text-2xl font-bold text-white">Set your focus scene</h2>
+                    <h2 id="background-picker-title" className="text-2xl font-bold text-white">Set your focus scene</h2>
                     <button
                         onClick={onClose}
                         className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
-                        aria-label="Close modal"
+                        aria-label="Close background picker"
                     >
-                        <X className="w-6 h-6 text-white/80" />
+                        <X className="w-6 h-6 text-white/80" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -108,6 +126,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     key={video.id}
                                     onClick={() => handleVideoSelect(video.id)}
                                     className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
+                                    aria-label={`Select ${video.name} background`}
                                 >
                                     {/* Video Preview - Using first frame as thumbnail */}
                                     <video
@@ -115,10 +134,11 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                         className="w-full h-full object-cover"
                                         muted
                                         playsInline
+                                        aria-hidden="true"
                                     />
 
                                     {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center" aria-hidden="true">
                                         <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
                                             <Play className="w-6 h-6 text-white ml-1" />
                                         </div>
@@ -141,6 +161,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     key={image.id}
                                     onClick={() => handleImageSelect(image.id)}
                                     className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
+                                    aria-label={`Select ${image.name} background`}
                                 >
                                     {/* Image */}
                                     <Image
@@ -151,7 +172,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     />
 
                                     {/* Overlay on hover */}
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" aria-hidden="true" />
 
                                     {/* Title */}
                                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">

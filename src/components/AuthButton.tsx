@@ -53,8 +53,8 @@ export function AuthButton() {
 
     if (loading) {
         return (
-            <div className="rounded-full px-5 py-2.5 bg-black/40 backdrop-blur-sm">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div className="rounded-full px-5 py-2.5 bg-black/40 backdrop-blur-sm" role="status" aria-label="Loading authentication status">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
             </div>
         );
     }
@@ -80,6 +80,9 @@ export function AuthButton() {
             <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="rounded-full p-1.5 bg-black/50 backdrop-blur-sm hover:bg-black/60 transition-all duration-200"
+                aria-label="Open user menu"
+                aria-expanded={showDropdown}
+                aria-haspopup="menu"
             >
                 {user.user_metadata?.avatar_url ? (
                     <Image
@@ -111,8 +114,9 @@ export function AuthButton() {
                             <button
                                 onClick={() => setShowDropdown(false)}
                                 className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
+                                aria-label="Close user menu"
                             >
-                                <X className="w-4 h-4" />
+                                <X className="w-4 h-4" aria-hidden="true" />
                             </button>
                             <h3 className="text-white font-bold text-base pr-6">{getFullName()}</h3>
                             <p className="text-gray-400 text-sm mt-0.5">

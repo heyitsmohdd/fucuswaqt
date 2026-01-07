@@ -106,7 +106,13 @@ export function Timer() {
             </div>
 
             {/* Timer Display */}
-            <div className="text-[8rem] md:text-[10rem] font-bold text-white leading-none tracking-tight">
+            <div
+                className="text-[8rem] md:text-[10rem] font-bold text-white leading-none tracking-tight"
+                aria-live="polite"
+                aria-atomic="true"
+                role="timer"
+                aria-label={`${minutes} minutes and ${seconds} seconds remaining`}
+            >
                 {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
             </div>
 
@@ -115,6 +121,7 @@ export function Timer() {
                 <button
                     onClick={isRunning ? pauseTimer : startTimer}
                     className="glass-light p-6 rounded-full hover:bg-white/20 transition-all"
+                    aria-label={isRunning ? 'Pause timer' : 'Start timer'}
                 >
                     {isRunning ? (
                         <Pause className="w-8 h-8 text-white" />
@@ -125,6 +132,7 @@ export function Timer() {
                 <button
                     onClick={resetTimer}
                     className="glass-light p-6 rounded-full hover:bg-white/20 transition-all"
+                    aria-label="Reset timer"
                 >
                     <RotateCcw className="w-8 h-8 text-white" />
                 </button>
