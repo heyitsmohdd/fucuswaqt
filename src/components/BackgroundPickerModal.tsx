@@ -118,38 +118,63 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
 
                 {/* Body */}
                 <div className="px-6 py-6">
+                    {/* Global Loading Overlay */}
+                    {isSelecting && (
+                        <div className="absolute inset-0 bg-black/50 z-10 flex items-center justify-center rounded-3xl">
+                            <div className="flex flex-col items-center gap-2">
+                                <Loader2 className="w-8 h-8 text-white animate-spin" />
+                                <span className="text-white text-sm">Loading background...</span>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Motion Tab Content */}
                     {activeTab === 'motion' && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {VIDEO_BACKGROUNDS.map((video) => (
-                                <button
-                                    key={video.id}
-                                    onClick={() => handleVideoSelect(video.id)}
-                                    className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
-                                    aria-label={`Select ${video.name} background`}
-                                >
-                                    {/* Video Preview - Using first frame as thumbnail */}
-                                    <video
-                                        src={video.url}
-                                        className="w-full h-full object-cover"
-                                        muted
-                                        playsInline
-                                        aria-hidden="true"
-                                    />
+                            {VIDEO_BACKGROUNDS.map((video) => {
+                                const isLoaded = loadedVideos.has(video.id);
+                                return (
+                                    <button
+                                        key={video.id}
+                                        onClick={() => handleVideoSelect(video.id)}
+                                        className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
+                                        aria-label={`Select ${video.name} background`}
+                                        disabled={isSelecting}
+                                    >
+                                        {/* Loading Skeleton */}
+                                        {!isLoaded && (
+                                            <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center">
+                                                <Loader2 className="w-6 h-6 text-white/50 animate-spin" />
+                                            </div>
+                                        )}
 
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center" aria-hidden="true">
-                                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                                            <Play className="w-6 h-6 text-white ml-1" />
+                                        {/* Video Preview - Using first frame as thumbnail */}
+                                        <video
+                                            src={video.url}
+                                            className={cn(
+                                                "w-full h-full object-cover transition-opacity",
+                                                isLoaded ? "opacity-100" : "opacity-0"
+                                            )}
+                                            muted
+                                            playsInline
+                                            aria-hidden="true"
+                                            onLoadedData={() => handleVideoLoad(video.id)}
+                                        />
+
+                                        {/* Overlay */}
+                                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center" aria-hidden="true">
+                                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                                <Play className="w-6 h-6 text-white ml-1" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Title */}
-                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                                        <p className="text-white font-medium text-sm">{video.name}</p>
-                                    </div>
-                                </button>
-                            ))}
+                                        {/* Title */}
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                                            <p className="text-white font-medium text-sm">{video.name}</p>
+                                        </div>
+                                    </button>
+                                );
+                            })}
                         </div>
                     )}
 
