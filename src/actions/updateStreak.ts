@@ -29,9 +29,9 @@ export async function updateStreak(): Promise<UpdateStreakResult> {
         }
 
         // Check rate limit (60 updates per 1 minute)
-        const rateLimit = await checkRateLimit(user.id, 'update-streak', 60, 1);
+        const allowed = await checkRateLimit(user.id, 'streak');
 
-        if (!rateLimit.success) {
+        if (!allowed) {
             return { success: false, error: 'You are doing that too fast. Please wait a moment.' };
         }
 

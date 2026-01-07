@@ -13,10 +13,10 @@ export async function GET(request: Request) {
         // Rate Limit: Identify by IP since user isn't logged in yet
         const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'anonymous_ip'
 
-        // Limit: 10 attempts per 1 minute
-        const rateLimit = await checkRateLimit(ip, 'auth-callback', 10, 1)
+        // Limit: 5 attempts per 1 minute (as defined in ratelimit.ts for 'auth')
+        const allowed = await checkRateLimit(ip, 'auth');
 
-        if (!rateLimit.success) {
+        if (!allowed) {
             return NextResponse.redirect(`${origin}/auth/rate-limit-exceeded`)
         }
 

@@ -13,7 +13,8 @@ interface MusicModalProps {
 
 // Validate if a URL is a valid YouTube URL
 const isValidYouTubeUrl = (url: string): boolean => {
-    const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]{11}([&?].*)?$/;
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]{11}([\?&][\w\-\=\%]*)?$/;
     return pattern.test(url.trim());
 };
 

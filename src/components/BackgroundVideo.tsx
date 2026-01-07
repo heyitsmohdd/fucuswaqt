@@ -20,7 +20,6 @@ export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
     useEffect(() => {
         if (videoUrl !== prevUrlRef.current) {
             prevUrlRef.current = videoUrl;
-            setHasError(false);
 
             // Clear any existing timer
             if (timerRef.current) {
@@ -29,6 +28,7 @@ export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
 
             // Schedule state updates to next microtask to avoid sync setState warning
             queueMicrotask(() => {
+                setHasError(false);
                 setIsLoaded(false);
                 setIsLoading(true);
                 timerRef.current = setTimeout(() => {

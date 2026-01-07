@@ -22,7 +22,7 @@ export async function checkRateLimit(identifier: string, type: 'auth' | 'streak'
 
     // Define limits
     let limit = 10; // Default
-    let window = 60; // Default seconds
+    const window = 60; // Default seconds
 
     if (type === 'streak') {
         limit = 60; // 60 requests per minute
