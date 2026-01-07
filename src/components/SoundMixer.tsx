@@ -44,8 +44,7 @@ export function SoundMixer() {
         audioRefs.current.forEach((audio, trackId) => {
             if (activeTracks.has(trackId)) {
                 audio.play().catch(() => {
-                    // Handle autoplay restrictions
-                    console.log('Autoplay prevented for', trackId);
+                    // Autoplay restriction handled silently
                 });
             } else {
                 audio.pause();

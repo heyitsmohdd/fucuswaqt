@@ -32,8 +32,8 @@ export function FullScreenToggle() {
                 // Exit fullscreen
                 await document.exitFullscreen();
             }
-        } catch (error) {
-            console.error('Fullscreen toggle failed:', error);
+        } catch {
+            // Fullscreen not available
         }
     };
 

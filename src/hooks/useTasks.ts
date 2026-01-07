@@ -39,7 +39,6 @@ export function useTasks() {
                     .order('created_at', { ascending: false });
 
                 if (error) {
-                    console.error('Error fetching tasks:', error);
                     return;
                 }
 
@@ -47,8 +46,8 @@ export function useTasks() {
                     // Clear existing tasks and populate with Supabase data
                     useAppStore.setState({ tasks: data });
                 }
-            } catch (err) {
-                console.error('Unexpected error fetching tasks:', err);
+            } catch {
+                // Silently handle fetch errors
             } finally {
                 setLoading(false);
             }
@@ -73,7 +72,6 @@ export function useTasks() {
                     .select();
 
                 if (error) {
-                    console.error('Error adding task:', error);
                     return;
                 }
 
@@ -84,8 +82,8 @@ export function useTasks() {
                         currentTask: '',
                     }));
                 }
-            } catch (err) {
-                console.error('Unexpected error adding task:', err);
+            } catch {
+                // Silently handle add errors
             } finally {
                 setLoading(false);
             }
@@ -110,14 +108,13 @@ export function useTasks() {
                     .eq('id', id);
 
                 if (error) {
-                    console.error('Error toggling task:', error);
                     return;
                 }
 
                 // Update local state
                 toggleTaskInStore(id);
-            } catch (err) {
-                console.error('Unexpected error toggling task:', err);
+            } catch {
+                // Silently handle toggle errors
             } finally {
                 setLoading(false);
             }
@@ -139,14 +136,13 @@ export function useTasks() {
                     .eq('id', id);
 
                 if (error) {
-                    console.error('Error removing task:', error);
                     return;
                 }
 
                 // Update local state
                 removeTaskFromStore(id);
-            } catch (err) {
-                console.error('Unexpected error removing task:', err);
+            } catch {
+                // Silently handle remove errors
             } finally {
                 setLoading(false);
             }

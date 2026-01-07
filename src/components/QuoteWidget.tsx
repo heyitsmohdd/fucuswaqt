@@ -33,8 +33,8 @@ export function QuoteWidget() {
                     setQuotes(parsed);
                     return;
                 }
-            } catch (e) {
-                console.error('Failed to parse quotes from localStorage:', e);
+            } catch {
+                // Invalid stored quotes, use defaults
             }
         }
         // If no valid stored quotes, use defaults

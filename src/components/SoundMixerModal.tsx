@@ -49,7 +49,7 @@ export function SoundMixerModal({ isOpen, onClose }: SoundMixerModalProps) {
         audioRefs.current.forEach((audio, trackId) => {
             if (activeTracks.has(trackId)) {
                 audio.play().catch(() => {
-                    console.log('Autoplay prevented for', trackId);
+                    // Autoplay restriction handled silently
                 });
             } else {
                 audio.pause();

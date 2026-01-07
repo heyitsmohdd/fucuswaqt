@@ -37,18 +37,14 @@ export function Timer() {
             // 3. Haven't already updated streak for this session
             if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
                 streakUpdatedRef.current = true; // Mark as updated
-                console.log('🔥 Focus session completed! Updating streak...');
 
                 try {
                     const result = await updateStreak();
                     if (result.success && result.profile) {
                         setStreak(result.profile.current_streak);
-                        console.log('✅ Streak updated successfully:', result.profile.current_streak);
-                    } else {
-                        console.error('❌ Failed to update streak:', result.error);
                     }
-                } catch (error) {
-                    console.error('❌ Error updating streak:', error);
+                } catch {
+                    // Silently handle streak update errors
                 }
             }
         };
