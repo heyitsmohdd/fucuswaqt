@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { X, Play } from 'lucide-react';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
 import { useAppStore } from '@/stores/appStore';
@@ -142,10 +143,11 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02]"
                                 >
                                     {/* Image */}
-                                    <img
+                                    <Image
                                         src={image.url}
                                         alt={image.name}
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
 
                                     {/* Overlay on hover */}

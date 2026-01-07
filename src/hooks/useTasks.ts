@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAppStore, Task } from '@/stores/appStore';
+import { useAppStore } from '@/stores/appStore';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { TASK_MAX_LENGTH } from '@/constants';

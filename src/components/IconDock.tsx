@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudRain, Music, Image } from 'lucide-react';
+import { CloudRain, Music, Image as ImageIcon } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 
 export function IconDock() {
@@ -33,7 +33,7 @@ export function IconDock() {
                     className="group relative w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all"
                     aria-label="Background Switcher"
                 >
-                    <Image className="w-5 h-5 text-white/90 group-hover:text-white transition-colors" />
+                    <ImageIcon className="w-5 h-5 text-white/90 group-hover:text-white transition-colors" />
                 </button>
             </div>
         </div>

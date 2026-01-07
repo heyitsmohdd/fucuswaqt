@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { LogOut, Settings, ChevronRight, X } from 'lucide-react';
@@ -81,9 +82,11 @@ export function AuthButton() {
                 className="rounded-full p-1.5 bg-black/50 backdrop-blur-sm hover:bg-black/60 transition-all duration-200"
             >
                 {user.user_metadata?.avatar_url ? (
-                    <img
+                    <Image
                         src={user.user_metadata.avatar_url}
                         alt={getFirstName()}
+                        width={36}
+                        height={36}
                         className="w-9 h-9 rounded-full ring-2 ring-blue-500"
                     />
                 ) : (

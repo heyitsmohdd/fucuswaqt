@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, Music, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DEFAULT_YOUTUBE_URL } from '@/constants';
 import { toast } from 'sonner';
 
 interface MusicModalProps {
@@ -35,8 +36,13 @@ const extractYouTubeId = (url: string): string | null => {
 
 export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     const [isChangingUrl, setIsChangingUrl] = useState(false);
-    const [videoUrl, setVideoUrl] = useState('https://youtu.be/uyTtCdaEux8?si=E9KEDBOkM2qjtfKu'); // Lofi hip hop radio
+    const [videoUrl, setVideoUrl] = useState(DEFAULT_YOUTUBE_URL); // Lofi hip hop radio
     const [inputValue, setInputValue] = useState('');
+
+    const handleCancelChange = () => {
+        setInputValue('');
+        setIsChangingUrl(false);
+    };
 
     // Close modal on Escape key
     useEffect(() => {
@@ -74,11 +80,6 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         }
 
         setVideoUrl(trimmedInput);
-        setIsChangingUrl(false);
-    };
-
-    const handleCancelChange = () => {
-        setInputValue('');
         setIsChangingUrl(false);
     };
 

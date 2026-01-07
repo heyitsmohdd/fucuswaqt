@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface BackgroundVideoProps {
@@ -8,18 +8,35 @@ interface BackgroundVideoProps {
 }
 
 export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(true);
     const [currentUrl, setCurrentUrl] = useState(videoUrl);
+    const prevUrlRef = useRef(videoUrl);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Sync with prop changes using a deferred update pattern
     useEffect(() => {
-        // Fade transition when video URL changes
-        setIsLoaded(false);
-        const timer = setTimeout(() => {
-            setCurrentUrl(videoUrl);
-            setIsLoaded(true);
-        }, 300);
+        if (videoUrl !== prevUrlRef.current) {
+            prevUrlRef.current = videoUrl;
 
-        return () => clearTimeout(timer);
+            // Clear any existing timer
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+            }
+
+            // Schedule state updates to next microtask to avoid sync setState warning
+            queueMicrotask(() => {
+                setIsLoaded(false);
+                timerRef.current = setTimeout(() => {
+                    setCurrentUrl(videoUrl);
+                }, 300);
+            });
+        }
+
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+            }
+        };
     }, [videoUrl]);
 
     return (

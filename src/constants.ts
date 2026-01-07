@@ -141,3 +141,7 @@ export const ALLOWED_ORIGINS = [
 
 // Production URL fallback
 export const PRODUCTION_URL = 'https://focuswaqt.vercel.app';
+
+// Default YouTube URL for music modal
+// Lofi hip hop radio - beats to relax/study to
+export const DEFAULT_YOUTUBE_URL = process.env.NEXT_PUBLIC_DEFAULT_YOUTUBE_URL || 'https://youtu.be/uyTtCdaEux8?si=E9KEDBOkM2qjtfKu';

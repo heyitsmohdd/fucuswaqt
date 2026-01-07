@@ -27,21 +27,23 @@ export function SoundMixerModal({ isOpen, onClose }: SoundMixerModalProps) {
 
     // Initialize audio elements
     useEffect(() => {
+        const currentAudioRefs = audioRefs.current;
+
         AUDIO_TRACKS.forEach((track) => {
-            if (!audioRefs.current.has(track.id)) {
+            if (!currentAudioRefs.has(track.id)) {
                 const audio = new Audio(track.url);
                 audio.loop = true;
                 audio.volume = getVolume(track.id);
-                audioRefs.current.set(track.id, audio);
+                currentAudioRefs.set(track.id, audio);
             }
         });
 
         return () => {
-            audioRefs.current.forEach((audio) => {
+            currentAudioRefs.forEach((audio) => {
                 audio.pause();
                 audio.src = '';
             });
-            audioRefs.current.clear();
+            currentAudioRefs.clear();
         };
     }, [getVolume]);
 

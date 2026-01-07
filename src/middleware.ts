@@ -31,9 +31,8 @@ export async function middleware(request: NextRequest) {
     // supabase.auth.getUser(). A simple mistake could make it very hard to debug
     // issues with users being randomly logged out.
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    // Refresh session if needed - required for Server Components
+    await supabase.auth.getUser()
 
     // Refresh session if expired - required for Server Components
     // This ensures the user's session stays active across page navigations

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Settings, X, Trash2, Plus } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useTimerStore } from '@/stores/timerStore';
@@ -18,38 +18,36 @@ const DEFAULT_QUOTES = [
 
 const STORAGE_KEY = 'focus-quotes';
 
+// Helper function to load quotes from localStorage
+const loadStoredQuotes = (): string[] => {
+    if (typeof window === 'undefined') return DEFAULT_QUOTES;
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+        try {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed;
+            }
+        } catch {
+            // Invalid stored quotes, use defaults
+        }
+    }
+    return DEFAULT_QUOTES;
+};
+
 export function QuoteWidget() {
     const { isRunning } = useTimerStore();
-    const [quotes, setQuotes] = useState<string[]>(DEFAULT_QUOTES);
-    const [currentQuote, setCurrentQuote] = useState('');
+    // Use lazy initialization to avoid setState in effect
+    const [quotes, setQuotes] = useState<string[]>(loadStoredQuotes);
+    const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * loadStoredQuotes().length));
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newQuote, setNewQuote] = useState('');
 
-    // Load quotes from localStorage on mount
-    useEffect(() => {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    setQuotes(parsed);
-                    return;
-                }
-            } catch {
-                // Invalid stored quotes, use defaults
-            }
-        }
-        // If no valid stored quotes, use defaults
-        setQuotes(DEFAULT_QUOTES);
-    }, []);
-
-    // Select random quote when quotes change
-    useEffect(() => {
-        if (quotes.length > 0) {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            setCurrentQuote(randomQuote);
-        }
-    }, [quotes]);
+    // Derive currentQuote from quotes and index
+    const currentQuote = useMemo(() => {
+        return quotes[quoteIndex % quotes.length] || quotes[0] || '';
+    }, [quotes, quoteIndex]);
 
     // Save quotes to localStorage whenever they change
     useEffect(() => {
@@ -91,13 +89,12 @@ export function QuoteWidget() {
 
     const handleChangeQuote = () => {
         if (quotes.length > 1) {
-            // Get a random quote that's different from the current one
-            const availableQuotes = quotes.filter(q => q !== currentQuote);
-            const randomQuote = availableQuotes[Math.floor(Math.random() * availableQuotes.length)];
-            setCurrentQuote(randomQuote);
-        } else if (quotes.length === 1) {
-            // If only one quote, just set it
-            setCurrentQuote(quotes[0]);
+            // Get a random index that's different from the current one
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * quotes.length);
+            } while (newIndex === quoteIndex % quotes.length);
+            setQuoteIndex(newIndex);
         }
     };
 

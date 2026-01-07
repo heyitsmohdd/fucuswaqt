@@ -16,7 +16,7 @@ interface TaskModalProps {
 
 export function TaskModal({ isOpen, onClose }: TaskModalProps) {
     const { currentTask, setCurrentTask } = useAppStore();
-    const { tasks, loading, addTask, toggleTask, removeTask } = useTasks();
+    const { tasks, addTask, toggleTask, removeTask } = useTasks();
     const [isAddingTask, setIsAddingTask] = useState(false);
 
     // Close modal on Escape key
