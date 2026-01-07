@@ -5,6 +5,7 @@ import { useAudioStore } from '@/stores/audioStore';
 import { AUDIO_TRACKS } from '@/constants';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface SoundMixerModalProps {
     isOpen: boolean;
@@ -49,7 +50,7 @@ export function SoundMixerModal({ isOpen, onClose }: SoundMixerModalProps) {
         audioRefs.current.forEach((audio, trackId) => {
             if (activeTracks.has(trackId)) {
                 audio.play().catch(() => {
-                    // Autoplay restriction handled silently
+                    toast.error('Could not play sound due to browser restrictions');
                 });
             } else {
                 audio.pause();

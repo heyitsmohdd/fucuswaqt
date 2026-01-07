@@ -5,6 +5,7 @@ import { useAudioStore } from '@/stores/audioStore';
 import { AUDIO_TRACKS } from '@/constants';
 import { CloudRain, Flame, Coffee, Waves, Bird, Volume2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 const iconMap = {
     CloudRain,
@@ -44,7 +45,7 @@ export function SoundMixer() {
         audioRefs.current.forEach((audio, trackId) => {
             if (activeTracks.has(trackId)) {
                 audio.play().catch(() => {
-                    // Autoplay restriction handled silently
+                    toast.error('Could not play sound due to browser restrictions');
                 });
             } else {
                 audio.pause();
