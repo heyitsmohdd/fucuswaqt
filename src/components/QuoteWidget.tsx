@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Settings, X, Trash2, Plus } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { useTimerStore } from '@/stores/timerStore';
 import { cn } from '@/lib/utils';
 
@@ -108,7 +109,7 @@ export function QuoteWidget() {
                         className="flex-1 bg-white/10 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/10 hover:bg-white/15 transition-all cursor-pointer text-left"
                     >
                         <p className="text-white text-base font-medium leading-relaxed">
-                            {currentQuote}
+                            {DOMPurify.sanitize(currentQuote)}
                         </p>
                     </button>
                 </div>
@@ -180,7 +181,7 @@ export function QuoteWidget() {
                                             className="flex items-start gap-2 p-3 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors group"
                                         >
                                             <p className="flex-1 text-white/90 text-sm leading-relaxed">
-                                                {quote}
+                                                {DOMPurify.sanitize(quote)}
                                             </p>
                                             <button
                                                 onClick={() => handleDeleteQuote(index)}

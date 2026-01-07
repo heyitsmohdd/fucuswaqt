@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { X, GripVertical, Plus } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { useAppStore } from '@/stores/appStore';
 import { useTasks } from '@/hooks/useTasks';
 import { cn } from '@/lib/utils';
@@ -109,7 +110,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                         "text-white text-sm flex-1",
                                         task.is_completed && "line-through text-white/50"
                                     )}>
-                                        {task.title}
+                                        {DOMPurify.sanitize(task.title)}
                                     </span>
                                     <button
                                         onClick={() => removeTask(task.id)}
