@@ -2,7 +2,23 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+import { ALLOWED_ORIGINS, PRODUCTION_URL } from "@/constants";
 import styles from "./CubeLogin.module.css";
+
+// Validate and get safe redirect origin
+function getSafeRedirectOrigin(): string {
+    if (typeof window === 'undefined') return PRODUCTION_URL;
+
+    const currentOrigin = window.location.origin;
+
+    // Check if current origin is in allowed list
+    if (ALLOWED_ORIGINS.includes(currentOrigin as typeof ALLOWED_ORIGINS[number])) {
+        return currentOrigin;
+    }
+
+    // Fallback to production URL for security
+    return PRODUCTION_URL;
+}
 
 export default function CubeLogin() {
     const supabase = createClient();
@@ -10,10 +26,11 @@ export default function CubeLogin() {
 
     const handleLogin = async (provider: 'google' | 'github') => {
         setLoading(true);
+        const safeOrigin = getSafeRedirectOrigin();
         await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`,
+                redirectTo: `${safeOrigin}/auth/callback`,
             },
         });
     };

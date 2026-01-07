@@ -25,9 +25,9 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     url: '/videos/jungle-walk.mp4',
   },
   {
-    id: 'sea',
-    name: 'Sea',
-    url: '/videos/sea.mp4',
+    id: 'forest',
+    name: 'Forest',
+    url: '/videos/forest.mp4',
   },
   {
     id: 'sky-loop',
@@ -75,9 +75,9 @@ export const IMAGE_BACKGROUNDS: ImageBackground[] = [
     url: '/images/goku.jpg',
   },
   {
-    id: 'masajid',
-    name: 'Masajid',
-    url: '/images/masajid2.jpg',
+    id: 'calm',
+    name: 'Calm',
+    url: '/images/calm.jpg',
   },
   {
     id: 'nature',
@@ -126,3 +126,14 @@ export const TIMER_DEFAULTS = {
   BREAK_DURATION: 5 * 60, // 5 minutes in seconds
   LONG_BREAK_DURATION: 15 * 60, // 15 minutes in seconds
 } as const;
+
+// Allowed OAuth redirect origins (security)
+export const ALLOWED_ORIGINS = [
+  'https://focuswaqt.vercel.app',
+  'https://www.focuswaqt.com',
+  'http://localhost:3000',
+  'http://localhost:3001',
+] as const;
+
+// Production URL fallback
+export const PRODUCTION_URL = 'https://focuswaqt.vercel.app';
