@@ -1,78 +1,51 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from '@supabase/supabase-js';
 
-export interface RateLimitResult {
-    success: boolean;
-    remaining: number;
-    resetAt?: Date;
+// 1. Get the Service Role Key
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// 2. Safety Check: Warn if key is missing (but don't crash)
+if (!serviceRoleKey) {
+    console.warn("⚠️ Rate Limiting disabled: Missing SUPABASE_SERVICE_ROLE_KEY in .env");
 }
 
-export async function checkRateLimit(
-    userId: string,
-    endpoint: string,
-    limit: number = 10,
-    windowMinutes: number = 1
-): Promise<RateLimitResult> {
-    const supabase = await createClient();
-    const now = new Date();
+// 3. Create the Admin Client
+// We use the Service Role Key to bypass RLS policies on the 'rate_limits' table
+const supabaseAdmin = createClient(
+    supabaseUrl,
+    serviceRoleKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-    // Calculate when the current window started
-    const windowStart = new Date(now.getTime() - windowMinutes * 60 * 1000);
+export async function checkRateLimit(identifier: string, type: 'auth' | 'streak') {
+    // If the key is missing, "fail open" (allow the request) so we don't block users due to a config error
+    if (!serviceRoleKey) return true;
 
-    // 1. Get current rate limit entry
-    const { data } = await supabase
-        .from('rate_limits')
-        .select('count, last_reset')
-        .eq('user_id', userId)
-        .eq('endpoint', endpoint)
-        .single();
+    // Define limits
+    let limit = 10; // Default
+    let window = 60; // Default seconds
 
-    // 2. Decide if we need to reset the window
-    // Reset if: no entry exists OR the last reset was older than our window
-    const shouldReset = !data || new Date(data.last_reset) < windowStart;
+    if (type === 'streak') {
+        limit = 60; // 60 requests per minute
+    } else if (type === 'auth') {
+        limit = 5;  // 5 login attempts per minute
+    }
 
-    if (shouldReset) {
-        const { error: upsertError } = await supabase
-            .from('rate_limits')
-            .upsert({
-                user_id: userId,
-                endpoint: endpoint,
-                count: 1,
-                last_reset: now.toISOString()
-            }, {
-                onConflict: 'user_id,endpoint'
-            });
+    try {
+        // Call the database function
+        const { data, error } = await supabaseAdmin.rpc('check_rate_limit', {
+            rate_key: `${type}:${identifier}`,
+            limit_count: limit,
+            window_seconds: window
+        });
 
-        if (upsertError) {
-            // Fallback: allow request if DB fails
-            return { success: true, remaining: limit - 1 };
+        if (error) {
+            console.error('Rate limit error:', error);
+            return true; // If DB fails, allow the request
         }
 
-        return {
-            success: true,
-            remaining: limit - 1,
-            resetAt: new Date(now.getTime() + windowMinutes * 60 * 1000)
-        };
+        return data; // Returns TRUE if allowed, FALSE if blocked
+    } catch (err) {
+        console.error('Rate limit exception:', err);
+        return true;
     }
-
-    // 3. Check if over limit
-    if (data.count >= limit) {
-        return {
-            success: false,
-            remaining: 0,
-            resetAt: new Date(new Date(data.last_reset).getTime() + windowMinutes * 60 * 1000)
-        };
-    }
-
-    // 4. Increment count
-    await supabase
-        .from('rate_limits')
-        .update({ count: data.count + 1 })
-        .eq('user_id', userId)
-        .eq('endpoint', endpoint);
-
-    return {
-        success: true,
-        remaining: limit - data.count - 1,
-        resetAt: new Date(new Date(data.last_reset).getTime() + windowMinutes * 60 * 1000)
-    };
 }
