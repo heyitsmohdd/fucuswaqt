@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { checkRateLimit } from '@/lib/ratelimit';
 
 interface Profile {
     id: string;
@@ -25,6 +26,13 @@ export async function updateStreak(): Promise<UpdateStreakResult> {
 
         if (authError || !user) {
             return { success: false, error: 'User not authenticated' };
+        }
+
+        // Check rate limit (60 updates per 1 minute)
+        const rateLimit = await checkRateLimit(user.id, 'update-streak', 60, 1);
+
+        if (!rateLimit.success) {
+            return { success: false, error: 'You are doing that too fast. Please wait a moment.' };
         }
 
         // Fetch current profile

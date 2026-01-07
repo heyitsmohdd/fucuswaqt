@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { checkRateLimit } from '@/lib/ratelimit'
 
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url)
@@ -8,12 +9,23 @@ export async function GET(request: Request) {
 
     if (code) {
         const supabase = await createClient()
+
+        // Rate Limit: Identify by IP since user isn't logged in yet
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'anonymous_ip'
+
+        // Limit: 10 attempts per 1 minute
+        const rateLimit = await checkRateLimit(ip, 'auth-callback', 10, 1)
+
+        if (!rateLimit.success) {
+            return NextResponse.redirect(`${origin}/auth/rate-limit-exceeded`)
+        }
+
         const { error } = await supabase.auth.exchangeCodeForSession(code)
+
         if (!error) {
             return NextResponse.redirect(`${origin}${next}`)
         }
     }
 
-    // Return the user to an error page with instructions
     return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
