@@ -42,15 +42,15 @@ export default function SimpleLogin() {
     };
 
     return (
-        <div className="w-full flex flex-col gap-4">
-            {/* Google Button */}
+        <div className="w-full">
+            {/* Google Button - Outlined Style */}
             <button
                 onClick={() => handleLogin('google')}
                 disabled={!!isLoading}
-                className="group relative flex items-center justify-center gap-3 w-full p-3 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group relative flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-white text-gray-800 text-[15px] font-medium rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
                 {isLoading === 'google' ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-5 h-5 animate-spin text-gray-600" />
                 ) : (
                     <>
                         {/* Google Logo SVG */}
