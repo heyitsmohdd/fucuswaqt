@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { fetchFocusHeatmap, type FocusDay } from '@/actions/fetchFocusHeatmap';
 
 interface HeatmapProps {
@@ -9,7 +9,7 @@ interface HeatmapProps {
 
 export function FocusHeatmap({ className = '' }: HeatmapProps) {
     const [focusData, setFocusData] = useState<FocusDay[]>([]);
-    const [hoveredDay, setHoveredDay] = useState<{ date: string; data: FocusDay | null } | null>(null);
+    const [hoveredDay, setHoveredDay] = useState<{ date: string; data: FocusDay | null; x: number; y: number } | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -99,7 +99,7 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
             if (dayData && dayData.focus_minutes > 0) {
                 streak++;
             } else if (dateStr !== today) {
-                // Allow today to be 0 without breaking streak
+                // Allow today to be  0 without breaking streak
                 break;
             }
         }
@@ -125,36 +125,36 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
 
     if (loading) {
         return (
-            <div className={`p-6 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
+            <div className={`p-4 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
                 <div className="animate-pulse">
                     <div className="h-6 bg-white/10 rounded w-48 mb-4"></div>
-                    <div className="h-32 bg-white/10 rounded"></div>
+                    <div className="h-24 bg-white/10 rounded"></div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className={`p-6 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
+        <div className={`p-4 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
             {/* Header with Stats */}
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-                <h2 className="text-xl font-semibold text-white">Focus Activity</h2>
-                <div className="flex gap-4 text-sm">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+                <h2 className="text-lg font-semibold text-white">Focus Activity</h2>
+                <div className="flex gap-3 text-sm">
                     <div className="text-center">
                         <div className="text-gray-400 text-xs">Total</div>
-                        <div className="text-white font-semibold">{totalHours}h</div>
+                        <div className="text-white font-semibold text-sm">{totalHours}h</div>
                     </div>
                     <div className="text-center">
                         <div className="text-gray-400 text-xs">Days</div>
-                        <div className="text-white font-semibold">{activeDays}</div>
+                        <div className="text-white font-semibold text-sm">{activeDays}</div>
                     </div>
                     <div className="text-center">
                         <div className="text-gray-400 text-xs">Streak</div>
-                        <div className="text-white font-semibold">{currentStreak}🔥</div>
+                        <div className="text-white font-semibold text-sm">{currentStreak}🔥</div>
                     </div>
                     <div className="text-center">
                         <div className="text-gray-400 text-xs">Best</div>
-                        <div className="text-white font-semibold">{longestStreak}</div>
+                        <div className="text-white font-semibold text-sm">{longestStreak}</div>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
             {/* Heatmap Grid */}
             <div className="relative overflow-x-auto">
                 {/* Month labels */}
-                <div className="flex mb-2 text-xs text-gray-400 ml-12 min-w-[700px]">
+                <div className="flex mb-1.5 text-xs text-gray-400 ml-10 min-w-[650px]">
                     {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month) => (
                         <div key={month} className="flex-1 text-left">
                             {month}
@@ -170,81 +170,87 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
                     ))}
                 </div>
 
-                <div className="flex gap-2 min-w-[700px]">
+                <div className="flex gap-1.5 min-w-[650px]">
                     {/* Day of week labels */}
-                    <div className="flex flex-col gap-1 text-xs text-gray-400 justify-around h-[105px]">
+                    <div className="flex flex-col gap-0.5 text-xs text-gray-400 justify-around h-[90px]">
                         <div>Mon</div>
                         <div>Wed</div>
                         <div>Fri</div>
                     </div>
 
                     {/* Grid of squares */}
-                    <div className="grid grid-flow-col grid-rows-7 gap-1 flex-1">
+                    <div className="grid grid-flow-col grid-rows-7 gap-0.5 flex-1 relative">
                         {allDays.map(({ date, data }) => (
                             <div
                                 key={date}
                                 className={`
-                  w-[15px] h-[15px] rounded-sm cursor-pointer transition-all duration-200
+                  w-[12px] h-[12px] rounded-sm cursor-pointer transition-all duration-200
                   hover:ring-2 hover:ring-white/40 hover:scale-110
                   ${getColorClass(data?.focus_minutes)}
                 `}
-                                onMouseEnter={() => setHoveredDay({ date, data })}
+                                onMouseEnter={(e) => {
+                                    const rect = e.currentTarget.getBoundingClientRect();
+                                    setHoveredDay({
+                                        date,
+                                        data,
+                                        x: rect.left + rect.width / 2,
+                                        y: rect.top
+                                    });
+                                }}
                                 onMouseLeave={() => setHoveredDay(null)}
-                                title={`${formatDate(date)}: ${data?.focus_minutes || 0} minutes`}
+                                onClick={(e) => {
+                                    const rect = e.currentTarget.getBoundingClientRect();
+                                    setHoveredDay({
+                                        date,
+                                        data,
+                                        x: rect.left + rect.width / 2,
+                                        y: rect.top
+                                    });
+                                }}
                             />
                         ))}
                     </div>
                 </div>
 
-                {/* Tooltip */}
+                {/* Compact Dark Tooltip */}
                 {hoveredDay && (
-                    <div className="fixed bg-gray-900 text-white text-sm rounded-lg p-3 shadow-xl border border-white/10 z-50 min-w-[200px] pointer-events-none"
+                    <div
+                        className="fixed bg-gray-900 text-white rounded px-3 py-2 shadow-2xl border-2 border-white/30 pointer-events-none"
                         style={{
-                            left: '50%',
-                            top: '50%',
-                            transform: 'translate(-50%, -120%)'
-                        }}>
-                        <div className="font-semibold mb-1">{formatDate(hoveredDay.date)}</div>
-                        <div className="text-gray-300">
-                            {hoveredDay.data && hoveredDay.data.focus_minutes > 0 ? (
-                                <>
-                                    <div className="flex justify-between gap-4">
-                                        <span>Focus time:</span>
-                                        <span className="font-semibold text-green-400">
-                                            {formatTime(hoveredDay.data.focus_minutes)}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between gap-4">
-                                        <span>Sessions:</span>
-                                        <span className="font-semibold">{hoveredDay.data.sessions_completed}</span>
-                                    </div>
-                                    {hoveredDay.data.tasks_completed > 0 && (
-                                        <div className="flex justify-between gap-4">
-                                            <span>Tasks:</span>
-                                            <span className="font-semibold">{hoveredDay.data.tasks_completed}</span>
-                                        </div>
-                                    )}
-                                    <div className="mt-2 text-xs text-gray-400">
-                                        {getColorName(hoveredDay.data.focus_minutes)} activity
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="text-gray-500">No focus time recorded</div>
-                            )}
-                        </div>
+                            left: `${hoveredDay.x}px`,
+                            top: `${hoveredDay.y - 10}px`,
+                            transform: 'translate(-50%, -100%)',
+                            minWidth: '160px',
+                            zIndex: 99999
+                        }}
+                    >
+                        <div className="font-semibold text-sm mb-1">{formatDate(hoveredDay.date)}</div>
+                        {hoveredDay.data && hoveredDay.data.focus_minutes > 0 ? (
+                            <div className="text-sm space-y-1">
+                                <div className="text-green-400 font-semibold text-base">
+                                    {formatTime(hoveredDay.data.focus_minutes)}
+                                </div>
+                                <div className="text-gray-300 text-xs">
+                                    {hoveredDay.data.sessions_completed} sessions
+                                    {hoveredDay.data.tasks_completed > 0 && `, ${hoveredDay.data.tasks_completed} tasks`}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-gray-400 text-sm">No focus time</div>
+                        )}
                     </div>
                 )}
             </div>
 
             {/* Legend */}
-            <div className="flex items-center justify-end gap-2 mt-4 text-xs text-gray-400">
+            <div className="flex items-center justify-end gap-2 mt-3 text-xs text-gray-400">
                 <span>Less</span>
-                <div className="flex gap-1">
-                    <div className="w-3 h-3 rounded-sm bg-gray-800/30"></div>
-                    <div className="w-3 h-3 rounded-sm bg-green-900/40"></div>
-                    <div className="w-3 h-3 rounded-sm bg-green-700/60"></div>
-                    <div className="w-3 h-3 rounded-sm bg-green-600/80"></div>
-                    <div className="w-3 h-3 rounded-sm bg-green-500"></div>
+                <div className="flex gap-0.5">
+                    <div className="w-2.5 h-2.5 rounded-sm bg-gray-800/30"></div>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-900/40"></div>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-700/60"></div>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-600/80"></div>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-500"></div>
                 </div>
                 <span>More</span>
             </div>
