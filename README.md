@@ -7,7 +7,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 
-FocusWaqt is a modern, accessible Pomodoro timer application inspired by [studyfoc.us](https://studyfoc.us/pomodoro) that helps you stay productive with stunning full-screen video backgrounds, multi-track ambient audio mixing, task management, and streak tracking.
 
 ---
 
@@ -382,11 +381,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 🙏 Acknowledgments
-
-- Inspired by [studyfoc.us](https://studyfoc.us/pomodoro)
-- Video backgrounds and ambient tracks sourced from copyright-free libraries
-- Built with ❤️ using modern web technologies
 
 ---
 
