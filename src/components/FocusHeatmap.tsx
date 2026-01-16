@@ -9,7 +9,6 @@ interface HeatmapProps {
 
 export function FocusHeatmap({ className = '' }: HeatmapProps) {
     const [focusData, setFocusData] = useState<FocusDay[]>([]);
-    const [hoveredDay, setHoveredDay] = useState<{ date: string; data: FocusDay | null; x: number; y: number } | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -183,63 +182,33 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
                         {allDays.map(({ date, data }) => (
                             <div
                                 key={date}
-                                className={`
-                  w-[12px] h-[12px] rounded-sm cursor-pointer transition-all duration-200
-                  hover:ring-2 hover:ring-white/40 hover:scale-110
-                  ${getColorClass(data?.focus_minutes)}
-                `}
-                                onMouseEnter={(e) => {
-                                    const rect = e.currentTarget.getBoundingClientRect();
-                                    setHoveredDay({
-                                        date,
-                                        data,
-                                        x: rect.left + rect.width / 2,
-                                        y: rect.top
-                                    });
-                                }}
-                                onMouseLeave={() => setHoveredDay(null)}
-                                onClick={(e) => {
-                                    const rect = e.currentTarget.getBoundingClientRect();
-                                    setHoveredDay({
-                                        date,
-                                        data,
-                                        x: rect.left + rect.width / 2,
-                                        y: rect.top
-                                    });
-                                }}
-                            />
+                                className="group relative w-[12px] h-[12px] rounded-sm cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-white/40 hover:scale-110"
+                            >
+                                {/* Square */}
+                                <div className={`w-full h-full rounded-sm ${getColorClass(data?.focus_minutes)}`} />
+
+                                {/* Tooltip - appears to the RIGHT to avoid clipping */}
+                                <div className="invisible group-hover:visible absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white rounded px-2.5 py-1.5 shadow-xl border border-white/20 z-[99999] pointer-events-none text-xs whitespace-nowrap">
+                                    <div className="font-medium mb-0.5">
+                                        {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </div>
+                                    {data && data.focus_minutes > 0 ? (
+                                        <>
+                                            <div className="text-green-400 font-semibold">
+                                                {formatTime(data.focus_minutes)}
+                                            </div>
+                                            <div className="text-gray-400 text-[10px] mt-0.5">
+                                                {data.sessions_completed} sessions
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="text-gray-400">No time</div>
+                                    )}
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
-
-                {/* Compact Dark Tooltip */}
-                {hoveredDay && (
-                    <div
-                        className="fixed bg-gray-900 text-white rounded px-3 py-2 shadow-2xl border-2 border-white/30 pointer-events-none"
-                        style={{
-                            left: `${hoveredDay.x}px`,
-                            top: `${hoveredDay.y - 10}px`,
-                            transform: 'translate(-50%, -100%)',
-                            minWidth: '160px',
-                            zIndex: 99999
-                        }}
-                    >
-                        <div className="font-semibold text-sm mb-1">{formatDate(hoveredDay.date)}</div>
-                        {hoveredDay.data && hoveredDay.data.focus_minutes > 0 ? (
-                            <div className="text-sm space-y-1">
-                                <div className="text-green-400 font-semibold text-base">
-                                    {formatTime(hoveredDay.data.focus_minutes)}
-                                </div>
-                                <div className="text-gray-300 text-xs">
-                                    {hoveredDay.data.sessions_completed} sessions
-                                    {hoveredDay.data.tasks_completed > 0 && `, ${hoveredDay.data.tasks_completed} tasks`}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="text-gray-400 text-sm">No focus time</div>
-                        )}
-                    </div>
-                )}
             </div>
 
             {/* Legend */}

@@ -44,7 +44,7 @@ export default function StatsPage() {
                 </div>
 
                 {/* Stats Container - Centered Box */}
-                <div className="flex-1 flex items-center justify-center overflow-hidden">
+                <div className="flex-1 flex items-center justify-center overflow-visible">
                     <div className="max-w-4xl w-full">
                         {/* Close button above heading */}
                         <div className="flex justify-end mb-2">
