@@ -6,6 +6,8 @@ import { useAppStore } from '@/stores/appStore';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { updateStreak } from '@/actions/updateStreak';
+import { updateDailyFocus } from '@/actions/updateDailyFocus';
+import { TIMER_DEFAULTS } from '@/constants';
 
 export function Timer() {
     const { isRunning, timeLeft, mode, startTimer, pauseTimer, resetTimer, tick, switchMode } = useTimerStore();
@@ -28,7 +30,7 @@ export function Timer() {
         streakUpdatedRef.current = false;
     }, [mode, isRunning]);
 
-    // Handle streak update when focus session completes
+    // Handle streak update and focus tracking when session completes
     useEffect(() => {
         const handleSessionComplete = async () => {
             // Only trigger once when:
@@ -39,12 +41,17 @@ export function Timer() {
                 streakUpdatedRef.current = true; // Mark as updated
 
                 try {
+                    // Update streak
                     const result = await updateStreak();
                     if (result.success && result.profile) {
                         setStreak(result.profile.current_streak);
                     }
+
+                    // Record focus time in heatmap
+                    const focusMinutes = Math.floor(TIMER_DEFAULTS.FOCUS_DURATION / 60);
+                    await updateDailyFocus(focusMinutes);
                 } catch {
-                    // Silently handle streak update errors
+                    // Silently handle errors
                 }
             }
         };
