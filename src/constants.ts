@@ -108,10 +108,10 @@ export const AUDIO_TRACKS: AudioTrack[] = [
     url: '/sounds/fire-sound.mp3',
   },
   {
-    id: 'cafe',
-    name: 'Coffee Shop',
-    icon: 'Coffee',
-    url: '/sounds/drip-coffee.mp3',
+    id: 'night',
+    name: 'Night',
+    icon: 'Moon',
+    url: '/sounds/night.mp3',
   },
   {
     id: 'waves',
