@@ -56,9 +56,9 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     url: '/videos/sky.mp4',
   },
   {
-    id: 'sleeping-in-flowers',
-    name: 'Sleeping in Flowers',
-    url: '/videos/sleeping-in-flowers.mp4',
+    id: 'city',
+    name: 'City',
+    url: '/videos/city.mp4',
   },
 ];
 
