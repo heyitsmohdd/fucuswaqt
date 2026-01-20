@@ -21,24 +21,34 @@ export const QUOTE_MAX_LENGTH = 300;
 // Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {
-    id: 'flowers',
-    name: 'Flowers',
-    url: '/videos/flowers.mp4',
+    id: 'catt',
+    name: 'Catt',
+    url: '/videos/catt.mp4',
   },
   {
-    id: 'jungle-walk',
-    name: 'Jungle Walk',
-    url: '/videos/jungle-walk.mp4',
+    id: 'cool',
+    name: 'Cool',
+    url: '/videos/cool.mp4',
   },
   {
-    id: 'forest',
-    name: 'Forest',
-    url: '/videos/forest.mp4',
+    id: 'cozy',
+    name: 'Cozy',
+    url: '/videos/cozy.mp4',
   },
   {
-    id: 'sky-loop',
-    name: 'Sky Loop',
-    url: '/videos/sky-loop.mp4',
+    id: 'good',
+    name: 'Good',
+    url: '/videos/good.mp4',
+  },
+  {
+    id: 'ocean',
+    name: 'Ocean',
+    url: '/videos/ocean.mp4',
+  },
+  {
+    id: 'rain',
+    name: 'Rain',
+    url: '/videos/rain.mp4',
   },
   {
     id: 'sky',
@@ -49,16 +59,6 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     id: 'sleeping-in-flowers',
     name: 'Sleeping in Flowers',
     url: '/videos/sleeping-in-flowers.mp4',
-  },
-  {
-    id: 'three-loop',
-    name: 'Three Loop',
-    url: '/videos/three-loop.mp4',
-  },
-  {
-    id: 'train-view',
-    name: 'Train View',
-    url: '/videos/train-view.mp4',
   },
 ];
 

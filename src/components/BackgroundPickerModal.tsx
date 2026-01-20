@@ -168,10 +168,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                             </div>
                                         </div>
 
-                                        {/* Title */}
-                                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                                            <p className="text-white font-medium text-sm">{video.name}</p>
-                                        </div>
+
                                     </button>
                                 );
                             })}
@@ -199,10 +196,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     {/* Overlay on hover */}
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" aria-hidden="true" />
 
-                                    {/* Title */}
-                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                                        <p className="text-white font-medium text-sm">{image.name}</p>
-                                    </div>
+
                                 </button>
                             ))}
                         </div>
