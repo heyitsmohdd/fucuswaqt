@@ -7,7 +7,7 @@ import { useAppStore } from '@/stores/appStore';
 import { useTasks } from '@/hooks/useTasks';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { TASK_MAX_LENGTH } from '@/constants';
+import { TASK_MAX_LENGTH, TASK_LIMIT } from '@/constants';
 
 interface TaskModalProps {
     isOpen: boolean;
@@ -36,6 +36,11 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
     const handleAddTask = async () => {
         const trimmed = currentTask.trim();
         if (!trimmed) return;
+
+        if (tasks.length >= TASK_LIMIT) {
+            toast.error(`Maximum ${TASK_LIMIT} tasks allowed. Delete one to add more.`);
+            return;
+        }
 
         if (trimmed.length > TASK_MAX_LENGTH) {
             toast.error(`Task must be ${TASK_MAX_LENGTH} characters or less`);
@@ -178,15 +183,23 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                     {/* New Task Button */}
                     <button
                         onClick={() => setIsAddingTask(true)}
-                        className="w-full p-4 border-2 border-dashed border-white/20 rounded-lg hover:border-white/40 transition-colors flex items-center justify-center gap-2 text-white/60 hover:text-white/80"
+                        disabled={tasks.length >= TASK_LIMIT}
+                        className={cn(
+                            "w-full p-4 border-2 border-dashed rounded-lg transition-colors flex items-center justify-center gap-2",
+                            tasks.length >= TASK_LIMIT
+                                ? "border-white/10 text-white/30 cursor-not-allowed"
+                                : "border-white/20 hover:border-white/40 text-white/60 hover:text-white/80"
+                        )}
                     >
                         <Plus className="w-4 h-4" />
-                        <span className="text-sm">New task</span>
+                        <span className="text-sm">
+                            {tasks.length >= TASK_LIMIT ? `Limit reached (${TASK_LIMIT} max)` : 'New task'}
+                        </span>
                     </button>
 
                     {/* Footer Text */}
                     <p className="text-center text-white/30 text-xs mt-4">
-                        Add up to 3 tasks.
+
                     </p>
                 </div>
             </div>

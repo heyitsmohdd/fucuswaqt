@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 import { useTimerStore } from '@/stores/timerStore';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { QUOTE_MAX_LENGTH } from '@/constants';
+import { QUOTE_MAX_LENGTH, QUOTE_LIMIT } from '@/constants';
 
 const DEFAULT_QUOTES = [
     "Take it one step at a time.",
@@ -59,6 +59,11 @@ export function QuoteWidget() {
     const handleAddQuote = () => {
         const trimmed = newQuote.trim();
         if (!trimmed) return;
+
+        if (quotes.length >= QUOTE_LIMIT) {
+            toast.error(`Maximum ${QUOTE_LIMIT} quotes allowed. Delete one to add more.`);
+            return;
+        }
 
         if (trimmed.length > QUOTE_MAX_LENGTH) {
             toast.error(`Quote must be ${QUOTE_MAX_LENGTH} characters or less`);
@@ -166,10 +171,10 @@ export function QuoteWidget() {
                                     />
                                     <button
                                         onClick={handleAddQuote}
-                                        disabled={!newQuote.trim()}
+                                        disabled={!newQuote.trim() || quotes.length >= QUOTE_LIMIT}
                                         className={cn(
                                             "px-4 py-2 rounded-xl font-medium transition-all",
-                                            newQuote.trim()
+                                            newQuote.trim() && quotes.length < QUOTE_LIMIT
                                                 ? "bg-white/20 hover:bg-white/30 text-white"
                                                 : "bg-white/5 text-white/30 cursor-not-allowed"
                                         )}
@@ -188,7 +193,7 @@ export function QuoteWidget() {
                             {/* Quote List */}
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-white/70">
-                                    Your Quotes ({quotes.length})
+                                    Your Quotes ({quotes.length}/{QUOTE_LIMIT})
                                 </label>
                                 <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                                     {quotes.map((quote, index) => (
