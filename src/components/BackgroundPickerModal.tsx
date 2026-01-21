@@ -65,7 +65,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
 
             {/* Modal */}
             <div
-                className="relative w-full max-w-4xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
+                className="relative w-full max-w-4xl bg-black/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="background-picker-title"

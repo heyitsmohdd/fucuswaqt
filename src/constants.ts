@@ -26,9 +26,9 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     url: '/videos/catt.mp4',
   },
   {
-    id: 'cool',
-    name: 'Cool',
-    url: '/videos/cool.mp4',
+    id: 'night',
+    name: 'Night',
+    url: '/videos/night.mp4',
   },
   {
     id: 'cozy',
@@ -41,9 +41,9 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     url: '/videos/good.mp4',
   },
   {
-    id: 'ocean',
-    name: 'Ocean',
-    url: '/videos/ocean.mp4',
+    id: 'working',
+    name: 'Working',
+    url: '/videos/working.mp4',
   },
   {
     id: 'rain',
