@@ -27,6 +27,7 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
         const days: { date: string; data: FocusDay | null }[] = [];
         const currentYear = new Date().getFullYear();
         const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
 
         // Start from January 1st of current year
         const startDate = new Date(currentYear, 0, 1);
@@ -39,8 +40,8 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
             const dateStr = currentDate.toISOString().split('T')[0];
             const dayData = focusData.find(d => d.date === dateStr);
 
-            // Mark future days differently
-            const isFuture = currentDate > today;
+            // Mark future days differently (compare date strings, not Date objects)
+            const isFuture = dateStr > todayStr;
             days.push({
                 date: dateStr,
                 data: isFuture ? null : (dayData || null),
