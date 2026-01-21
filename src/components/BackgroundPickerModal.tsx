@@ -41,8 +41,6 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     const handleVideoSelect = async (videoId: string) => {
         setIsSelecting(true);
         setCurrentBackground(videoId, 'video');
-        // Small delay to show loading state
-        await new Promise(resolve => setTimeout(resolve, 300));
         setIsSelecting(false);
         onClose();
     };
@@ -50,7 +48,6 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     const handleImageSelect = async (imageId: string) => {
         setIsSelecting(true);
         setCurrentBackground(imageId, 'image');
-        await new Promise(resolve => setTimeout(resolve, 300));
         setIsSelecting(false);
         onClose();
     };

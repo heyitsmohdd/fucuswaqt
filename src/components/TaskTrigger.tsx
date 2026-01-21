@@ -1,6 +1,6 @@
 'use client';
 
-import { ListTodo, Flag } from 'lucide-react';
+import { ListTodo, Zap } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 
 export function TaskTrigger() {
@@ -17,7 +17,7 @@ export function TaskTrigger() {
         >
             {showFocusMode ? (
                 <>
-                    <Flag className="w-6 h-6" />
+                    <Zap className="w-6 h-6" />
                     <span className="text-2xl font-semibold">
                         {activeTask.title}
                     </span>
@@ -26,7 +26,7 @@ export function TaskTrigger() {
                 <>
                     <ListTodo className="w-6 h-6" />
                     <span className="text-xl font-light">
-                        What are you working on?
+                        Today's goal...
                     </span>
                 </>
             )}
