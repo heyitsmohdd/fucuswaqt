@@ -1,7 +1,8 @@
 'use client';
 
-import { CloudRain, Music, Image as ImageIcon, BarChart3 } from 'lucide-react';
+import { CloudRain, Music, Image as ImageIcon, BarChart3, Coffee } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
+import { BUY_ME_COFFEE_URL } from '@/constants';
 import Link from 'next/link';
 
 export function IconDock() {
@@ -45,6 +46,17 @@ export function IconDock() {
                 >
                     <ImageIcon className="w-5 h-5 text-white/90 group-hover:text-white transition-colors" />
                 </button>
+
+                {/* Buy Me a Coffee */}
+                <a
+                    href={BUY_ME_COFFEE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative w-10 h-10 rounded-xl flex items-center justify-center hover:bg-yellow-400/20 transition-all"
+                    aria-label="Buy Me a Coffee"
+                >
+                    <Coffee className="w-5 h-5 text-white/90 group-hover:text-yellow-400 transition-colors" />
+                </a>
             </div>
         </div>
     );

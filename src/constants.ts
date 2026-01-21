@@ -20,6 +20,9 @@ export const QUOTE_MAX_LENGTH = 80;
 export const TASK_LIMIT = 3;
 export const QUOTE_LIMIT = 5;
 
+// Links
+export const BUY_ME_COFFEE_URL = 'https://buymeacoffee.com/heyitsmohdd';
+
 // Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {

@@ -6,22 +6,31 @@ export const contentType = 'image/png';
 export default function Icon() {
   return new ImageResponse(
     (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={{ width: '100%', height: '100%', background: '#1a1a1a' }}
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#FF6B35',
+          borderRadius: '8px',
+        }}
       >
-        <path d="M4.5 3h15" />
-        <path d="M4.5 21h15" />
-        <path d="M6 3v4.2c0 .53.21 1.04.59 1.41L12 14l5.41-5.39c.38-.37.59-.88.59-1.41V3" />
-        <path d="M6 21v-4.2c0-.53.21-1.04.59-1.41L12 10l5.41 5.39c.38.37.59.88.59 1.41V21" />
-        <circle cx="12" cy="12" r="1" fill="#ffffff" />
-      </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="#ffffff"
+          stroke="#ffffff"
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ width: '22px', height: '22px' }}
+        >
+          {/* Flame icon */}
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+        </svg>
+      </div>
     ),
     { ...size }
   );
