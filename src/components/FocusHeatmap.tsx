@@ -22,18 +22,31 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
         setLoading(false);
     }
 
-    // Generate all days in the last 365 days
+    // Generate all days in the current calendar year (GitHub style: Jan 1 to Dec 31)
     function generateAllDays() {
         const days: { date: string; data: FocusDay | null }[] = [];
+        const currentYear = new Date().getFullYear();
         const today = new Date();
 
-        for (let i = 364; i >= 0; i--) {
-            const date = new Date(today);
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
+        // Start from January 1st of current year
+        const startDate = new Date(currentYear, 0, 1);
+        // End at December 31st of current year (or today if we're in current year)
+        const endDate = new Date(currentYear, 11, 31);
 
+        // Fill in days from start of year to end of year
+        const currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            const dateStr = currentDate.toISOString().split('T')[0];
             const dayData = focusData.find(d => d.date === dateStr);
-            days.push({ date: dateStr, data: dayData || null });
+
+            // Mark future days differently
+            const isFuture = currentDate > today;
+            days.push({
+                date: dateStr,
+                data: isFuture ? null : (dayData || null),
+            });
+
+            currentDate.setDate(currentDate.getDate() + 1);
         }
 
         return days;
