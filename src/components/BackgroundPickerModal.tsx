@@ -18,7 +18,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     const [activeTab, setActiveTab] = useState<TabType>('motion');
     const [loadedVideos, setLoadedVideos] = useState<Set<string>>(new Set());
     const [isSelecting, setIsSelecting] = useState(false);
-    const { setCurrentVideo, setCurrentBackground } = useAppStore();
+    const { setCurrentBackground } = useAppStore();
 
     // Close modal on Escape key
     useEffect(() => {
@@ -40,7 +40,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
 
     const handleVideoSelect = async (videoId: string) => {
         setIsSelecting(true);
-        setCurrentVideo(videoId);
+        setCurrentBackground(videoId, 'video');
         // Small delay to show loading state
         await new Promise(resolve => setTimeout(resolve, 300));
         setIsSelecting(false);

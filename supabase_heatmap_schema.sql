@@ -83,6 +83,51 @@ $$;
 GRANT EXECUTE ON FUNCTION increment_daily_focus TO authenticated;
 
 -- =====================================================
+-- Profiles Table Schema (for Streak Tracking)
+-- =====================================================
+
+-- 9. Create the profiles table for streak tracking
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  current_streak INTEGER DEFAULT 0,
+  longest_streak INTEGER DEFAULT 0,
+  last_study_date DATE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 10. Add table comment
+COMMENT ON TABLE profiles IS 'Stores user profile data including streak information';
+
+-- 11. Enable Row Level Security (RLS)
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- 12. Drop existing policies if they exist (for re-runs)
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
+
+-- 13. Create RLS Policies for profiles
+CREATE POLICY "Users can view own profile"
+  ON profiles
+  FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile"
+  ON profiles
+  FOR INSERT
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile"
+  ON profiles
+  FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
+-- 14. Create index for performance
+CREATE INDEX IF NOT EXISTS idx_profiles_last_study_date ON profiles(last_study_date);
+
+-- =====================================================
 -- Verification Queries (Optional - for testing)
 -- =====================================================
 

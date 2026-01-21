@@ -34,13 +34,11 @@ export async function fetchFocusHeatmap(days: number = 365): Promise<FocusDay[]>
             .order('date', { ascending: true });
 
         if (error) {
-            console.error('Error fetching heatmap data:', error);
             return [];
         }
 
         return data || [];
-    } catch (error) {
-        console.error('Error in fetchFocusHeatmap:', error);
+    } catch {
         return [];
     }
 }

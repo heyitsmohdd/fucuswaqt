@@ -10,7 +10,6 @@ export interface Task {
 }
 
 interface AppState {
-    currentVideoId: string;
     currentBackgroundType: 'video' | 'image';
     currentBackgroundId: string;
     streakDays: number;
@@ -20,7 +19,6 @@ interface AppState {
     isBackgroundPickerOpen: boolean;
     isTaskModalOpen: boolean;
     isMusicModalOpen: boolean;
-    setCurrentVideo: (id: string) => void;
     setCurrentBackground: (id: string, type: 'video' | 'image') => void;
     incrementStreak: () => void;
     setStreak: (days: number) => void;
@@ -36,14 +34,14 @@ interface AppState {
     closeTaskModal: () => void;
     openMusicModal: () => void;
     closeMusicModal: () => void;
+    toggleMusicModal: () => void;
 }
 
 export const useAppStore = create<AppState>()(
     persist(
         (set) => ({
-            currentVideoId: 'flowers',
             currentBackgroundType: 'video',
-            currentBackgroundId: 'flowers',
+            currentBackgroundId: 'catt',
             streakDays: 0,
             tasks: [],
             currentTask: '',
@@ -51,8 +49,6 @@ export const useAppStore = create<AppState>()(
             isBackgroundPickerOpen: false,
             isTaskModalOpen: false,
             isMusicModalOpen: false,
-
-            setCurrentVideo: (id: string) => set({ currentVideoId: id, currentBackgroundId: id, currentBackgroundType: 'video' }),
 
             setCurrentBackground: (id: string, type: 'video' | 'image') => set({ currentBackgroundId: id, currentBackgroundType: type }),
 
@@ -104,6 +100,8 @@ export const useAppStore = create<AppState>()(
             openMusicModal: () => set({ isMusicModalOpen: true }),
 
             closeMusicModal: () => set({ isMusicModalOpen: false }),
+
+            toggleMusicModal: () => set((state) => ({ isMusicModalOpen: !state.isMusicModalOpen })),
         }),
         {
             name: 'pomodoro-app-storage',

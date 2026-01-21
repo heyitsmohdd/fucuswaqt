@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAudioStore } from '@/stores/audioStore';
 import { AUDIO_TRACKS } from '@/constants';
-import { CloudRain, Flame, Coffee, Waves, Bird, Volume2 } from 'lucide-react';
+import { CloudRain, Flame, Moon, Waves, Bird, Volume2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const iconMap = {
     CloudRain,
     Flame,
-    Coffee,
+    Moon,
     Waves,
     Bird,
 };

@@ -35,8 +35,8 @@ export default function SimpleLogin() {
                     redirectTo: `${safeOrigin}/auth/callback`,
                 },
             });
-        } catch (error) {
-            console.error('Login failed:', error);
+        } catch {
+            // Silent fail - reset loading state
             setIsLoading(null);
         }
     };

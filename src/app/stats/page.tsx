@@ -7,16 +7,25 @@ import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { useAppStore } from '@/stores/appStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 
 export default function StatsPage() {
     const { currentBackgroundId, currentBackgroundType } = useAppStore();
+    const router = useRouter();
 
     const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentBackgroundId);
     const currentImage = IMAGE_BACKGROUNDS.find(i => i.id === currentBackgroundId);
     const backgroundUrl = currentBackgroundType === 'video'
         ? (currentVideo?.url || VIDEO_BACKGROUNDS[0].url)
         : (currentImage?.url || IMAGE_BACKGROUNDS[0].url);
+
+    const handleBackgroundClick = (e: React.MouseEvent) => {
+        // Only close if clicking directly on the background overlay, not on content
+        if (e.target === e.currentTarget) {
+            router.push('/');
+        }
+    };
 
     return (
         <div className="relative h-screen w-screen overflow-hidden">
@@ -33,8 +42,11 @@ export default function StatsPage() {
                 </>
             )}
 
-            {/* Content */}
-            <div className="relative z-10 h-screen w-full p-6 md:p-8 flex flex-col">
+            {/* Content - Click outside stats card to go back */}
+            <div
+                className="relative z-10 h-screen w-full p-6 md:p-8 flex flex-col"
+                onClick={handleBackgroundClick}
+            >
                 {/* Top Bar - Only Auth/Streak */}
                 <div className="w-full flex justify-end items-center mb-6">
                     <div className="flex gap-3">
@@ -44,7 +56,7 @@ export default function StatsPage() {
                 </div>
 
                 {/* Stats Container - Centered Box */}
-                <div className="flex-1 flex items-center justify-center overflow-visible">
+                <div className="flex-1 flex items-center justify-center overflow-visible" onClick={handleBackgroundClick}>
                     <div className="max-w-4xl w-full">
                         {/* Close button above heading */}
                         <div className="flex justify-end mb-2">

@@ -5,7 +5,7 @@ import { useAppStore } from '@/stores/appStore';
 import Link from 'next/link';
 
 export function IconDock() {
-    const { openSoundMixer, openBackgroundPicker, openMusicModal } = useAppStore();
+    const { openSoundMixer, openBackgroundPicker, toggleMusicModal } = useAppStore();
 
     return (
         <div className="fixed bottom-6 left-6 z-20">
@@ -21,7 +21,7 @@ export function IconDock() {
 
                 {/* Music Note Icon */}
                 <button
-                    onClick={openMusicModal}
+                    onClick={toggleMusicModal}
                     className="group relative w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all"
                     aria-label="Music"
                 >

@@ -26,13 +26,11 @@ export async function updateDailyFocus(minutes: number, tasksCompleted: number =
         });
 
         if (error) {
-            console.error('Error updating daily focus:', error);
             return { success: false, error: error.message };
         }
 
         return { success: true };
-    } catch (error) {
-        console.error('Error in updateDailyFocus:', error);
+    } catch {
         return { success: false, error: 'Failed to update focus data' };
     }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Music, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DEFAULT_YOUTUBE_URL } from '@/constants';
@@ -39,6 +39,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     const [isChangingUrl, setIsChangingUrl] = useState(false);
     const [videoUrl, setVideoUrl] = useState(DEFAULT_YOUTUBE_URL); // Lofi hip hop radio
     const [inputValue, setInputValue] = useState('');
+    const widgetRef = useRef<HTMLDivElement>(null);
 
     const handleCancelChange = () => {
         setInputValue('');
@@ -60,6 +61,18 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
     }, [isOpen, isChangingUrl, onClose]);
+
+    // Close on click outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (isOpen && widgetRef.current && !widgetRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOpen, onClose]);
 
     const videoId = extractYouTubeId(videoUrl);
 
@@ -94,6 +107,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
 
     return (
         <div
+            ref={widgetRef}
             className={cn(
                 'fixed bottom-24 left-6 z-50 w-80 transition-all duration-300 ease-in-out',
                 isOpen
@@ -160,7 +174,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                 <div className="px-4 pb-4">
                     <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                         <iframe
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`}
+                            src={`https://www.youtube.com/embed/${videoId}?autoplay=0&mute=0`}
                             className="absolute inset-0 w-full h-full"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen

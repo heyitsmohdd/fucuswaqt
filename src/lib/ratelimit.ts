@@ -4,10 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// 2. Safety Check: Warn if key is missing (but don't crash)
-if (!serviceRoleKey) {
-    console.warn("⚠️ Rate Limiting disabled: Missing SUPABASE_SERVICE_ROLE_KEY in .env");
-}
+// Note: If serviceRoleKey is missing, rate limiting is bypassed (fail-open)
 
 // 3. Create the Admin Client
 // We use the Service Role Key to bypass RLS policies on the 'rate_limits' table
@@ -39,13 +36,11 @@ export async function checkRateLimit(identifier: string, type: 'auth' | 'streak'
         });
 
         if (error) {
-            console.error('Rate limit error:', error);
             return true; // If DB fails, allow the request
         }
 
         return data; // Returns TRUE if allowed, FALSE if blocked
-    } catch (err) {
-        console.error('Rate limit exception:', err);
-        return true;
+    } catch {
+        return true; // Fail open on exception
     }
 }
