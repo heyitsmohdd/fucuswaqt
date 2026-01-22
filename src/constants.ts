@@ -139,6 +139,22 @@ export const TIMER_DEFAULTS = {
   LONG_BREAK_DURATION: 15 * 60, // 15 minutes in seconds
 } as const;
 
+// Timer presets (in minutes)
+export type TimerPresetKey = 'short' | 'medium' | 'long' | 'custom';
+
+export interface TimerPreset {
+  focus: number;
+  break: number;
+  longBreak: number;
+  label: string;
+}
+
+export const TIMER_PRESETS: Record<Exclude<TimerPresetKey, 'custom'>, TimerPreset> = {
+  short: { focus: 25, break: 5, longBreak: 15, label: 'Short (25/5/15)' },
+  medium: { focus: 50, break: 10, longBreak: 20, label: 'Medium (50/10/20)' },
+  long: { focus: 90, break: 15, longBreak: 30, label: 'Long (90/15/30)' },
+};
+
 // Allowed OAuth redirect origins (security)
 export const ALLOWED_ORIGINS = [
   'https://focuswaqt.vercel.app',
