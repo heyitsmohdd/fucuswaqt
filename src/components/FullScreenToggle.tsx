@@ -1,53 +1,40 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Maximize, Minimize } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
 export function FullScreenToggle() {
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    // Check if currently in fullscreen
     useEffect(() => {
-        const checkFullscreen = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-
-        // Listen for fullscreen changes (including Esc key)
+        const checkFullscreen = () => setIsFullscreen(!!document.fullscreenElement);
         document.addEventListener('fullscreenchange', checkFullscreen);
-
-        // Initial check
         checkFullscreen();
-
-        return () => {
-            document.removeEventListener('fullscreenchange', checkFullscreen);
-        };
+        return () => document.removeEventListener('fullscreenchange', checkFullscreen);
     }, []);
 
     const toggleFullscreen = async () => {
         try {
             if (!isFullscreen) {
-                // Enter fullscreen
                 await document.documentElement.requestFullscreen();
             } else {
-                // Exit fullscreen
                 await document.exitFullscreen();
             }
-        } catch {
-            // Fullscreen not available
-        }
+        } catch { /* fullscreen not available */ }
     };
 
     return (
         <button
             onClick={toggleFullscreen}
-            className="text-white/80 hover:text-white transition-colors"
+            className="has-tooltip w-9 h-9 flex items-center justify-center rounded-xl glass-light hover:bg-white/20 transition-all btn-press text-white/60 hover:text-white"
             aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         >
             {isFullscreen ? (
-                <Minimize className="w-6 h-6" />
+                <Minimize2 className="w-4 h-4" />
             ) : (
-                <Maximize className="w-6 h-6" />
+                <Maximize2 className="w-4 h-4" />
             )}
+            <span className="tooltip-label">{isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}</span>
         </button>
     );
 }
