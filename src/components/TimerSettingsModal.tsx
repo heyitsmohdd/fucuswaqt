@@ -51,9 +51,13 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
 
     if (!mounted) return null;
 
-    const handlePresetSelect = (preset: TimerPresetKey) => {
-        setPreset(preset);
-        onClose();
+    const handlePresetSelect = (preset: Exclude<TimerPresetKey, 'custom'>) => {
+        const p = TIMER_PRESETS[preset];
+        setLocalCustom({
+            focus: String(p.focus),
+            break: String(p.break),
+            longBreak: String(p.longBreak),
+        });
     };
 
     const handleCustomSave = () => {
@@ -115,7 +119,7 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                                 onClick={() => handlePresetSelect(key)}
                                 className={cn(
                                     'p-3 rounded-xl text-xs font-medium transition-all btn-press border',
-                                    currentPreset === key
+                                    localCustom.focus === String(focus) && localCustom.break === String(breakMin) && localCustom.longBreak === String(long)
                                         ? 'bg-white/15 border-white/30 text-white'
                                         : 'bg-white/4 border-white/8 text-white/50 hover:bg-white/8 hover:text-white/80'
                                 )}
