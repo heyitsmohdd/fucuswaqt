@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { useTimerStore } from '@/stores/timerStore';
 import { TIMER_PRESETS, type TimerPresetKey } from '@/constants';
@@ -12,12 +12,7 @@ interface TimerSettingsModalProps {
 }
 
 export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps) {
-    const {
-        currentPreset,
-        customDurations,
-        setPreset,
-        setCustomDurations,
-    } = useTimerStore();
+    const { currentPreset, customDurations, setPreset, setCustomDurations } = useTimerStore();
 
     const [localCustom, setLocalCustom] = useState({
         focus: customDurations.focus,
@@ -25,16 +20,23 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         longBreak: customDurations.longBreak,
     });
 
-    const modalRef = useRef<HTMLDivElement>(null);
+    const [mounted, setMounted] = useState(false);
+    const [visible, setVisible] = useState(false);
 
-    // Sync local state when modal opens
+    // Animate in / out
     useEffect(() => {
         if (isOpen) {
+            setMounted(true);
             setLocalCustom({
                 focus: customDurations.focus,
                 break: customDurations.break,
                 longBreak: customDurations.longBreak,
             });
+            requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+        } else {
+            setVisible(false);
+            const t = setTimeout(() => setMounted(false), 220);
+            return () => clearTimeout(t);
         }
     }, [isOpen, customDurations]);
 
@@ -47,23 +49,10 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         return () => document.removeEventListener('keydown', handleEscape);
     }, [isOpen, onClose]);
 
-    // Close on click outside
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (isOpen && modalRef.current && !modalRef.current.contains(e.target as Node)) {
-                onClose();
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, onClose]);
-
-    if (!isOpen) return null;
+    if (!mounted) return null;
 
     const handlePresetSelect = (preset: TimerPresetKey) => {
-        if (preset === 'custom') {
-            setCustomDurations(localCustom);
-        }
+        if (preset === 'custom') setCustomDurations(localCustom);
         setPreset(preset);
     };
 
@@ -72,107 +61,106 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         setPreset('custom');
     };
 
-    const presetButtons: { key: Exclude<TimerPresetKey, 'custom'>; label: string }[] = [
-        { key: 'short', label: '25 / 5 / 15' },
-        { key: 'medium', label: '50 / 10 / 20' },
-        { key: 'long', label: '90 / 15 / 30' },
+    const presetButtons: { key: Exclude<TimerPresetKey, 'custom'>; focus: number; breakMin: number; long: number }[] = [
+        { key: 'short',  focus: 25, breakMin: 5,  long: 15 },
+        { key: 'medium', focus: 50, breakMin: 10, long: 20 },
+        { key: 'long',   focus: 90, breakMin: 15, long: 30 },
     ];
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <div
+                className={cn(
+                    'absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200',
+                    visible ? 'opacity-100' : 'opacity-0'
+                )}
+                onClick={onClose}
+            />
 
             {/* Modal */}
             <div
-                ref={modalRef}
-                className="relative w-full max-w-md bg-black/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-6"
+                className={cn(
+                    'relative w-full max-w-sm bg-black/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl p-6 transition-all duration-220',
+                    visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
+                )}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-white">Timer Settings</h2>
+                    <h2 className="text-lg font-semibold text-white tracking-tight">Timer Settings</h2>
                     <button
                         onClick={onClose}
-                        className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
+                        className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors btn-press"
                         aria-label="Close"
                     >
-                        <X className="w-5 h-5 text-white/80" />
+                        <X className="w-4 h-4 text-white/60" />
                     </button>
                 </div>
 
                 {/* Presets */}
-                <div className="mb-6">
-                    <label className="text-sm text-white/60 mb-3 block">Presets (Focus / Break / Long)</label>
+                <div className="mb-5">
+                    <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-3">
+                        Presets — Focus / Break / Long
+                    </p>
                     <div className="grid grid-cols-3 gap-2">
-                        {presetButtons.map(({ key, label }) => (
+                        {presetButtons.map(({ key, focus, breakMin, long }) => (
                             <button
                                 key={key}
                                 onClick={() => handlePresetSelect(key)}
                                 className={cn(
-                                    "p-3 rounded-xl text-sm font-medium transition-all border",
+                                    'p-3 rounded-xl text-xs font-medium transition-all btn-press border',
                                     currentPreset === key
-                                        ? "bg-white/20 border-white/40 text-white"
-                                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                                        ? 'bg-white/15 border-white/30 text-white'
+                                        : 'bg-white/4 border-white/8 text-white/50 hover:bg-white/8 hover:text-white/80'
                                 )}
                             >
-                                {label}
+                                <div className="font-semibold text-sm mb-0.5">{focus}m</div>
+                                <div className="opacity-60">{breakMin} / {long}</div>
                             </button>
                         ))}
                     </div>
                 </div>
 
                 {/* Divider */}
-                <div className="border-t border-white/10 my-4" />
+                <div className="border-t border-white/8 my-4" />
 
                 {/* Custom */}
                 <div>
-                    <label className="text-sm text-white/60 mb-3 block">Custom (minutes)</label>
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                        <div>
-                            <label className="text-xs text-white/40 mb-1 block">Focus</label>
-                            <input
-                                type="number"
-                                min={1}
-                                max={180}
-                                value={localCustom.focus}
-                                onChange={(e) => setLocalCustom({ ...localCustom, focus: Math.max(1, Math.min(180, Number(e.target.value))) })}
-                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-center focus:outline-none focus:ring-2 focus:ring-white/30"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-xs text-white/40 mb-1 block">Break</label>
-                            <input
-                                type="number"
-                                min={1}
-                                max={60}
-                                value={localCustom.break}
-                                onChange={(e) => setLocalCustom({ ...localCustom, break: Math.max(1, Math.min(60, Number(e.target.value))) })}
-                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-center focus:outline-none focus:ring-2 focus:ring-white/30"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-xs text-white/40 mb-1 block">Long</label>
-                            <input
-                                type="number"
-                                min={1}
-                                max={90}
-                                value={localCustom.longBreak}
-                                onChange={(e) => setLocalCustom({ ...localCustom, longBreak: Math.max(1, Math.min(90, Number(e.target.value))) })}
-                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-center focus:outline-none focus:ring-2 focus:ring-white/30"
-                            />
-                        </div>
+                    <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-3">
+                        Custom (minutes)
+                    </p>
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                        {[
+                            { field: 'focus' as const, label: 'Focus', max: 180 },
+                            { field: 'break' as const, label: 'Break', max: 60 },
+                            { field: 'longBreak' as const, label: 'Long', max: 90 },
+                        ].map(({ field, label, max }) => (
+                            <div key={field}>
+                                <label className="text-xs text-white/35 mb-1.5 block">{label}</label>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={max}
+                                    value={localCustom[field]}
+                                    onChange={(e) =>
+                                        setLocalCustom({ ...localCustom, [field]: Math.max(1, Math.min(max, Number(e.target.value))) })
+                                    }
+                                    className="w-full px-2 py-2 bg-white/8 border border-white/12 rounded-lg text-white text-sm text-center focus:outline-none focus:ring-1 focus:ring-white/25 focus:border-white/25 transition-all"
+                                />
+                            </div>
+                        ))}
                     </div>
                     <button
                         onClick={handleCustomSave}
                         className={cn(
-                            "w-full py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2",
+                            'w-full py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 btn-press',
                             currentPreset === 'custom'
-                                ? "bg-green-600/80 text-white"
-                                : "bg-white/10 text-white/80 hover:bg-white/20"
+                                ? 'bg-white/15 text-white border border-white/25'
+                                : 'bg-white/8 text-white/70 hover:bg-white/12 hover:text-white border border-white/10'
                         )}
                     >
                         <Check className="w-4 h-4" />
-                        {currentPreset === 'custom' ? 'Custom Active' : 'Use Custom'}
+                        {currentPreset === 'custom' ? 'Custom active' : 'Use custom'}
                     </button>
                 </div>
             </div>
