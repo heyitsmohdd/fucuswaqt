@@ -6,66 +6,69 @@ import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { LogOut, Settings, ChevronRight, X } from 'lucide-react';
 import { AuthModal } from './AuthModal';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 export function AuthButton() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const supabase = createClient();
 
     useEffect(() => {
-        // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user ?? null);
             setLoading(false);
         });
 
-        // Listen for auth changes
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
-            setShowAuthModal(false); // Close modal on successful auth
+            setShowAuthModal(false);
         });
 
         return () => subscription.unsubscribe();
     }, [supabase.auth]);
+
+    // Dropdown animate in
+    useEffect(() => {
+        if (showDropdown) {
+            requestAnimationFrame(() => requestAnimationFrame(() => setDropdownVisible(true)));
+        } else {
+            setDropdownVisible(false);
+        }
+    }, [showDropdown]);
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
         setShowDropdown(false);
     };
 
-    // Get first name from full name
     const getFirstName = () => {
         const fullName = user?.user_metadata?.full_name || user?.user_metadata?.name;
-        if (fullName) {
-            return fullName.split(' ')[0];
-        }
+        if (fullName) return fullName.split(' ')[0];
         return user?.email?.split('@')[0] || 'User';
     };
 
-    // Get full name
     const getFullName = () => {
         return user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'User';
     };
 
     if (loading) {
         return (
-            <div className="rounded-full px-5 py-2.5 bg-black/40 backdrop-blur-sm" role="status" aria-label="Loading authentication status">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+            <div className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8" role="status" aria-label="Loading">
+                <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" aria-hidden="true" />
             </div>
         );
     }
 
-    // Logged OUT state
     if (!user) {
         return (
             <>
                 <button
                     onClick={() => setShowAuthModal(true)}
-                    className="rounded-full px-5 py-2.5 bg-black/40 backdrop-blur-sm hover:bg-black/50 transition-all duration-200 text-white font-medium text-sm"
+                    className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8 hover:bg-black/55 hover:border-white/15 transition-all duration-200 text-white/90 font-medium text-sm btn-press"
                 >
                     Sign In
                 </button>
@@ -74,12 +77,11 @@ export function AuthButton() {
         );
     }
 
-    // Logged IN state
     return (
         <div className="relative">
             <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="rounded-full p-1.5 bg-black/50 backdrop-blur-sm hover:bg-black/60 transition-all duration-200"
+                className="rounded-full p-1 bg-black/40 backdrop-blur-sm border border-white/8 hover:border-white/20 transition-all duration-200 btn-press"
                 aria-label="Open user menu"
                 aria-expanded={showDropdown}
                 aria-haspopup="menu"
@@ -88,12 +90,12 @@ export function AuthButton() {
                     <Image
                         src={user.user_metadata.avatar_url}
                         alt={getFirstName()}
-                        width={36}
-                        height={36}
-                        className="w-9 h-9 rounded-full ring-2 ring-blue-500"
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 rounded-full ring-1 ring-white/20"
                     />
                 ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold ring-2 ring-blue-500">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold ring-1 ring-white/20">
                         {getFirstName().charAt(0).toUpperCase()}
                     </div>
                 )}
@@ -101,56 +103,53 @@ export function AuthButton() {
 
             {showDropdown && (
                 <>
-                    {/* Backdrop */}
-                    <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setShowDropdown(false)}
-                    />
+                    <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
 
-                    {/* Dropdown menu */}
-                    <div className="absolute -right-4 top-full mt-2 w-64 rounded-xl bg-[#1E1E1E] border border-white/10 shadow-2xl z-50 overflow-hidden">
+                    <div className={cn(
+                        'absolute -right-2 top-full mt-2 w-60 rounded-2xl bg-black/90 backdrop-blur-2xl border border-white/10 shadow-2xl z-50 overflow-hidden transition-all duration-200',
+                        dropdownVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95'
+                    )}>
                         {/* User Header */}
                         <div className="p-4 relative">
                             <button
                                 onClick={() => setShowDropdown(false)}
-                                className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
+                                className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors btn-press"
                                 aria-label="Close user menu"
                             >
-                                <X className="w-4 h-4" aria-hidden="true" />
+                                <X className="w-3.5 h-3.5 text-white/50" aria-hidden="true" />
                             </button>
-                            <h3 className="text-white font-bold text-base pr-6">{getFullName()}</h3>
-                            <p className="text-gray-400 text-sm mt-0.5">
+                            <p className="text-white font-semibold text-sm pr-8">{getFullName()}</p>
+                            <p className="text-white/40 text-xs mt-0.5 truncate">
                                 {user.email || 'Guest Account'}
                             </p>
                         </div>
 
-                        {/* Divider */}
-                        <div className="border-t border-white/10" />
+                        <div className="border-t border-white/8" />
 
-                        {/* Actions */}
-                        <div className="py-1">
-                            {/* Settings */}
+                        <div className="py-1.5">
                             <button
-                                onClick={() => alert('Settings coming soon!')}
-                                className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors text-sm text-gray-200"
+                                onClick={() => {
+                                    setShowDropdown(false);
+                                    toast.info('Settings coming soon!');
+                                }}
+                                className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/6 transition-colors text-sm text-white/80"
                             >
                                 <div className="flex items-center gap-3">
-                                    <Settings className="w-4 h-4" />
+                                    <Settings className="w-4 h-4 text-white/50" />
                                     <span>App settings</span>
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-gray-400" />
+                                <ChevronRight className="w-3.5 h-3.5 text-white/30" />
                             </button>
 
-                            {/* Logout */}
                             <button
                                 onClick={handleSignOut}
-                                className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors text-sm text-gray-200"
+                                className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/6 transition-colors text-sm text-white/80"
                             >
                                 <div className="flex items-center gap-3">
-                                    <LogOut className="w-4 h-4" />
-                                    <span>Logout</span>
+                                    <LogOut className="w-4 h-4 text-white/50" />
+                                    <span>Sign out</span>
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-gray-400" />
+                                <ChevronRight className="w-3.5 h-3.5 text-white/30" />
                             </button>
                         </div>
                     </div>

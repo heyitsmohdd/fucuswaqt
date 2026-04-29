@@ -8,12 +8,16 @@ export function StreakCounter() {
 
     return (
         <div
-            className="rounded-full px-5 py-2.5 flex items-center gap-2 bg-black/40 backdrop-blur-sm"
+            className="rounded-full px-4 py-2 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm border border-white/8 hover:border-white/15 transition-colors"
             aria-label={`Current streak: ${streakDays} day${streakDays !== 1 ? 's' : ''}`}
             role="status"
         >
-            <Flame className="w-4 h-4 text-orange-500" aria-hidden="true" />
-            <span className="text-orange-500 font-semibold text-sm">
+            <Flame
+                className="w-3.5 h-3.5 text-orange-400"
+                aria-hidden="true"
+                style={{ filter: streakDays > 0 ? 'drop-shadow(0 0 4px rgba(251,146,60,0.6))' : undefined }}
+            />
+            <span className="text-orange-400 font-semibold text-sm tabular-nums">
                 {streakDays}
             </span>
         </div>
