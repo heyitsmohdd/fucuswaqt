@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { fetchFocusHeatmap, type FocusDay } from '@/actions/fetchFocusHeatmap';
 
 interface HeatmapProps {
@@ -22,108 +22,49 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
         setLoading(false);
     }
 
-    // Generate all days in the current calendar year (GitHub style: Jan 1 to Dec 31)
-    function generateAllDays() {
+    // Memoize all days — only recalculates when focusData changes
+    const allDays = useMemo(() => {
         const days: { date: string; data: FocusDay | null }[] = [];
         const currentYear = new Date().getFullYear();
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
-
-        // Start from January 1st of current year
+        const todayStr = new Date().toISOString().split('T')[0];
         const startDate = new Date(currentYear, 0, 1);
-        // End at December 31st of current year (or today if we're in current year)
         const endDate = new Date(currentYear, 11, 31);
+        const current = new Date(startDate);
 
-        // Fill in days from start of year to end of year
-        const currentDate = new Date(startDate);
-        while (currentDate <= endDate) {
-            const dateStr = currentDate.toISOString().split('T')[0];
+        while (current <= endDate) {
+            const dateStr = current.toISOString().split('T')[0];
             const dayData = focusData.find(d => d.date === dateStr);
-
-            // Mark future days differently (compare date strings, not Date objects)
             const isFuture = dateStr > todayStr;
-            days.push({
-                date: dateStr,
-                data: isFuture ? null : (dayData || null),
-            });
-
-            currentDate.setDate(currentDate.getDate() + 1);
+            days.push({ date: dateStr, data: isFuture ? null : (dayData || null) });
+            current.setDate(current.getDate() + 1);
         }
 
         return days;
-    }
+    }, [focusData]);
 
-    // Get color intensity based on focus minutes
-    function getColorClass(minutes: number | undefined): string {
-        if (!minutes || minutes === 0) return 'bg-gray-800/30';
-        if (minutes < 30) return 'bg-green-900/40';
-        if (minutes < 60) return 'bg-green-700/60';
-        if (minutes < 120) return 'bg-green-600/80';
-        return 'bg-green-500';
-    }
+    // Memoize stats
+    const { totalHours, activeDays, currentStreak, longestStreak } = useMemo(() => {
+        const totalMinutes = focusData.reduce((sum, day) => sum + day.focus_minutes, 0);
+        const active = focusData.filter(day => day.focus_minutes > 0).length;
 
-    // Get color description for tooltip
-    function getColorName(minutes: number | undefined): string {
-        if (!minutes || minutes === 0) return 'No focus';
-        if (minutes < 30) return 'Light';
-        if (minutes < 60) return 'Moderate';
-        if (minutes < 120) return 'Good';
-        return 'Excellent';
-    }
-
-    // Format minutes to hours and minutes
-    function formatTime(minutes: number): string {
-        if (minutes < 60) return `${minutes}m`;
-        const hours = Math.floor(minutes / 60);
-        const mins = minutes % 60;
-        return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-    }
-
-    // Format date for display
-    function formatDate(dateStr: string): string {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    }
-
-    const allDays = generateAllDays();
-
-    // Calculate stats
-    const totalMinutes = focusData.reduce((sum, day) => sum + day.focus_minutes, 0);
-    const totalHours = Math.floor(totalMinutes / 60);
-    const activeDays = focusData.filter(day => day.focus_minutes > 0).length;
-    const currentStreak = calculateCurrentStreak();
-    const longestStreak = calculateLongestStreak();
-
-    function calculateCurrentStreak(): number {
-        let streak = 0;
-        const today = new Date().toISOString().split('T')[0];
-
+        // Current streak
+        let cStreak = 0;
+        const todayStr = new Date().toISOString().split('T')[0];
         for (let i = 0; i <= 365; i++) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
-
-            const dayData = focusData.find(d => d.date === dateStr);
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const dStr = d.toISOString().split('T')[0];
+            const dayData = focusData.find(fd => fd.date === dStr);
             if (dayData && dayData.focus_minutes > 0) {
-                streak++;
-            } else if (dateStr !== today) {
-                // Allow today to be  0 without breaking streak
+                cStreak++;
+            } else if (dStr !== todayStr) {
                 break;
             }
         }
 
-        return streak;
-    }
-
-    function calculateLongestStreak(): number {
+        // Longest streak
         let longest = 0;
         let current = 0;
-
         allDays.forEach(({ data }) => {
             if (data && data.focus_minutes > 0) {
                 current++;
@@ -133,90 +74,98 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
             }
         });
 
-        return longest;
+        return {
+            totalHours: Math.floor(totalMinutes / 60),
+            activeDays: active,
+            currentStreak: cStreak,
+            longestStreak: longest,
+        };
+    }, [focusData, allDays]);
+
+    function getColorClass(minutes: number | undefined): string {
+        if (!minutes || minutes === 0) return 'bg-gray-800/30';
+        if (minutes < 30) return 'bg-green-900/50';
+        if (minutes < 60) return 'bg-green-700/70';
+        if (minutes < 120) return 'bg-green-600/85';
+        return 'bg-green-500';
+    }
+
+    function formatTime(minutes: number): string {
+        if (minutes < 60) return `${minutes}m`;
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
     }
 
     if (loading) {
         return (
-            <div className={`p-4 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
-                <div className="animate-pulse">
-                    <div className="h-6 bg-white/10 rounded w-48 mb-4"></div>
-                    <div className="h-24 bg-white/10 rounded"></div>
+            <div className={`p-4 rounded-xl bg-white/4 backdrop-blur-sm ${className}`}>
+                <div className="animate-pulse space-y-3">
+                    <div className="h-5 bg-white/8 rounded w-36" />
+                    <div className="h-24 bg-white/8 rounded" />
                 </div>
             </div>
         );
     }
 
     return (
-        <div className={`p-4 rounded-lg bg-white/5 backdrop-blur-sm ${className}`}>
+        <div className={`p-4 rounded-xl bg-white/4 backdrop-blur-sm border border-white/6 ${className}`}>
             {/* Header with Stats */}
             <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                <h2 className="text-lg font-semibold text-white">Focus Activity</h2>
-                <div className="flex gap-3 text-sm">
-                    <div className="text-center">
-                        <div className="text-gray-400 text-xs">Total</div>
-                        <div className="text-white font-semibold text-sm">{totalHours}h</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-gray-400 text-xs">Days</div>
-                        <div className="text-white font-semibold text-sm">{activeDays}</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-gray-400 text-xs">Streak</div>
-                        <div className="text-white font-semibold text-sm">{currentStreak}🔥</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-gray-400 text-xs">Best</div>
-                        <div className="text-white font-semibold text-sm">{longestStreak}</div>
-                    </div>
+                <h2 className="text-sm font-semibold text-white/90 tracking-tight">Focus Activity</h2>
+                <div className="flex gap-4 text-xs">
+                    {[
+                        { label: 'Total', value: `${totalHours}h` },
+                        { label: 'Days', value: activeDays },
+                        { label: 'Streak', value: `${currentStreak}🔥` },
+                        { label: 'Best', value: longestStreak },
+                    ].map(({ label, value }) => (
+                        <div key={label} className="text-center">
+                            <div className="text-white/35 text-[10px] uppercase tracking-wider">{label}</div>
+                            <div className="text-white font-semibold mt-0.5">{value}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {/* Heatmap Grid */}
             <div className="relative overflow-x-auto">
                 {/* Month labels */}
-                <div className="flex mb-1.5 text-xs text-gray-400 ml-10 min-w-[650px]">
+                <div className="flex mb-1.5 text-[10px] text-white/30 ml-10 min-w-[650px]">
                     {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month) => (
-                        <div key={month} className="flex-1 text-left">
-                            {month}
-                        </div>
+                        <div key={month} className="flex-1 text-left">{month}</div>
                     ))}
                 </div>
 
                 <div className="flex gap-1.5 min-w-[650px]">
-                    {/* Day of week labels */}
-                    <div className="flex flex-col gap-0.5 text-xs text-gray-400 justify-around h-[90px]">
+                    {/* Day labels */}
+                    <div className="flex flex-col gap-0.5 text-[10px] text-white/30 justify-around h-[90px]">
                         <div>Mon</div>
                         <div>Wed</div>
                         <div>Fri</div>
                     </div>
 
-                    {/* Grid of squares */}
+                    {/* Grid */}
                     <div className="grid grid-flow-col grid-rows-7 gap-0.5 flex-1 relative">
                         {allDays.map(({ date, data }) => (
                             <div
                                 key={date}
-                                className="group relative w-[12px] h-[12px] rounded-sm cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-white/40 hover:scale-110"
+                                className="group relative w-[12px] h-[12px] rounded-sm cursor-pointer transition-all duration-150 hover:ring-1 hover:ring-white/40 hover:scale-125"
                             >
-                                {/* Square */}
                                 <div className={`w-full h-full rounded-sm ${getColorClass(data?.focus_minutes)}`} />
 
-                                {/* Tooltip - appears to the RIGHT to avoid clipping */}
-                                <div className="invisible group-hover:visible absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white rounded px-2.5 py-1.5 shadow-xl border border-white/20 z-[99999] pointer-events-none text-xs whitespace-nowrap">
-                                    <div className="font-medium mb-0.5">
+                                {/* Tooltip */}
+                                <div className="invisible group-hover:visible absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black/95 text-white rounded-lg px-2.5 py-2 shadow-xl border border-white/15 z-[99999] pointer-events-none text-xs whitespace-nowrap">
+                                    <div className="font-medium text-white/70 mb-0.5">
                                         {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                     </div>
                                     {data && data.focus_minutes > 0 ? (
                                         <>
-                                            <div className="text-green-400 font-semibold">
-                                                {formatTime(data.focus_minutes)}
-                                            </div>
-                                            <div className="text-gray-400 text-[10px] mt-0.5">
-                                                {data.sessions_completed} sessions
-                                            </div>
+                                            <div className="text-green-400 font-semibold">{formatTime(data.focus_minutes)}</div>
+                                            <div className="text-white/35 text-[10px] mt-0.5">{data.sessions_completed} sessions</div>
                                         </>
                                     ) : (
-                                        <div className="text-gray-400">No time</div>
+                                        <div className="text-white/35">No focus</div>
                                     )}
                                 </div>
                             </div>
@@ -226,14 +175,14 @@ export function FocusHeatmap({ className = '' }: HeatmapProps) {
             </div>
 
             {/* Legend */}
-            <div className="flex items-center justify-end gap-2 mt-3 text-xs text-gray-400">
+            <div className="flex items-center justify-end gap-2 mt-3 text-[10px] text-white/30">
                 <span>Less</span>
                 <div className="flex gap-0.5">
-                    <div className="w-2.5 h-2.5 rounded-sm bg-gray-800/30"></div>
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-900/40"></div>
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-700/60"></div>
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-600/80"></div>
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-500"></div>
+                    <div className="w-2.5 h-2.5 rounded-sm bg-gray-800/30" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-900/50" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-700/70" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-600/85" />
+                    <div className="w-2.5 h-2.5 rounded-sm bg-green-500" />
                 </div>
                 <span>More</span>
             </div>
