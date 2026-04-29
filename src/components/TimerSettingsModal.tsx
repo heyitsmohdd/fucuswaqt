@@ -53,6 +53,7 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
 
     const handlePresetSelect = (preset: TimerPresetKey) => {
         setPreset(preset);
+        onClose();
     };
 
     const handleCustomSave = () => {
