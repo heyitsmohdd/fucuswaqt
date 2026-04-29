@@ -15,9 +15,9 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
     const { currentPreset, customDurations, setPreset, setCustomDurations } = useTimerStore();
 
     const [localCustom, setLocalCustom] = useState({
-        focus: customDurations.focus,
-        break: customDurations.break,
-        longBreak: customDurations.longBreak,
+        focus: String(customDurations.focus),
+        break: String(customDurations.break),
+        longBreak: String(customDurations.longBreak),
     });
 
     const [mounted, setMounted] = useState(false);
@@ -28,9 +28,9 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         if (isOpen) {
             setMounted(true);
             setLocalCustom({
-                focus: customDurations.focus,
-                break: customDurations.break,
-                longBreak: customDurations.longBreak,
+                focus: String(customDurations.focus),
+                break: String(customDurations.break),
+                longBreak: String(customDurations.longBreak),
             });
             requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
         } else {
@@ -52,13 +52,18 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
     if (!mounted) return null;
 
     const handlePresetSelect = (preset: TimerPresetKey) => {
-        if (preset === 'custom') setCustomDurations(localCustom);
         setPreset(preset);
     };
 
     const handleCustomSave = () => {
-        setCustomDurations(localCustom);
+        const parsed = {
+            focus: Math.max(1, Math.min(180, Number(localCustom.focus) || 25)),
+            break: Math.max(1, Math.min(60, Number(localCustom.break) || 5)),
+            longBreak: Math.max(1, Math.min(90, Number(localCustom.longBreak) || 15)),
+        };
+        setCustomDurations(parsed);
         setPreset('custom');
+        onClose();
     };
 
     const presetButtons: { key: Exclude<TimerPresetKey, 'custom'>; focus: number; breakMin: number; long: number }[] = [
@@ -142,10 +147,8 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                                     min={1}
                                     max={max}
                                     value={localCustom[field]}
-                                    onChange={(e) =>
-                                        setLocalCustom({ ...localCustom, [field]: Math.max(1, Math.min(max, Number(e.target.value))) })
-                                    }
-                                    className="w-full px-2 py-2 bg-white/8 border border-white/12 rounded-lg text-white text-sm text-center focus:outline-none focus:ring-1 focus:ring-white/25 focus:border-white/25 transition-all"
+                                    onChange={(e) => setLocalCustom({ ...localCustom, [field]: e.target.value })}
+                                    className="w-full px-2 py-2 bg-white/8 border border-white/10 rounded-lg text-white text-sm text-center focus:outline-none focus:ring-1 focus:ring-white/20 transition-all [color-scheme:dark] appearance-none"
                                 />
                             </div>
                         ))}
