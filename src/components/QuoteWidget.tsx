@@ -114,7 +114,7 @@ export function QuoteWidget() {
                     </button>
                     <button
                         onClick={handleChangeQuote}
-                        className="flex-1 bg-black/30 backdrop-blur-lg rounded-2xl px-4 py-3 border border-white/8 hover:bg-black/40 hover:border-white/15 transition-all text-left cursor-pointer"
+                        className="flex-1 bg-white/5 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/8 hover:bg-white/8 transition-all text-left cursor-pointer"
                         aria-label="Next quote"
                     >
                         <p className="text-white/85 text-sm font-medium leading-relaxed">
@@ -136,7 +136,7 @@ export function QuoteWidget() {
                     />
 
                     <div className={cn(
-                        'relative w-full max-w-md bg-black/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                        'relative w-full max-w-md bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
                         modalVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
                     )}>
                         {/* Header */}

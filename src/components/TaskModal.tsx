@@ -85,7 +85,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
             {/* Modal */}
             <div
                 className={cn(
-                    'relative w-full max-w-lg bg-black/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                    'relative w-full max-w-lg bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
                     visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
                 )}
                 role="dialog"

@@ -2,17 +2,16 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { useTimerStore } from '@/stores/timerStore';
-import { useAppStore } from '@/stores/appStore';
+// import { useAppStore } from '@/stores/appStore';              // Supabase paused
 import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { updateStreak } from '@/actions/updateStreak';
-import { updateDailyFocus } from '@/actions/updateDailyFocus';
+// import { updateStreak } from '@/actions/updateStreak';        // Supabase paused
+// import { updateDailyFocus } from '@/actions/updateDailyFocus'; // Supabase paused
 import { TIMER_PRESETS } from '@/constants';
 import { TimerSettingsModal } from './TimerSettingsModal';
 
 export function Timer() {
     const { isRunning, timeLeft, mode, currentPreset, customDurations, startTimer, pauseTimer, resetTimer, tick, switchMode } = useTimerStore();
-    const { setStreak } = useAppStore();
     const streakUpdatedRef = useRef(false);
     const [showSettings, setShowSettings] = useState(false);
 
@@ -28,23 +27,23 @@ export function Timer() {
         streakUpdatedRef.current = false;
     }, [mode, isRunning]);
 
-    // Handle session complete
-    useEffect(() => {
-        const handleSessionComplete = async () => {
-            if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
-                streakUpdatedRef.current = true;
-                try {
-                    const result = await updateStreak();
-                    if (result.success && result.profile) {
-                        setStreak(result.profile.current_streak);
-                    }
-                    const preset = currentPreset === 'custom' ? customDurations : TIMER_PRESETS[currentPreset];
-                    await updateDailyFocus(preset.focus);
-                } catch { /* silently handle */ }
-            }
-        };
-        handleSessionComplete();
-    }, [timeLeft, mode, setStreak, currentPreset, customDurations]);
+    // Supabase paused — streak/focus tracking disabled
+    // useEffect(() => {
+    //     const handleSessionComplete = async () => {
+    //         if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
+    //             streakUpdatedRef.current = true;
+    //             try {
+    //                 const result = await updateStreak();
+    //                 if (result.success && result.profile) {
+    //                     setStreak(result.profile.current_streak);
+    //                 }
+    //                 const preset = currentPreset === 'custom' ? customDurations : TIMER_PRESETS[currentPreset];
+    //                 await updateDailyFocus(preset.focus);
+    //             } catch { /* silently handle */ }
+    //         }
+    //     };
+    //     handleSessionComplete();
+    // }, [timeLeft, mode, setStreak, currentPreset, customDurations]);
 
     // Update document title
     useEffect(() => {
@@ -67,35 +66,27 @@ export function Timer() {
 
     const progress = totalSeconds > 0 ? timeLeft / totalSeconds : 1;
 
-    // Split into individual digits for per-digit animation
-    const d0 = Math.floor(minutes / 10);
-    const d1 = minutes % 10;
-    const d2 = Math.floor(seconds / 10);
-    const d3 = seconds % 10;
-
     return (
         <>
             <div className="flex flex-col items-center gap-7">
-                {/* Mode Pills */}
-                <div className="flex items-center gap-1 bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
+                {/* Mode Dots */}
+                <div className="flex items-center gap-3">
                     {(['focus', 'break', 'longBreak'] as const).map((m) => (
                         <button
                             key={m}
                             onClick={() => switchMode(m)}
                             className={cn(
-                                'px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200',
+                                'w-2.5 h-2.5 rounded-full transition-all duration-200',
                                 mode === m
-                                    ? 'bg-white text-black shadow-sm'
-                                    : 'text-white/50 hover:text-white/80'
+                                    ? 'bg-white scale-110'
+                                    : 'bg-white/25 hover:bg-white/50'
                             )}
                             aria-label={`Switch to ${m === 'focus' ? 'focus' : m === 'break' ? 'short break' : 'long break'} mode`}
-                        >
-                            {m === 'focus' ? 'Focus' : m === 'break' ? 'Break' : 'Long'}
-                        </button>
+                        />
                     ))}
                 </div>
 
-                {/* Timer Display — individual digits with entrance animation */}
+                {/* Timer Display */}
                 <div
                     className="font-bold text-white leading-none tracking-tight select-none tabular-nums"
                     style={{ fontSize: 'clamp(5rem, 14vw, 10rem)' }}
@@ -104,11 +95,7 @@ export function Timer() {
                     role="timer"
                     aria-label={`${minutes} minutes and ${seconds} remaining`}
                 >
-                    <span key={`d0-${d0}`} className="inline-block animate-digit-in">{d0}</span>
-                    <span key={`d1-${d1}`} className="inline-block animate-digit-in">{d1}</span>
-                    <span className="inline-block opacity-50 mx-0.5 md:mx-1">:</span>
-                    <span key={`d2-${d2}`} className="inline-block animate-digit-in">{d2}</span>
-                    <span key={`d3-${d3}`} className="inline-block animate-digit-in">{d3}</span>
+                    {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
                 </div>
 
                 {/* Progress Bar */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudRain, Music, Image as ImageIcon, BarChart3, Coffee } from 'lucide-react';
+import { CloudRain, Music, Image as ImageIcon, Coffee } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
 import Link from 'next/link';
@@ -44,7 +44,7 @@ export function IconDock() {
 
     return (
         <div className="fixed bottom-6 left-6 z-20 animate-slide-up">
-            <div className="glass rounded-2xl px-2 py-2 flex items-center gap-1">
+            <div className="glass-light rounded-2xl px-2 py-2 flex items-center gap-1">
                 <DockButton onClick={openSoundMixer} label="Sounds">
                     <CloudRain className="w-4.5 h-4.5" />
                 </DockButton>
@@ -53,9 +53,7 @@ export function IconDock() {
                     <Music className="w-4.5 h-4.5" />
                 </DockButton>
 
-                <DockButton isLink href="/stats" label="Stats">
-                    <BarChart3 className="w-4.5 h-4.5" />
-                </DockButton>
+                {/* Stats hidden — Supabase paused */}
 
                 <DockButton onClick={openBackgroundPicker} label="Scene">
                     <ImageIcon className="w-4.5 h-4.5" />

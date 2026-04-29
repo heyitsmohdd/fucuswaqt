@@ -46,3 +46,7 @@ next-env.d.ts
 
 # local env files
 .env.local
+
+# AI agent instructions (local only)
+CLAUDE.md
+AGENTS.md
