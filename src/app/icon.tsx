@@ -13,22 +13,31 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#a735ffff',
-          borderRadius: '8px',
+          background: 'transparent',
         }}
       >
         <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="#ffffff"
-          stroke="#ffffff"
-          strokeWidth="1"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ width: '22px', height: '22px' }}
         >
-          {/* Flame icon */}
-          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+          {/* 4 colored quarter-circle segments — clockwise from top */}
+
+          {/* Top-right — orange */}
+          <path d="M 16 16 L 16 3 A 13 13 0 0 1 29 16 Z" fill="#FF6B35" />
+
+          {/* Bottom-right — purple */}
+          <path d="M 16 16 L 29 16 A 13 13 0 0 1 16 29 Z" fill="#A78BFA" />
+
+          {/* Bottom-left — teal */}
+          <path d="M 16 16 L 16 29 A 13 13 0 0 1 3 16 Z" fill="#2DD4BF" />
+
+          {/* Top-left — amber */}
+          <path d="M 16 16 L 3 16 A 13 13 0 0 1 16 3 Z" fill="#FBBF24" />
+
+          {/* White center dot */}
+          <circle cx="16" cy="16" r="4.5" fill="white" />
         </svg>
       </div>
     ),
