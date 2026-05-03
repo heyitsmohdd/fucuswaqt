@@ -11,15 +11,27 @@ import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
 import { TaskModal } from '@/components/TaskModal';
 import { MusicModal } from '@/components/MusicModal';
 import { FullScreenToggle } from '@/components/FullScreenToggle';
+import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { QuoteWidget } from '@/components/QuoteWidget';
+import { Logo } from '@/components/Logo';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
+import { useEffect, useState, useRef } from 'react';
 // import { fetchUserStreak } from '@/actions/fetchUserStreak';  // Supabase paused
 
 export default function Home() {
-  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal } = useAppStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings } = useAppStore();
   const { isRunning } = useTimerStore();
+  const [switching, setSwitching] = useState(false);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    setSwitching(true);
+    const t = setTimeout(() => setSwitching(false), 700);
+    return () => clearTimeout(t);
+  }, [currentBackgroundType]);
 
   // Supabase paused — streak loading disabled
   // useEffect(() => {
@@ -38,13 +50,20 @@ export default function Home() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
+      {/* Type-switch transition overlay */}
+      <div
+        className="fixed inset-0 z-[200] bg-black pointer-events-none"
+        style={{ opacity: switching ? 1 : 0, transition: 'opacity 0.4s ease' }}
+      />
+
       {/* Background */}
       {currentBackgroundType === 'video' ? (
         <BackgroundVideo videoUrl={backgroundUrl} />
       ) : (
         <>
           <div
-            className="fixed inset-0 w-full h-full bg-cover bg-center z-0 transition-opacity duration-700"
+            key={backgroundUrl}
+            className="fixed inset-0 w-full h-full bg-cover bg-center z-0 animate-fade-in"
             style={{ backgroundImage: `url(${backgroundUrl})` }}
           />
           <div className="fixed inset-0 bg-black/30 z-[1]" />
@@ -56,6 +75,7 @@ export default function Home() {
       <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
       <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
       <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
+      <TimerSettingsModal isOpen={isTimerSettingsOpen} onClose={closeTimerSettings} />
 
       {/* Icon Dock */}
       <IconDock />
@@ -65,22 +85,30 @@ export default function Home() {
 
       {/* Main layout */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 py-6 md:px-8 md:py-8">
-        {/* Top Bar — hidden until Supabase is back */}
+        {/* Top Bar */}
         {/* <div className="w-full flex justify-end items-center gap-2">
           <StreakCounter />
           <AuthButton />
         </div> */}
-        <div />
+        <div className="w-full flex justify-start items-center animate-slide-down" style={{ animationDelay: '0ms' }}>
+          <Logo />
+        </div>
 
         {/* Center Content */}
         <div className="flex flex-col items-center gap-6">
-          <TaskTrigger />
-          <Timer />
+          <div className="animate-slide-up" style={{ animationDelay: '80ms' }}>
+            <TaskTrigger />
+          </div>
+          <div className="animate-slide-up" style={{ animationDelay: '160ms' }}>
+            <Timer />
+          </div>
         </div>
 
         {/* Bottom */}
-        <div className="w-full flex justify-end items-center">
-          {isRunning && <FullScreenToggle />}
+        <div className="w-full flex justify-end items-center h-9">
+          <div className={`transition-opacity duration-300 ${isRunning ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <FullScreenToggle />
+          </div>
         </div>
       </div>
     </div>
