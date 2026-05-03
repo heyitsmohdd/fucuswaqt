@@ -24,10 +24,16 @@ export default function Home() {
   const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings } = useAppStore();
   const { isRunning } = useTimerStore();
   const [switching, setSwitching] = useState(false);
-  const isFirstRender = useRef(true);
+  const switchingReady = useRef(false);
+
+  // Delay enabling switching watcher until after Zustand rehydration settles
+  useEffect(() => {
+    const t = setTimeout(() => { switchingReady.current = true; }, 800);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    if (!switchingReady.current) return;
     setSwitching(true);
     const t = setTimeout(() => setSwitching(false), 700);
     return () => clearTimeout(t);
@@ -90,18 +96,14 @@ export default function Home() {
           <StreakCounter />
           <AuthButton />
         </div> */}
-        <div className="w-full flex justify-start items-center animate-slide-down" style={{ animationDelay: '0ms' }}>
+        <div className="w-full flex justify-start items-center animate-fade-in" style={{ animationDelay: '100ms' }}>
           <Logo />
         </div>
 
         {/* Center Content */}
-        <div className="flex flex-col items-center gap-6">
-          <div className="animate-slide-up" style={{ animationDelay: '80ms' }}>
-            <TaskTrigger />
-          </div>
-          <div className="animate-slide-up" style={{ animationDelay: '160ms' }}>
-            <Timer />
-          </div>
+        <div className="flex flex-col items-center gap-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
+          <TaskTrigger />
+          <Timer />
         </div>
 
         {/* Bottom */}
