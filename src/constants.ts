@@ -27,42 +27,42 @@ export const BUY_ME_COFFEE_URL = 'https://buymeacoffee.com/heyitsmohdd';
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [
   {
     id: 'catt',
-    name: 'Catt',
+    name: 'Lofi Dock',
     url: '/videos/catt.mp4',
   },
   {
     id: 'night',
-    name: 'Night',
+    name: 'Starlit Night',
     url: '/videos/night.mp4',
   },
   {
     id: 'cozy',
-    name: 'Cozy',
+    name: 'Cozy Fireplace',
     url: '/videos/cozy.mp4',
   },
   {
     id: 'good',
-    name: 'Good',
+    name: 'Mountain Lake',
     url: '/videos/good.mp4',
   },
   {
     id: 'working',
-    name: 'Working',
+    name: 'Night Grind',
     url: '/videos/working.mp4',
   },
   {
     id: 'rain',
-    name: 'Rain',
+    name: 'Rainy Window',
     url: '/videos/rain.mp4',
   },
   {
     id: 'sky',
-    name: 'Sky',
+    name: 'Cave Fire',
     url: '/videos/sky.mp4',
   },
   {
     id: 'city',
-    name: 'City',
+    name: 'City Lights',
     url: '/videos/city.mp4',
   },
 ];
@@ -77,22 +77,22 @@ export interface ImageBackground {
 export const IMAGE_BACKGROUNDS: ImageBackground[] = [
   {
     id: 'cat',
-    name: 'Cat',
+    name: 'Sleepy Cat',
     url: '/images/cat.jpg',
   },
   {
     id: 'goku',
-    name: 'Goku',
+    name: 'Ultra Instinct',
     url: '/images/goku.jpg',
   },
   {
     id: 'calm',
-    name: 'Calm',
+    name: 'Morning Calm',
     url: '/images/calm.jpg',
   },
   {
     id: 'nature',
-    name: 'Nature',
+    name: 'Forest Path',
     url: '/images/nature2.jpg',
   },
 ];
@@ -168,4 +168,4 @@ export const PRODUCTION_URL = 'https://focuswaqt.vercel.app';
 
 // Default YouTube URL for music modal
 // Lofi hip hop radio - beats to relax/study to
-export const DEFAULT_YOUTUBE_URL = process.env.NEXT_PUBLIC_DEFAULT_YOUTUBE_URL || 'https://youtu.be/uyTtCdaEux8?si=E9KEDBOkM2qjtfKu';
+export const DEFAULT_YOUTUBE_URL = process.env.NEXT_PUBLIC_DEFAULT_YOUTUBE_URL || 'https://youtu.be/Srwxd7hcygM?si=x4wFO2uvldELprZR';
