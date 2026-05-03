@@ -28,7 +28,7 @@ export function TaskTrigger() {
   const [isHovered, setIsHovered] = useState(false);
   const [currentSlang, setCurrentSlang] = useState('');
   const [cycleKey, setCycleKey] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const usedRef = useRef<Set<string>>(new Set());
 
   const activeTask = tasks.find(task => !task.is_completed);
