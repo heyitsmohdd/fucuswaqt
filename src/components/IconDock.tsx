@@ -4,6 +4,7 @@ import { CloudRain, Music, Image as ImageIcon, Coffee } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface DockButtonProps {
     onClick?: () => void;
@@ -13,54 +14,91 @@ interface DockButtonProps {
     isLink?: boolean;
     href?: string;
     external?: boolean;
+    lift: number;
+    onHover: () => void;
+    onLeave: () => void;
 }
 
-function DockButton({ onClick, label, children, className = '', isLink, href, external }: DockButtonProps) {
+function DockButton({ onClick, label, children, className = '', isLink, href, external, lift, onHover, onLeave }: DockButtonProps) {
     const base =
-        'has-tooltip group relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150 btn-press text-white/70 hover:text-white hover:bg-white/15';
+        'has-tooltip group relative w-10 h-10 rounded-xl flex items-center justify-center btn-press text-white/70 hover:text-white hover:bg-white/15';
+
+    const style = {
+        transform: `translateY(${-lift}px) scale(${1 + lift * 0.012})`,
+        transition: lift > 0
+            ? 'transform 0.45s cubic-bezier(0.34,1.56,0.64,1)'
+            : 'transform 0.5s cubic-bezier(0.25,0.1,0.25,1)',
+    };
+
+    const content = (
+        <>
+            {children}
+            <span className="tooltip-label">{label}</span>
+        </>
+    );
 
     if (isLink && href) {
-        const props = external
-            ? { target: '_blank', rel: 'noopener noreferrer' }
-            : {};
+        const props = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
         return (
-            <Link href={href} className={`${base} ${className}`} aria-label={label} {...props}>
-                {children}
-                <span className="tooltip-label">{label}</span>
+            <Link
+                href={href}
+                className={`${base} ${className}`}
+                aria-label={label}
+                style={style}
+                onMouseEnter={onHover}
+                onMouseLeave={onLeave}
+                {...props}
+            >
+                {content}
             </Link>
         );
     }
 
     return (
-        <button onClick={onClick} className={`${base} ${className}`} aria-label={label}>
-            {children}
-            <span className="tooltip-label">{label}</span>
+        <button
+            onClick={onClick}
+            className={`${base} ${className}`}
+            aria-label={label}
+            style={style}
+            onMouseEnter={onHover}
+            onMouseLeave={onLeave}
+        >
+            {content}
         </button>
     );
 }
 
+function getLift(hoveredIdx: number | null, idx: number): number {
+    return hoveredIdx === idx ? 10 : 0;
+}
+
 export function IconDock() {
     const { openSoundMixer, openBackgroundPicker, toggleMusicModal } = useAppStore();
+    const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+    const items = [
+        { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
+        { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
+        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: openBackgroundPicker },
+    ];
 
     return (
         <div className="fixed bottom-6 left-6 z-20 animate-slide-up">
-            <div className="glass-light rounded-2xl px-2 py-2 flex items-center gap-1">
-                <DockButton onClick={openSoundMixer} label="Sounds">
-                    <CloudRain className="w-4.5 h-4.5" />
-                </DockButton>
+            <div className="glass-light rounded-2xl px-2 py-2 flex items-end gap-1">
+                {items.map((item, i) => (
+                    <DockButton
+                        key={item.label}
+                        onClick={item.onClick}
+                        label={item.label}
+                        lift={getLift(hoveredIdx, i)}
+                        onHover={() => setHoveredIdx(i)}
+                        onLeave={() => setHoveredIdx(null)}
+                    >
+                        {item.icon}
+                    </DockButton>
+                ))}
 
-                <DockButton onClick={toggleMusicModal} label="Music">
-                    <Music className="w-4.5 h-4.5" />
-                </DockButton>
-
-                {/* Stats hidden — Supabase paused */}
-
-                <DockButton onClick={openBackgroundPicker} label="Scene">
-                    <ImageIcon className="w-4.5 h-4.5" />
-                </DockButton>
-
-                {/* Divider */}
-                <div className="w-px h-5 bg-white/10 mx-1" />
+                <div className="w-px h-5 bg-white/10 mx-1 self-center" />
 
                 <DockButton
                     isLink
@@ -68,6 +106,9 @@ export function IconDock() {
                     external
                     label="Buy me a coffee"
                     className="hover:text-yellow-400 hover:bg-yellow-400/10"
+                    lift={getLift(hoveredIdx, 3)}
+                    onHover={() => setHoveredIdx(3)}
+                    onLeave={() => setHoveredIdx(null)}
                 >
                     <Coffee className="w-4.5 h-4.5" />
                 </DockButton>
