@@ -52,7 +52,7 @@ const config: Config = {
         'modal-out': 'modal-out 0.18s ease-in forwards',
         'slide-up':  'slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1) both',
         'slide-down':'slide-down 0.5s cubic-bezier(0.16,1,0.3,1) both',
-        'fade-in':   'fade-in 0.22s ease-out forwards',
+        'fade-in':   'fade-in 0.4s ease-out both',
         'scale-in':  'scale-in 0.22s cubic-bezier(0.22,1,0.36,1) forwards',
         'pulse-glow':'pulse-glow 2s ease-in-out infinite',
       },
