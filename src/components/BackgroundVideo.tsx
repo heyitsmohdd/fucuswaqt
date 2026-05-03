@@ -57,13 +57,15 @@ export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
 
     return (
         <>
+            {/* Scene transition overlay */}
+            {isLoading && (
+                <div className="fixed inset-0 z-[2] bg-black/60 backdrop-blur-md pointer-events-none animate-fade-in" />
+            )}
+
             {/* Loading indicator */}
             {isLoading && (
-                <div className="fixed inset-0 z-0 flex items-center justify-center bg-gray-900">
-                    <div className="flex flex-col items-center gap-2">
-                        <Loader2 className="w-10 h-10 text-white/60 animate-spin" />
-                        <span className="text-white/60 text-sm">Loading background...</span>
-                    </div>
+                <div className="fixed inset-0 z-[3] flex items-center justify-center">
+                    <Loader2 className="w-6 h-6 text-white/40 animate-spin" />
                 </div>
             )}
 
