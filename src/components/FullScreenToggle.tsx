@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useShortcutHint } from '@/hooks/useShortcutHint';
 
 export function FullScreenToggle() {
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const fullscreenHint = useShortcutHint('hint-f', 'Press F for fullscreen');
 
     useEffect(() => {
         const checkFullscreen = () => setIsFullscreen(!!document.fullscreenElement);
@@ -21,9 +22,9 @@ export function FullScreenToggle() {
             } else {
                 await document.exitFullscreen();
             }
-            toast(`${!isFullscreen ? 'Fullscreen' : 'Exit fullscreen'} — press F`, { duration: 3000 });
+            fullscreenHint.trigger();
         } catch { /* fullscreen not available */ }
-    }, [isFullscreen]);
+    }, [isFullscreen, fullscreenHint]);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {

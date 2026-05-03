@@ -16,12 +16,11 @@ export function Timer() {
     const { openTimerSettings } = useAppStore();
     const streakUpdatedRef = useRef(false);
     const prevTimeLeftRef = useRef(timeLeft);
-    const spaceHint = useShortcutHint('hint-space');
-    const resetHint = useShortcutHint('hint-r');
+    const spaceHint = useShortcutHint('hint-space', 'Press Space to play');
+    const resetHint = useShortcutHint('hint-r', 'Press R to reset');
     const handlePlayPause = useCallback(() => {
         isRunning ? pauseTimer() : startTimer();
         spaceHint.trigger();
-        toast(`${isRunning ? 'Pause' : 'Play'} — press Space`, { duration: 3000 });
     }, [isRunning, startTimer, pauseTimer, spaceHint]);
 
     // Countdown interval
@@ -179,7 +178,7 @@ export function Timer() {
                             </kbd>
                         )}
                         <button
-                            onClick={() => { resetTimer(); resetHint.trigger(); toast('Reset — press R', { duration: 3000 }); }}
+                            onClick={() => { resetTimer(); resetHint.trigger(); }}
                             className="glass-light w-12 h-12 rounded-full flex items-center justify-center hover:bg-white/20 transition-all btn-press group"
                             aria-label="Reset timer"
                         >

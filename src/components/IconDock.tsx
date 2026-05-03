@@ -6,7 +6,6 @@ import { BUY_ME_COFFEE_URL } from '@/constants';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
 import Link from 'next/link';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 interface DockButtonProps {
     onClick?: () => void;
@@ -77,12 +76,12 @@ function getLift(hoveredIdx: number | null, idx: number): number {
 export function IconDock() {
     const { openSoundMixer, openBackgroundPicker, toggleMusicModal } = useAppStore();
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-    const sceneHint = useShortcutHint('hint-c');
+    const sceneHint = useShortcutHint('hint-c', 'Press C for scene dock');
 
     const items = [
         { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
         { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
-        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); toast('Change scene — press C', { duration: 3000 }); } },
+        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
     ];
 
     return (
