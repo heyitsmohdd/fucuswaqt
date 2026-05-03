@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useMemo, useCallback  } from 'react';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
+import { useShortcutHint } from '@/hooks/useShortcutHint';
 import { useTimerStore } from '@/stores/timerStore';
 import { useAppStore } from '@/stores/appStore';
 import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
@@ -15,9 +16,12 @@ export function Timer() {
     const { openTimerSettings } = useAppStore();
     const streakUpdatedRef = useRef(false);
     const prevTimeLeftRef = useRef(timeLeft);
+    const spaceHint = useShortcutHint('hint-space');
+    const resetHint = useShortcutHint('hint-r');
     const handlePlayPause = useCallback(() => {
         isRunning ? pauseTimer() : startTimer();
-    }, [isRunning, startTimer, pauseTimer]);
+        spaceHint.trigger();
+    }, [isRunning, startTimer, pauseTimer, spaceHint]);
 
     // Countdown interval
     useEffect(() => {
@@ -167,16 +171,28 @@ export function Timer() {
                 {/* Controls */}
                 <div className="flex gap-3 items-center">
                     {/* Reset */}
-                    <button
-                        onClick={resetTimer}
-                        className="glass-light w-12 h-12 rounded-full flex items-center justify-center hover:bg-white/20 transition-all btn-press group"
-                        aria-label="Reset timer"
-                    >
-                        <RotateCcw className="w-5 h-5 text-white/70 transition-transform duration-500 group-hover:-rotate-180" />
-                    </button>
+                    <div className="relative">
+                        {resetHint.visible && (
+                            <kbd className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-white/15 border border-white/20 rounded-lg text-white/70 text-[11px] font-mono whitespace-nowrap pointer-events-none animate-fade-in">
+                                R
+                            </kbd>
+                        )}
+                        <button
+                            onClick={() => { resetTimer(); resetHint.trigger(); }}
+                            className="glass-light w-12 h-12 rounded-full flex items-center justify-center hover:bg-white/20 transition-all btn-press group"
+                            aria-label="Reset timer"
+                        >
+                            <RotateCcw className="w-5 h-5 text-white/70 transition-transform duration-500 group-hover:-rotate-180" />
+                        </button>
+                    </div>
 
                     {/* Play / Pause — primary, slightly larger */}
                     <div className="relative w-[4.5rem] h-[4.5rem] flex items-center justify-center">
+                        {spaceHint.visible && (
+                            <kbd className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-white/15 border border-white/20 rounded-lg text-white/70 text-[11px] font-mono whitespace-nowrap pointer-events-none animate-fade-in">
+                                Space
+                            </kbd>
+                        )}
                         <button
                             onClick={handlePlayPause}
                             className={cn(

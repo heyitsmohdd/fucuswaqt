@@ -14,7 +14,6 @@ import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { QuoteWidget } from '@/components/QuoteWidget';
 import { Logo } from '@/components/Logo';
-import { KeyboardHint } from '@/components/KeyboardHint';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
@@ -102,8 +101,6 @@ export default function Home() {
       {/* Quote Widget */}
       <QuoteWidget />
 
-      {/* Keyboard shortcut hint — shows once */}
-      <KeyboardHint />
 
       {/* Main layout */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 py-6 md:px-8 md:py-8">

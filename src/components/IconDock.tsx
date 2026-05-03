@@ -3,6 +3,7 @@
 import { CloudRain, Music, Image as ImageIcon, Coffee } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
+import { useShortcutHint } from '@/hooks/useShortcutHint';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -75,27 +76,34 @@ function getLift(hoveredIdx: number | null, idx: number): number {
 export function IconDock() {
     const { openSoundMixer, openBackgroundPicker, toggleMusicModal } = useAppStore();
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+    const sceneHint = useShortcutHint('hint-c');
 
     const items = [
         { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
         { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
-        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: openBackgroundPicker },
+        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
     ];
 
     return (
         <div className="fixed bottom-6 left-6 z-20 animate-slide-up">
             <div className="glass-light rounded-2xl px-2 py-2 flex items-end gap-1">
                 {items.map((item, i) => (
-                    <DockButton
-                        key={item.label}
-                        onClick={item.onClick}
-                        label={item.label}
-                        lift={getLift(hoveredIdx, i)}
-                        onHover={() => setHoveredIdx(i)}
-                        onLeave={() => setHoveredIdx(null)}
-                    >
-                        {item.icon}
-                    </DockButton>
+                    <div key={item.label} className="relative">
+                        {item.label === 'Scene' && sceneHint.visible && (
+                            <kbd className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-white/15 border border-white/20 rounded-lg text-white/70 text-[11px] font-mono whitespace-nowrap pointer-events-none animate-fade-in">
+                                C
+                            </kbd>
+                        )}
+                        <DockButton
+                            onClick={item.onClick}
+                            label={item.label}
+                            lift={getLift(hoveredIdx, i)}
+                            onHover={() => setHoveredIdx(i)}
+                            onLeave={() => setHoveredIdx(null)}
+                        >
+                            {item.icon}
+                        </DockButton>
+                    </div>
                 ))}
 
                 <div className="w-px h-5 bg-white/10 mx-1 self-center" />
