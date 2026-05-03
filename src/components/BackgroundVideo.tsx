@@ -9,7 +9,7 @@ interface BackgroundVideoProps {
 }
 
 export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
-    const [isLoaded, setIsLoaded] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [currentUrl, setCurrentUrl] = useState(videoUrl);
@@ -57,6 +57,9 @@ export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
 
     return (
         <>
+            {/* Base gradient — always visible, hides blank flash while video buffers */}
+            <div className="fixed inset-0 z-[-1] bg-gradient-to-br from-slate-900 via-zinc-900 to-slate-800" />
+
             {/* Scene transition overlay */}
             {isLoading && (
                 <div className="fixed inset-0 z-[2] bg-black/60 backdrop-blur-md pointer-events-none animate-fade-in" />

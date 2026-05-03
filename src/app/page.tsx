@@ -55,7 +55,7 @@ export default function Home() {
     : (currentImage?.url || IMAGE_BACKGROUNDS[0].url);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
+    <div className="relative h-screen w-screen overflow-hidden bg-zinc-950">
       {/* Type-switch transition overlay */}
       <div
         className="fixed inset-0 z-[200] bg-black pointer-events-none"
