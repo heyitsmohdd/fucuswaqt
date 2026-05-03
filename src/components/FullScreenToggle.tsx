@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function FullScreenToggle() {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -13,15 +14,25 @@ export function FullScreenToggle() {
         return () => document.removeEventListener('fullscreenchange', checkFullscreen);
     }, []);
 
-    const toggleFullscreen = async () => {
+    const toggleFullscreen = useCallback(async () => {
         try {
             if (!isFullscreen) {
                 await document.documentElement.requestFullscreen();
             } else {
                 await document.exitFullscreen();
             }
+            toast(`${!isFullscreen ? 'Fullscreen' : 'Exit fullscreen'} — press F`, { duration: 3000 });
         } catch { /* fullscreen not available */ }
-    };
+    }, [isFullscreen]);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+            if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [toggleFullscreen]);
 
     return (
         <button

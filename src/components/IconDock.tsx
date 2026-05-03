@@ -6,6 +6,7 @@ import { BUY_ME_COFFEE_URL } from '@/constants';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface DockButtonProps {
     onClick?: () => void;
@@ -81,7 +82,7 @@ export function IconDock() {
     const items = [
         { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
         { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
-        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
+        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); toast('Change scene — press C', { duration: 3000 }); } },
     ];
 
     return (

@@ -21,6 +21,7 @@ export function Timer() {
     const handlePlayPause = useCallback(() => {
         isRunning ? pauseTimer() : startTimer();
         spaceHint.trigger();
+        toast(`${isRunning ? 'Pause' : 'Play'} — press Space`, { duration: 3000 });
     }, [isRunning, startTimer, pauseTimer, spaceHint]);
 
     // Countdown interval
@@ -178,7 +179,7 @@ export function Timer() {
                             </kbd>
                         )}
                         <button
-                            onClick={() => { resetTimer(); resetHint.trigger(); }}
+                            onClick={() => { resetTimer(); resetHint.trigger(); toast('Reset — press R', { duration: 3000 }); }}
                             className="glass-light w-12 h-12 rounded-full flex items-center justify-center hover:bg-white/20 transition-all btn-press group"
                             aria-label="Reset timer"
                         >
