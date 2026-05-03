@@ -14,6 +14,7 @@ import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { QuoteWidget } from '@/components/QuoteWidget';
 import { Logo } from '@/components/Logo';
+import { KeyboardHint } from '@/components/KeyboardHint';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
@@ -21,10 +22,22 @@ import { useEffect, useState, useRef } from 'react';
 // import { fetchUserStreak } from '@/actions/fetchUserStreak';  // Supabase paused
 
 export default function Home() {
-  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings } = useAppStore();
-  const { isRunning } = useTimerStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, openBackgroundPicker } = useAppStore();
+  const { isRunning, startTimer, pauseTimer, resetTimer } = useTimerStore();
   const [switching, setSwitching] = useState(false);
   const switchingReady = useRef(false);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.code === 'Space') { e.preventDefault(); isRunning ? pauseTimer() : startTimer(); }
+      if (e.key === 'r' || e.key === 'R') resetTimer();
+      if (e.key === 'c' || e.key === 'C') openBackgroundPicker();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isRunning, startTimer, pauseTimer, resetTimer, openBackgroundPicker]);
 
   // Delay enabling switching watcher until after Zustand rehydration settles
   useEffect(() => {
@@ -88,6 +101,9 @@ export default function Home() {
 
       {/* Quote Widget */}
       <QuoteWidget />
+
+      {/* Keyboard shortcut hint — shows once */}
+      <KeyboardHint />
 
       {/* Main layout */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 py-6 md:px-8 md:py-8">

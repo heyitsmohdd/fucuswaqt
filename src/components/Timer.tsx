@@ -49,13 +49,21 @@ export function Timer() {
     //     handleSessionComplete();
     // }, [timeLeft, mode, setStreak, currentPreset, customDurations]);
 
-    // Session complete toast
+    // Session complete toast + browser notification
     useEffect(() => {
         if (prevTimeLeftRef.current > 0 && timeLeft === 0) {
-            if (mode === 'focus') {
-                toast.success('Focus session complete!', { description: 'Great work. Take a break.' });
-            } else {
-                toast('Break over!', { description: 'Ready to focus again?' });
+            const isFocus = mode === 'focus';
+            const title = isFocus ? 'Focus session complete! 🎉' : 'Break over!';
+            const body = isFocus ? 'Great work. Take a break.' : 'Ready to focus again?';
+
+            if (isFocus) toast.success(title, { description: body });
+            else toast(title, { description: body });
+
+            const notify = () => new Notification(title, { body, icon: '/icon.png' });
+            if (Notification.permission === 'granted') {
+                notify();
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(p => { if (p === 'granted') notify(); });
             }
         }
         prevTimeLeftRef.current = timeLeft;
