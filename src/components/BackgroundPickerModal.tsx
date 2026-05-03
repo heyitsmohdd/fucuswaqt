@@ -106,7 +106,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     return (
         <>
             {mounted && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
                     {/* Backdrop */}
                     <div
                         className={cn(
@@ -119,15 +119,15 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                     {/* Modal */}
                     <div
                         className={cn(
-                            'relative w-full max-w-3xl bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
-                            visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
+                            'relative w-full sm:max-w-3xl bg-white/8 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                            visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="background-picker-title"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 pt-6 pb-4">
+                        <div className="flex items-center justify-between px-4 sm:px-6 pt-5 sm:pt-6 pb-4">
                             <h2 id="background-picker-title" className="text-lg font-semibold text-white tracking-tight">
                                 Set your scene
                             </h2>
@@ -141,7 +141,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                         </div>
 
                         {/* Tab Navigation */}
-                        <div className="px-6">
+                        <div className="px-4 sm:px-6">
                             <div className="relative flex gap-1 border-b border-white/8">
                                 {(['motion', 'stills'] as const).map((tab) => (
                                     <button
@@ -167,7 +167,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                         </div>
 
                         {/* Body */}
-                        <div className="px-6 py-5 max-h-[60vh] overflow-y-auto">
+                        <div className="px-4 sm:px-6 py-4 sm:py-5 max-h-[55vh] sm:max-h-[60vh] overflow-y-auto">
                             {/* Motion Tab */}
                             <div
                                 className="transition-opacity duration-200"
@@ -200,8 +200,10 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                                         'w-full h-full object-cover transition-opacity duration-300',
                                                         isLoaded ? 'opacity-100' : 'opacity-0'
                                                     )}
+                                                    autoPlay
                                                     muted
                                                     playsInline
+                                                    preload="metadata"
                                                     aria-hidden="true"
                                                     onLoadedData={() => handleVideoLoad(video.id)}
                                                 />
