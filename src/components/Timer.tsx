@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useMemo, useCallback } from 'react';
+import { useEffect, useRef, useMemo, useCallback, useState } from 'react';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
 import { useTimerStore } from '@/stores/timerStore';
 import { useAppStore } from '@/stores/appStore';
@@ -16,6 +16,7 @@ export function Timer() {
     const { openTimerSettings } = useAppStore();
     const streakUpdatedRef = useRef(false);
     const prevTimeLeftRef = useRef(timeLeft);
+    const [pendingMode, setPendingMode] = useState<'focus' | 'break' | 'longBreak' | null>(null);
     const spaceHint = useShortcutHint('hint-space', 'Press Space to play');
     const resetHint = useShortcutHint('hint-r', 'Press R to reset');
     const handlePlayPause = useCallback(() => {
@@ -94,6 +95,15 @@ export function Timer() {
 
     const progress = totalSeconds > 0 ? timeLeft / totalSeconds : 1;
 
+    const handleModeSwitch = (m: 'focus' | 'break' | 'longBreak') => {
+        if (m === mode) return;
+        if (timeLeft < totalSeconds && timeLeft > 0) {
+            setPendingMode(m);
+        } else {
+            switchMode(m);
+        }
+    };
+
     return (
         <>
             <div className="flex flex-col items-center gap-7">
@@ -113,7 +123,7 @@ export function Timer() {
                                     {labels[m]}
                                 </span>
                                 <button
-                                    onClick={() => switchMode(m)}
+                                    onClick={() => handleModeSwitch(m)}
                                     className={cn(
                                         'h-2.5 rounded-full transition-all duration-300 overflow-hidden flex items-center justify-center',
                                         isActive
@@ -222,6 +232,43 @@ export function Timer() {
                 </div>
             </div>
 
+            {pendingMode && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl animate-scale-in flex flex-col items-center text-center relative overflow-hidden">
+                        <div className="absolute -top-12 -left-12 w-32 h-32 bg-rose-500/20 blur-3xl rounded-full" />
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/20 blur-3xl rounded-full" />
+                        
+                        <div className="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center mb-4 relative z-10">
+                            <span className="text-3xl">🥺</span>
+                        </div>
+                        
+                        <h3 className="text-xl font-semibold text-white mb-2 relative z-10">Hold on!</h3>
+                        <p className="text-white/60 text-sm mb-6 relative z-10">
+                            You're in the middle of a session. If you switch modes now, you'll lose your current progress.
+                        </p>
+                        
+                        <div className="flex gap-3 w-full relative z-10">
+                            <button
+                                onClick={() => setPendingMode(null)}
+                                className="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (pendingMode) {
+                                        switchMode(pendingMode);
+                                        setPendingMode(null);
+                                    }
+                                }}
+                                className="flex-1 py-3 px-4 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-medium transition-colors shadow-lg shadow-rose-500/20"
+                            >
+                                Switch anyway
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
