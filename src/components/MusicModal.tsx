@@ -1,10 +1,41 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { X, Music, Check } from 'lucide-react';
+import { useShortcutHint } from '@/hooks/useShortcutHint';
 import { cn } from '@/lib/utils';
 import { DEFAULT_YOUTUBE_URL } from '@/constants';
 import { toast } from 'sonner';
+
+interface YTPlayerInstance {
+    playVideo(): void;
+    pauseVideo(): void;
+    cueVideoById(videoId: string): void;
+    destroy(): void;
+}
+
+interface YTStateChangeEvent {
+    data: number;
+}
+
+declare global {
+    interface Window {
+        YT: {
+            Player: new (
+                element: HTMLElement,
+                config: {
+                    videoId: string;
+                    playerVars?: Record<string, number>;
+                    events?: {
+                        onReady?: () => void;
+                        onStateChange?: (e: YTStateChangeEvent) => void;
+                    };
+                }
+            ) => YTPlayerInstance;
+        };
+        onYouTubeIframeAPIReady: () => void;
+    }
+}
 
 interface MusicModalProps {
     isOpen: boolean;
@@ -37,9 +68,61 @@ const extractYouTubeId = (url: string): string | null => {
 
 export function MusicModal({ isOpen, onClose }: MusicModalProps) {
     const [isChangingUrl, setIsChangingUrl] = useState(false);
-    const [videoUrl, setVideoUrl] = useState(DEFAULT_YOUTUBE_URL); // Lofi hip hop radio
+    const [videoUrl, setVideoUrl] = useState(DEFAULT_YOUTUBE_URL);
     const [inputValue, setInputValue] = useState('');
+    const [isPlaying, setIsPlaying] = useState(false);
     const widgetRef = useRef<HTMLDivElement>(null);
+    const ytContainerRef = useRef<HTMLDivElement>(null);
+    const playerRef = useRef<YTPlayerInstance | null>(null);
+    const musicHint = useShortcutHint('hint-m', 'Press M to play/pause music');
+
+    const createPlayer = useCallback((videoId: string) => {
+        if (!ytContainerRef.current) return;
+        if (playerRef.current) playerRef.current.destroy();
+        playerRef.current = new window.YT.Player(ytContainerRef.current, {
+            videoId,
+            playerVars: { autoplay: 0, mute: 0 },
+            events: {
+                onStateChange: (e: YTStateChangeEvent) => setIsPlaying(e.data === 1),
+            },
+        });
+    }, []);
+
+    useEffect(() => {
+        const videoId = extractYouTubeId(videoUrl);
+        if (!videoId) return;
+        if (playerRef.current) {
+            playerRef.current.cueVideoById(videoId);
+            return;
+        }
+        const initPlayer = () => createPlayer(videoId);
+        if (window.YT?.Player) {
+            initPlayer();
+        } else {
+            if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://www.youtube.com/iframe_api';
+                document.body.appendChild(script);
+            }
+            window.onYouTubeIframeAPIReady = initPlayer;
+        }
+        return () => { playerRef.current?.destroy(); playerRef.current = null; };
+    }, [videoUrl, createPlayer]);
+
+    const togglePlayback = useCallback(() => {
+        if (!playerRef.current) return;
+        isPlaying ? playerRef.current.pauseVideo() : playerRef.current.playVideo();
+        musicHint.trigger();
+    }, [isPlaying, musicHint]);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+            if (e.key === 'm' || e.key === 'M') togglePlayback();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [togglePlayback]);
 
     const handleCancelChange = () => {
         setInputValue('');
@@ -119,7 +202,14 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
             <div className="bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 pb-3">
-                    <h2 className="text-lg font-bold text-white">YouTube</h2>
+                    <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                        YouTube
+                        {musicHint.visible && (
+                            <kbd className="px-2 py-0.5 bg-white/15 border border-white/20 rounded-lg text-white/70 text-[11px] font-mono whitespace-nowrap animate-fade-in">
+                                M
+                            </kbd>
+                        )}
+                    </h2>
 
                     {/* Change Button or Input Field */}
                     <div className="flex items-center gap-2">
@@ -172,14 +262,8 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
 
                 {/* Video Player */}
                 <div className="px-4 pb-4">
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                        <iframe
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=0&mute=0`}
-                            className="absolute inset-0 w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube music player"
-                        />
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/50">
+                        <div ref={ytContainerRef} className="absolute inset-0 w-full h-full" />
                     </div>
                 </div>
             </div>
