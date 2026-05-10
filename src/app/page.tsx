@@ -86,12 +86,16 @@ export default function Home() {
         </>
       )}
 
-      {/* Modals */}
+      {/* Fullscreen modals */}
       <SoundMixerModal isOpen={isSoundMixerOpen} onClose={closeSoundMixer} />
-      <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
       <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
-      <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
       <TimerSettingsModal isOpen={isTimerSettingsOpen} onClose={closeTimerSettings} />
+
+      {/* Dock-anchored modals — fixed above the icon dock (bottom-6 left-6) */}
+      <div className="fixed bottom-24 left-6 z-30 flex flex-col gap-3">
+        <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
+        <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
+      </div>
 
       {/* Icon Dock */}
       <IconDock />
