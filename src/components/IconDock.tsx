@@ -5,7 +5,7 @@ import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface DockButtonProps {
     onClick?: () => void;
@@ -78,11 +78,11 @@ export function IconDock() {
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
     const sceneHint = useShortcutHint('hint-c', 'Press C for scene dock');
 
-    const items = [
+    const items = useMemo(() => [
         { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
         { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
         { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
-    ];
+    ], [openSoundMixer, toggleMusicModal, openBackgroundPicker, sceneHint]);
 
     return (
         <div className="fixed bottom-6 left-6 z-20 animate-slide-up">
