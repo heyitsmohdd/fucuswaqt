@@ -6,7 +6,10 @@ import { TaskTrigger } from '@/components/TaskTrigger';
 // import { StreakCounter } from '@/components/StreakCounter';   // Supabase paused
 // import { AuthButton } from '@/components/AuthButton';         // Supabase paused
 import { IconDock } from '@/components/IconDock';
+import { SoundMixerModal } from '@/components/SoundMixerModal';
+import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
 import { TaskModal } from '@/components/TaskModal';
+import { MusicModal } from '@/components/MusicModal';
 import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { QuoteWidget } from '@/components/QuoteWidget';
@@ -18,7 +21,7 @@ import { useEffect, useState, useRef } from 'react';
 // import { fetchUserStreak } from '@/actions/fetchUserStreak';  // Supabase paused
 
 export default function Home() {
-  const { currentBackgroundId, currentBackgroundType, isTaskModalOpen, closeTaskModal, isTimerSettingsOpen, closeTimerSettings, openBackgroundPicker } = useAppStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, openBackgroundPicker } = useAppStore();
   const { isRunning, startTimer, pauseTimer, resetTimer } = useTimerStore();
   const [switching, setSwitching] = useState(false);
   const switchingReady = useRef(false);
@@ -84,7 +87,10 @@ export default function Home() {
       )}
 
       {/* Modals */}
+      <SoundMixerModal isOpen={isSoundMixerOpen} onClose={closeSoundMixer} />
+      <BackgroundPickerModal isOpen={isBackgroundPickerOpen} onClose={closeBackgroundPicker} />
       <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
+      <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
       <TimerSettingsModal isOpen={isTimerSettingsOpen} onClose={closeTimerSettings} />
 
       {/* Icon Dock */}
