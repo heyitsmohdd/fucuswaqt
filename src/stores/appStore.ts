@@ -113,6 +113,13 @@ export const useAppStore = create<AppState>()(
         }),
         {
             name: 'pomodoro-app-storage',
+            partialize: (state) => ({
+                currentBackgroundId: state.currentBackgroundId,
+                currentBackgroundType: state.currentBackgroundType,
+                tasks: state.tasks,
+                currentTask: state.currentTask,
+                streakDays: state.streakDays,
+            }),
         }
     )
 );
