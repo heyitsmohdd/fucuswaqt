@@ -106,7 +106,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
     return (
         <>
             {mounted && (
-                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     {/* Backdrop */}
                     <div
                         className={cn(
@@ -119,7 +119,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                     {/* Modal */}
                     <div
                         className={cn(
-                            'relative w-full sm:max-w-3xl bg-white/8 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                            'relative w-full max-w-3xl bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
                             visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
                         role="dialog"
@@ -202,10 +202,11 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                                     )}
                                                     autoPlay
                                                     muted
+                                                    loop
                                                     playsInline
-                                                    preload="metadata"
+                                                    preload="auto"
                                                     aria-hidden="true"
-                                                    onLoadedData={() => handleVideoLoad(video.id)}
+                                                    onLoadedMetadata={() => handleVideoLoad(video.id)}
                                                 />
 
                                                 <div className={cn(
