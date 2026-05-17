@@ -42,6 +42,43 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'FocusWaqt',
+  operatingSystem: 'Web',
+  applicationCategory: 'ProductivityApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  url: 'https://focuswaqt.space',
+  description:
+    'A beautiful Pomodoro timer with streak tracking, ambient sounds, and a GitHub-style focus heatmap. Free forever, no install needed.',
+  featureList: [
+    'Pomodoro Timer',
+    'Ambient Soundscapes',
+    'Beautiful Backgrounds',
+    'Streak Tracking',
+    'Focus Heatmap',
+    'Task Tracking',
+  ],
+  screenshot: 'https://focuswaqt.space/opengraph-image',
+  author: {
+    '@type': 'Person',
+    name: 'Mohammad Shariq',
+  },
+};
+
 export default function Page() {
-  return <LandingPage />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LandingPage />
+    </>
+  );
 }
