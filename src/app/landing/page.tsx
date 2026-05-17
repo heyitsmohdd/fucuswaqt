@@ -275,7 +275,7 @@ export default function LandingPage() {
   }, [menuOpen]);
 
   return (
-    <main className="bg-[#0e1710] text-white overflow-x-hidden">
+    <main className="bg-[#0e1710] text-white">
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
