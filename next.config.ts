@@ -56,11 +56,11 @@ const nextConfig: NextConfig = {
               // Images: self + data URLs + external sources
               "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://i.ytimg.com",
               // Media (audio/video): self + blob
-              "media-src 'self' blob: https://assets.mixkit.co",
+              "media-src 'self' blob: https://assets.mixkit.co https://d8j0ntlcm91z4.cloudfront.net",
               // Frames: YouTube embeds
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
               // Connect: API calls
-              "connect-src 'self' https://focuswaqt.space https://www.focuswaqt.space https://accounts.google.com https://oauth2.googleapis.com https://va.vercel-scripts.com",
+              "connect-src 'self' https://focuswaqt.space https://www.focuswaqt.space https://accounts.google.com https://oauth2.googleapis.com https://va.vercel-scripts.com https://d8j0ntlcm91z4.cloudfront.net",
               // Form actions
               "form-action 'self' https://accounts.google.com",
               // Base URI
