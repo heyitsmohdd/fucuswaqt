@@ -2,14 +2,17 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  LogIn, Menu, X, Timer, Flame, BarChart2,
+  Menu, X, Timer, Flame, BarChart2,
   Music, Image as ImageIcon, CheckCircle2, ArrowRight, ArrowDown,
 } from 'lucide-react';
-import BoomerangVideoBg from './BoomerangVideoBg';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import BoomerangVideoBg from '@/app/BoomerangVideoBg';
+import { Logo } from '@/components/Logo';
 
 const BG_VIDEO =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260511_131941_d136af49-e243-493a-be14-6ff3f24e09e6.mp4';
-const APP_URL = 'https://focuswaqt.space';
+const APP_URL = '/app';
 
 const MARQUEE_ITEMS = [
   'Pomodoro Timer', 'Streak Tracking', 'Ambient Sounds', 'Focus Heatmap',
@@ -274,15 +277,80 @@ export default function LandingPage() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero entrance — all screen sizes
+    gsap.set(['.hero-badge', '.hero-line', '.hero-sub', '.hero-cta', '.hero-mockup'], { opacity: 0, y: 40 });
+    gsap.to('.hero-badge',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.15 });
+    gsap.to('.hero-line',    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.35 });
+    gsap.to('.hero-sub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.75 });
+    gsap.to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.95 });
+    gsap.to('.hero-mockup',  { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 0.5  });
+
+    // Features: CSS sticky keeps content visible; GSAP scrubs cards in as you scroll through tall section
+    const featureCards = gsap.utils.toArray<HTMLElement>('.feature-card');
+    gsap.set(['.features-header', ...featureCards], { opacity: 0, y: 80 });
+
+    if (window.innerWidth >= 768) {
+      const featSec = document.getElementById('features');
+      if (featSec) featSec.style.height = `${window.innerHeight + featureCards.length * 200}px`;
+    }
+
+    const ftl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#features',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.8,
+      },
+    });
+    ftl.to('.features-header', { opacity: 1, y: 0, duration: 0.4 });
+    featureCards.forEach((card, i) => {
+      ftl.to(card, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.3 + i * 0.55);
+    });
+
+    // How It Works: CSS sticky + GSAP scrub each step sliding in
+    const stepItems = gsap.utils.toArray<HTMLElement>('.step-item');
+    gsap.set(['.howitworks-header', ...stepItems], { opacity: 0, x: -60 });
+
+    if (window.innerWidth >= 768) {
+      const howSec = document.getElementById('how-it-works');
+      if (howSec) howSec.style.height = `${window.innerHeight + stepItems.length * 220}px`;
+    }
+
+    const stl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#how-it-works',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.8,
+      },
+    });
+    stl.to('.howitworks-header', { opacity: 1, x: 0, duration: 0.4 });
+    stepItems.forEach((step, i) => {
+      stl.to(step, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, 0.3 + i * 0.5);
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
   return (
-    <main className="bg-[#0e1710] text-white">
+    <main className="text-white relative">
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        html { scroll-behavior: smooth; }
+        html, body { overflow: auto !important; scroll-behavior: smooth; }
       `}</style>
+
+      {/* Fixed video background — stays put while content scrolls */}
+      <BoomerangVideoBg src={BG_VIDEO} className="fixed inset-0 w-full h-full z-0" />
+      {/* Global dim overlay for text readability */}
+      <div className="fixed inset-0 z-[1] bg-black/60" />
 
       {/* ── Sticky Nav ── */}
       <nav
@@ -293,7 +361,7 @@ export default function LandingPage() {
           borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
         }}
       >
-        <div className="text-white/90 text-base font-semibold tracking-tight">FocusWaqt</div>
+        <Logo />
 
         <div className="hidden lg:flex items-center gap-6">
           {NAV_LINKS.map(link => (
@@ -310,14 +378,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <a
             href={APP_URL}
-            className="hidden sm:flex items-center gap-1.5 text-sm text-white/60 hover:text-white/90 transition-colors"
-          >
-            <LogIn className="w-3.5 h-3.5" />
-            Open App
-          </a>
-          <a
-            href={APP_URL}
-            className="hidden lg:inline-flex text-sm font-medium px-4 py-2 bg-white/10 hover:bg-white/15 border border-white/10 rounded-full transition-colors"
+            className="hidden sm:inline-flex text-sm font-medium px-4 py-2 bg-white/10 hover:bg-white/15 border border-white/10 rounded-full transition-colors"
           >
             Start Focusing
           </a>
@@ -369,14 +430,11 @@ export default function LandingPage() {
       </div>
 
       {/* ── Hero ── */}
-      <section className="relative w-full min-h-screen overflow-hidden">
-        <BoomerangVideoBg src={BG_VIDEO} className="absolute inset-0 w-full h-full" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[#0e1710]" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-32 pb-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 min-h-screen">
+      <section className="relative z-10 w-full min-h-screen">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-32 pb-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 min-h-screen">
           {/* Left: copy */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-8">
+            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-8">
               <div className="w-1.5 h-1.5 rounded-full bg-[#85AB8B] animate-pulse" />
               Free forever · No install needed
             </div>
@@ -385,19 +443,17 @@ export default function LandingPage() {
               className="font-normal leading-[0.93] text-[#c5dfc8]"
               style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', letterSpacing: '-0.035em' }}
             >
-              Deep focus,
-              <br />
-              <span className="text-[#85AB8B]">every single</span>
-              <br />
-              day.
+              <span className="hero-line block">Deep focus,</span>
+              <span className="hero-line block text-[#85AB8B]">every single</span>
+              <span className="hero-line block">day.</span>
             </h1>
 
-            <p className="mt-7 text-white/45 leading-relaxed max-w-md mx-auto lg:mx-0"
+            <p className="hero-sub mt-7 text-white/45 leading-relaxed max-w-md mx-auto lg:mx-0"
                style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
               A beautiful Pomodoro timer with ambient sounds, streak tracking, and a GitHub-style focus heatmap.
             </p>
 
-            <div className="mt-10 flex items-center gap-3 flex-wrap justify-center lg:justify-start">
+            <div className="hero-cta mt-10 flex items-center gap-3 flex-wrap justify-center lg:justify-start">
               <a
                 href={APP_URL}
                 className="flex items-center gap-2 bg-[#336443] hover:bg-[#2d5a3b] text-white font-semibold px-6 py-3.5 rounded-full transition-all duration-200 shadow-lg shadow-green-900/30 hover:shadow-green-900/50 hover:-translate-y-0.5"
@@ -414,7 +470,7 @@ export default function LandingPage() {
           </div>
 
           {/* Right: app preview */}
-          <div className="flex-shrink-0 w-full max-w-xs lg:max-w-sm">
+          <div className="hero-mockup flex-shrink-0 w-full max-w-xs lg:max-w-sm">
             <AppMockup />
           </div>
         </div>
@@ -422,7 +478,7 @@ export default function LandingPage() {
         {/* Scroll indicator */}
         <a
           href="#features"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
         >
           <span className="text-[10px] uppercase tracking-widest">Scroll</span>
           <ArrowDown className="w-4 h-4 animate-bounce" />
@@ -430,7 +486,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Marquee Strip ── */}
-      <div className="border-y border-white/6 bg-white/[0.02] py-4 overflow-hidden">
+      <div className="relative z-10 border-y border-white/6 bg-black/20 py-4 overflow-hidden">
         <div
           className="flex gap-8 w-max"
           style={{ animation: 'marquee 28s linear infinite' }}
@@ -445,9 +501,10 @@ export default function LandingPage() {
       </div>
 
       {/* ── Features ── */}
-      <section id="features" className="py-28 md:py-36 px-5 sm:px-8 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <FadeIn className="text-center mb-16">
+      <section id="features" className="relative z-10">
+        <div id="features-inner" className="px-5 sm:px-8 md:px-12 py-28 md:py-0 md:sticky md:top-0 md:h-screen md:flex md:items-center">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="features-header text-center mb-16">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">Features</p>
             <h2
               className="font-normal text-white"
@@ -457,12 +514,12 @@ export default function LandingPage() {
               <br />
               <span className="text-white/40">your best work</span>
             </h2>
-          </FadeIn>
+          </div>
 
           {/* Bento grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {/* Large card */}
-            <FadeIn delay={0} className="sm:col-span-2 lg:col-span-2">
+            <div className="feature-card sm:col-span-2 lg:col-span-2">
               <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 hover:border-white/12 rounded-2xl p-7 transition-all duration-300 group cursor-default">
                 <div className="w-12 h-12 rounded-2xl bg-[#336443]/20 border border-[#336443]/20 flex items-center justify-center text-[#85AB8B] mb-6 group-hover:bg-[#336443]/30 transition-colors">
                   <Timer className="w-6 h-6" />
@@ -482,11 +539,11 @@ export default function LandingPage() {
                   ))}
                 </div>
               </div>
-            </FadeIn>
+            </div>
 
             {/* Regular cards */}
-            {FEATURES.slice(1).map((feature, i) => (
-              <FadeIn key={feature.title} delay={i * 60}>
+            {FEATURES.slice(1).map((feature) => (
+              <div key={feature.title} className="feature-card">
                 <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 hover:border-white/12 rounded-2xl p-5 transition-all duration-300 group cursor-default">
                   <div className="w-9 h-9 rounded-xl bg-[#336443]/15 border border-[#336443]/15 flex items-center justify-center text-[#85AB8B] mb-4 group-hover:bg-[#336443]/25 transition-colors">
                     {feature.icon}
@@ -494,16 +551,18 @@ export default function LandingPage() {
                   <h3 className="text-white font-semibold text-sm mb-2">{feature.title}</h3>
                   <p className="text-white/40 text-xs leading-relaxed">{feature.description}</p>
                 </div>
-              </FadeIn>
+              </div>
             ))}
           </div>
+        </div>
         </div>
       </section>
 
       {/* ── How It Works ── */}
-      <section id="how-it-works" className="py-28 md:py-36 px-5 sm:px-8 md:px-12 bg-white/[0.02] border-y border-white/6">
-        <div className="max-w-6xl mx-auto">
-          <FadeIn className="text-center mb-20">
+      <section id="how-it-works" className="relative z-10 bg-black/25 border-y border-white/6">
+        <div id="howitworks-inner" className="px-5 sm:px-8 md:px-12 py-28 md:py-0 md:sticky md:top-0 md:h-screen md:flex md:items-center">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="howitworks-header text-center mb-20">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">How It Works</p>
             <h2
               className="font-normal text-white"
@@ -513,30 +572,29 @@ export default function LandingPage() {
               <br />
               <span className="text-white/40">powerful by habit</span>
             </h2>
-          </FadeIn>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-            {STEPS.map((step, i) => (
-              <FadeIn key={step.number} delay={i * 80}>
-                <div className="relative">
-                  <div
-                    className="font-bold tabular-nums text-[#336443]/30 mb-4 select-none"
-                    style={{ fontSize: 'clamp(3rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}
-                  >
-                    {step.number}
-                  </div>
-                  <div className="w-6 h-[2px] bg-[#85AB8B]/30 mb-4" />
-                  <h3 className="text-white font-semibold text-sm mb-3">{step.title}</h3>
-                  <p className="text-white/40 text-xs leading-relaxed">{step.description}</p>
+            {STEPS.map((step) => (
+              <div key={step.number} className="step-item relative">
+                <div
+                  className="font-bold tabular-nums text-[#336443]/30 mb-4 select-none"
+                  style={{ fontSize: 'clamp(3rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}
+                >
+                  {step.number}
                 </div>
-              </FadeIn>
+                <div className="w-6 h-[2px] bg-[#85AB8B]/30 mb-4" />
+                <h3 className="text-white font-semibold text-sm mb-3">{step.title}</h3>
+                <p className="text-white/40 text-xs leading-relaxed">{step.description}</p>
+              </div>
             ))}
           </div>
+        </div>
         </div>
       </section>
 
       {/* ── Progress / Heatmap ── */}
-      <section id="progress" className="py-28 md:py-36 px-5 sm:px-8 md:px-12">
+      <section id="progress" className="relative z-10 py-28 md:py-36 px-5 sm:px-8 md:px-12">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
             <FadeIn direction="left">
@@ -575,7 +633,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-28 md:py-36 px-5 sm:px-8">
+      <section className="relative z-10 py-28 md:py-36 px-5 sm:px-8">
         <FadeIn>
           <div className="max-w-4xl mx-auto text-center bg-white/[0.04] border border-white/8 rounded-3xl px-8 py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-[#336443]/10 to-transparent pointer-events-none" />
@@ -604,7 +662,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-white/6 px-5 sm:px-8 md:px-12 py-8">
+      <footer className="relative z-10 border-t border-white/6 bg-black/30 px-5 sm:px-8 md:px-12 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-sm">
           <span className="font-semibold text-white/40">FocusWaqt</span>
           <span>© {new Date().getFullYear()} FocusWaqt. Free forever.</span>
