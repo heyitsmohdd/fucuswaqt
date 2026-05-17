@@ -4,7 +4,7 @@ import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
 import { TaskTrigger } from '@/components/TaskTrigger';
 // import { StreakCounter } from '@/components/StreakCounter';   // Supabase paused
-// import { AuthButton } from '@/components/AuthButton';         // Supabase paused
+import { AuthButton } from '@/components/AuthButton';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
 import { BackgroundPickerModal } from '@/components/BackgroundPickerModal';
@@ -105,10 +105,9 @@ export default function Home() {
       {/* Main layout */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 py-6 md:px-8 md:py-8">
         {/* Top Bar */}
-        {/* <div className="w-full flex justify-end items-center gap-2">
-          <StreakCounter />
+        <div className="w-full flex justify-end items-center gap-2">
           <AuthButton />
-        </div> */}
+        </div>
         <div className="w-full flex justify-start items-center animate-fade-in" style={{ animationDelay: '100ms' }}>
           <Logo />
         </div>

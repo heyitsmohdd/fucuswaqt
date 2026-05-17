@@ -158,13 +158,14 @@ export const TIMER_PRESETS: Record<Exclude<TimerPresetKey, 'custom'>, TimerPrese
 // Allowed OAuth redirect origins (security)
 export const ALLOWED_ORIGINS = [
   'https://focuswaqt.vercel.app',
-  'https://www.focuswaqt.com',
+  'https://focuswaqt.space',
+  'https://www.focuswaqt.space',
   'http://localhost:3000',
   'http://localhost:3001',
 ] as const;
 
 // Production URL fallback
-export const PRODUCTION_URL = 'https://focuswaqt.vercel.app';
+export const PRODUCTION_URL = 'https://focuswaqt.space';
 
 // Default YouTube URL for music modal
 // Lofi hip hop radio - beats to relax/study to

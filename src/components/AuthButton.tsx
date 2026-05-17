@@ -1,61 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { authClient } from '@/lib/auth-client';
 import { LogOut, Settings, ChevronRight, X } from 'lucide-react';
 import { AuthModal } from './AuthModal';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 export function AuthButton() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { data: session, isPending } = authClient.useSession();
     const [showDropdown, setShowDropdown] = useState(false);
-    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
-    const supabase = createClient();
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
+        if (!session) setShowAuthModal(false);
+    }, [session]);
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-            setShowAuthModal(false);
-        });
-
-        return () => subscription.unsubscribe();
-    }, [supabase.auth]);
-
-    // Dropdown animate in
     useEffect(() => {
         if (showDropdown) {
-            requestAnimationFrame(() => requestAnimationFrame(() => setDropdownVisible(true)));
+            requestAnimationFrame(() => requestAnimationFrame(() => setIsDropdownVisible(true)));
         } else {
-            setDropdownVisible(false);
+            setIsDropdownVisible(false);
         }
     }, [showDropdown]);
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
+        await authClient.signOut();
         setShowDropdown(false);
     };
 
     const getFirstName = () => {
-        const fullName = user?.user_metadata?.full_name || user?.user_metadata?.name;
+        const fullName = session?.user.name;
         if (fullName) return fullName.split(' ')[0];
-        return user?.email?.split('@')[0] || 'User';
+        return session?.user.email?.split('@')[0] ?? 'User';
     };
 
     const getFullName = () => {
-        return user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'User';
+        return session?.user.name ?? session?.user.email?.split('@')[0] ?? 'User';
     };
 
-    if (loading) {
+    if (isPending) {
         return (
             <div className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8" role="status" aria-label="Loading">
                 <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" aria-hidden="true" />
@@ -63,7 +49,7 @@ export function AuthButton() {
         );
     }
 
-    if (!user) {
+    if (!session) {
         return (
             <>
                 <button
@@ -86,9 +72,9 @@ export function AuthButton() {
                 aria-expanded={showDropdown}
                 aria-haspopup="menu"
             >
-                {user.user_metadata?.avatar_url ? (
+                {session.user.image ? (
                     <Image
-                        src={user.user_metadata.avatar_url}
+                        src={session.user.image}
                         alt={getFirstName()}
                         width={32}
                         height={32}
@@ -107,9 +93,8 @@ export function AuthButton() {
 
                     <div className={cn(
                         'absolute -right-2 top-full mt-2 w-60 rounded-2xl bg-black/90 backdrop-blur-2xl border border-white/10 shadow-2xl z-50 overflow-hidden transition-all duration-200',
-                        dropdownVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95'
+                        isDropdownVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95'
                     )}>
-                        {/* User Header */}
                         <div className="p-4 relative">
                             <button
                                 onClick={() => setShowDropdown(false)}
@@ -120,7 +105,7 @@ export function AuthButton() {
                             </button>
                             <p className="text-white font-semibold text-sm pr-8">{getFullName()}</p>
                             <p className="text-white/40 text-xs mt-0.5 truncate">
-                                {user.email || 'Guest Account'}
+                                {session.user.email ?? 'Guest Account'}
                             </p>
                         </div>
 
