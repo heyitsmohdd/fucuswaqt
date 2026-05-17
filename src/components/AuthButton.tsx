@@ -4,19 +4,19 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { LogOut, Settings, ChevronRight, X } from 'lucide-react';
-import { AuthModal } from './AuthModal';
+import { useAppStore } from '@/stores/appStore';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 export function AuthButton() {
     const { data: session, isPending } = authClient.useSession();
+    const { openAuthModal, closeAuthModal } = useAppStore();
     const [showDropdown, setShowDropdown] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
-        if (!session) setShowAuthModal(false);
-    }, [session]);
+        if (!session) closeAuthModal();
+    }, [session, closeAuthModal]);
 
     useEffect(() => {
         if (showDropdown) {
@@ -51,15 +51,12 @@ export function AuthButton() {
 
     if (!session) {
         return (
-            <>
-                <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8 hover:bg-black/55 hover:border-white/15 transition-all duration-200 text-white/90 font-medium text-sm btn-press"
-                >
-                    Sign In
-                </button>
-                <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-            </>
+            <button
+                onClick={openAuthModal}
+                className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8 hover:bg-black/55 hover:border-white/15 transition-all duration-200 text-white/90 font-medium text-sm btn-press"
+            >
+                Sign In
+            </button>
         );
     }
 
