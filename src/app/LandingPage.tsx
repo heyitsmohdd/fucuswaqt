@@ -5,8 +5,6 @@ import {
   Menu, X, Timer, Flame, BarChart2,
   Music, Image as ImageIcon, CheckCircle2, ArrowRight, ArrowDown,
 } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import BoomerangVideoBg from '@/app/BoomerangVideoBg';
 import { Logo } from '@/components/Logo';
 
@@ -277,65 +275,6 @@ export default function LandingPage() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Hero entrance — all screen sizes
-    gsap.set(['.hero-badge', '.hero-line', '.hero-sub', '.hero-cta', '.hero-mockup'], { opacity: 0, y: 40 });
-    gsap.to('.hero-badge',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.15 });
-    gsap.to('.hero-line',    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.35 });
-    gsap.to('.hero-sub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.75 });
-    gsap.to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.95 });
-    gsap.to('.hero-mockup',  { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 0.5  });
-
-    // Features: CSS sticky keeps content visible; GSAP scrubs cards in as you scroll through tall section
-    const featureCards = gsap.utils.toArray<HTMLElement>('.feature-card');
-    gsap.set(['.features-header', ...featureCards], { opacity: 0, y: 80 });
-
-    if (window.innerWidth >= 768) {
-      const featSec = document.getElementById('features');
-      if (featSec) featSec.style.height = `${window.innerHeight + featureCards.length * 200}px`;
-    }
-
-    const ftl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#features',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.8,
-      },
-    });
-    ftl.to('.features-header', { opacity: 1, y: 0, duration: 0.4 });
-    featureCards.forEach((card, i) => {
-      ftl.to(card, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.3 + i * 0.55);
-    });
-
-    // How It Works: CSS sticky + GSAP scrub each step sliding in
-    const stepItems = gsap.utils.toArray<HTMLElement>('.step-item');
-    gsap.set(['.howitworks-header', ...stepItems], { opacity: 0, x: -60 });
-
-    if (window.innerWidth >= 768) {
-      const howSec = document.getElementById('how-it-works');
-      if (howSec) howSec.style.height = `${window.innerHeight + stepItems.length * 220}px`;
-    }
-
-    const stl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#how-it-works',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.8,
-      },
-    });
-    stl.to('.howitworks-header', { opacity: 1, x: 0, duration: 0.4 });
-    stepItems.forEach((step, i) => {
-      stl.to(step, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, 0.3 + i * 0.5);
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, []);
 
   return (
     <main className="text-white relative">
@@ -431,7 +370,7 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="relative z-10 w-full min-h-screen">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-32 pb-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 min-h-screen">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-24 sm:pt-32 pb-16 sm:pb-24 flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16 min-h-screen">
           {/* Left: copy */}
           <div className="flex-1 text-center lg:text-left">
             <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-8">
@@ -469,8 +408,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Right: app preview */}
-          <div className="hero-mockup flex-shrink-0 w-full max-w-xs lg:max-w-sm">
+          {/* Right: app preview — hidden on small mobile */}
+          <div className="hero-mockup hidden sm:block flex-shrink-0 w-full max-w-xs lg:max-w-sm">
             <AppMockup />
           </div>
         </div>
@@ -501,10 +440,9 @@ export default function LandingPage() {
       </div>
 
       {/* ── Features ── */}
-      <section id="features" className="relative z-10">
-        <div id="features-inner" className="px-5 sm:px-8 md:px-12 py-28 md:py-0 md:sticky md:top-0 md:h-screen md:flex md:items-center">
-        <div className="max-w-6xl mx-auto w-full">
-          <div className="features-header text-center mb-16">
+      <section id="features" className="relative z-10 py-20 md:py-32 px-5 sm:px-8 md:px-12">
+        <div className="max-w-6xl mx-auto">
+          <FadeIn className="text-center mb-12 md:mb-16">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">Features</p>
             <h2
               className="font-normal text-white"
@@ -514,82 +452,66 @@ export default function LandingPage() {
               <br />
               <span className="text-white/40">your best work</span>
             </h2>
-          </div>
+          </FadeIn>
 
           {/* Bento grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {/* Large card */}
-            <div className="feature-card sm:col-span-2 lg:col-span-2">
-              <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 hover:border-white/12 rounded-2xl p-7 transition-all duration-300 group cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-[#336443]/20 border border-[#336443]/20 flex items-center justify-center text-[#85AB8B] mb-6 group-hover:bg-[#336443]/30 transition-colors">
-                  <Timer className="w-6 h-6" />
+            <FadeIn delay={0} className="sm:col-span-2 lg:col-span-2">
+              <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl p-5 sm:p-7 transition-all duration-300 group cursor-default">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#336443]/20 border border-[#336443]/20 flex items-center justify-center text-[#85AB8B] mb-4 sm:mb-6 group-hover:bg-[#336443]/30 transition-colors">
+                  <Timer className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="text-white font-semibold text-xl mb-3">Pomodoro Timer</h3>
+                <h3 className="text-white font-semibold text-lg sm:text-xl mb-2 sm:mb-3">Pomodoro Timer</h3>
                 <p className="text-white/45 text-sm leading-relaxed max-w-sm">
-                  Focus sessions, short breaks, long breaks — fully customisable to match your rhythm. Hit space to start, space to pause. No friction between you and your work.
+                  Focus sessions, short breaks, long breaks — fully customisable. Hit space to start, space to pause. No friction between you and your work.
                 </p>
-                <div className="mt-6 flex items-center gap-2">
+                <div className="mt-4 sm:mt-6 flex items-center gap-2 flex-wrap">
                   {['25 min', '5 min', '15 min'].map((label, i) => (
-                    <span
-                      key={label}
-                      className={`text-xs px-3 py-1 rounded-full ${i === 0 ? 'bg-[#85AB8B]/15 text-[#85AB8B] border border-[#85AB8B]/20' : 'bg-white/5 text-white/30 border border-white/8'}`}
-                    >
+                    <span key={label} className={`text-xs px-3 py-1 rounded-full ${i === 0 ? 'bg-[#85AB8B]/15 text-[#85AB8B] border border-[#85AB8B]/20' : 'bg-white/5 text-white/30 border border-white/8'}`}>
                       {label}
                     </span>
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Regular cards */}
-            {FEATURES.slice(1).map((feature) => (
-              <div key={feature.title} className="feature-card">
-                <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 hover:border-white/12 rounded-2xl p-5 transition-all duration-300 group cursor-default">
-                  <div className="w-9 h-9 rounded-xl bg-[#336443]/15 border border-[#336443]/15 flex items-center justify-center text-[#85AB8B] mb-4 group-hover:bg-[#336443]/25 transition-colors">
+            </FadeIn>
+            {FEATURES.slice(1).map((feature, i) => (
+              <FadeIn key={feature.title} delay={i * 60}>
+                <div className="h-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl p-4 sm:p-5 transition-all duration-300 group cursor-default">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#336443]/15 border border-[#336443]/15 flex items-center justify-center text-[#85AB8B] mb-3 sm:mb-4 group-hover:bg-[#336443]/25 transition-colors">
                     {feature.icon}
                   </div>
-                  <h3 className="text-white font-semibold text-sm mb-2">{feature.title}</h3>
+                  <h3 className="text-white font-semibold text-sm mb-1.5">{feature.title}</h3>
                   <p className="text-white/40 text-xs leading-relaxed">{feature.description}</p>
                 </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
-        </div>
         </div>
       </section>
 
       {/* ── How It Works ── */}
-      <section id="how-it-works" className="relative z-10 bg-black/25 border-y border-white/6">
-        <div id="howitworks-inner" className="px-5 sm:px-8 md:px-12 py-28 md:py-0 md:sticky md:top-0 md:h-screen md:flex md:items-center">
-        <div className="max-w-6xl mx-auto w-full">
-          <div className="howitworks-header text-center mb-20">
+      <section id="how-it-works" className="relative z-10 py-20 md:py-32 px-5 sm:px-8 md:px-12 bg-black/25 border-y border-white/6">
+        <div className="max-w-6xl mx-auto">
+          <FadeIn className="text-center mb-12 md:mb-20">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">How It Works</p>
-            <h2
-              className="font-normal text-white"
-              style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.025em' }}
-            >
+            <h2 className="font-normal text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.025em' }}>
               Simple by design,
               <br />
               <span className="text-white/40">powerful by habit</span>
             </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-            {STEPS.map((step) => (
-              <div key={step.number} className="step-item relative">
-                <div
-                  className="font-bold tabular-nums text-[#336443]/30 mb-4 select-none"
-                  style={{ fontSize: 'clamp(3rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}
-                >
+          </FadeIn>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
+            {STEPS.map((step, i) => (
+              <FadeIn key={step.number} delay={i * 80}>
+                <div className="font-bold tabular-nums text-[#336443]/30 mb-3 select-none" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}>
                   {step.number}
                 </div>
-                <div className="w-6 h-[2px] bg-[#85AB8B]/30 mb-4" />
-                <h3 className="text-white font-semibold text-sm mb-3">{step.title}</h3>
+                <div className="w-6 h-[2px] bg-[#85AB8B]/30 mb-3" />
+                <h3 className="text-white font-semibold text-sm mb-2">{step.title}</h3>
                 <p className="text-white/40 text-xs leading-relaxed">{step.description}</p>
-              </div>
+              </FadeIn>
             ))}
           </div>
-        </div>
         </div>
       </section>
 

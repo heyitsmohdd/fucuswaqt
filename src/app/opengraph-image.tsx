@@ -38,11 +38,11 @@ export default function OGImage() {
         {/* Clover icon */}
         <div style={{ display: 'flex', marginBottom: 32 }}>
           <svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="9"  r="8" fill="#C084FC" opacity="0.9" />
-            <circle cx="23" cy="16" r="8" fill="#C084FC" opacity="0.9" />
-            <circle cx="16" cy="23" r="8" fill="#C084FC" opacity="0.9" />
-            <circle cx="9"  cy="16" r="8" fill="#C084FC" opacity="0.9" />
-            <circle cx="16" cy="16" r="4" fill="#7C3AED" />
+            <circle cx="16" cy="9"  r="8" fill="#85AB8B" opacity="0.9" />
+            <circle cx="23" cy="16" r="8" fill="#85AB8B" opacity="0.9" />
+            <circle cx="16" cy="23" r="8" fill="#85AB8B" opacity="0.9" />
+            <circle cx="9"  cy="16" r="8" fill="#85AB8B" opacity="0.9" />
+            <circle cx="16" cy="16" r="4" fill="#336443" />
           </svg>
         </div>
 
