@@ -1,46 +1,28 @@
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@/lib/db';
 
-// 1. Get the Service Role Key
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const RATE_LIMIT_CONFIG = {
+    auth: { limit: 5, windowSeconds: 60 },
+    streak: { limit: 60, windowSeconds: 60 },
+} as const;
 
-// Note: If serviceRoleKey is missing, rate limiting is bypassed (fail-open)
-
-// 3. Create the Admin Client
-// We use the Service Role Key to bypass RLS policies on the 'rate_limits' table
-const supabaseAdmin = createClient(
-    supabaseUrl,
-    serviceRoleKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-export async function checkRateLimit(identifier: string, type: 'auth' | 'streak') {
-    // If the key is missing, "fail open" (allow the request) so we don't block users due to a config error
-    if (!serviceRoleKey) return true;
-
-    // Define limits
-    let limit = 10; // Default
-    const window = 60; // Default seconds
-
-    if (type === 'streak') {
-        limit = 60; // 60 requests per minute
-    } else if (type === 'auth') {
-        limit = 5;  // 5 login attempts per minute
-    }
+export async function checkRateLimit(identifier: string, type: 'auth' | 'streak'): Promise<boolean> {
+    const { limit, windowSeconds } = RATE_LIMIT_CONFIG[type];
+    const key = `${type}:${identifier}`;
+    const now = Date.now();
+    const windowStart = now - windowSeconds * 1000;
 
     try {
-        // Call the database function
-        const { data, error } = await supabaseAdmin.rpc('check_rate_limit', {
-            rate_key: `${type}:${identifier}`,
-            limit_count: limit,
-            window_seconds: window
-        });
+        await sql`DELETE FROM rate_limits WHERE key = ${key} AND timestamp < ${windowStart}`;
 
-        if (error) {
-            return true; // If DB fails, allow the request
-        }
+        const countRows = await sql`SELECT COUNT(*) as count FROM rate_limits WHERE key = ${key}`;
+        const currentCount = Number(countRows[0].count);
 
-        return data; // Returns TRUE if allowed, FALSE if blocked
+        if (currentCount >= limit) return false;
+
+        await sql`INSERT INTO rate_limits (key, timestamp) VALUES (${key}, ${now})`;
+
+        return true;
     } catch {
-        return true; // Fail open on exception
+        return true;
     }
 }
