@@ -1,31 +1,20 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { auth } from '@/lib/auth';
+import { sql } from '@/lib/db';
+import { headers } from 'next/headers';
 
 export async function fetchUserStreak(): Promise<number> {
     try {
-        const supabase = await createClient();
+        const session = await auth.api.getSession({ headers: await headers() });
 
-        // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (!session?.user) return 0;
 
-        if (authError || !user) {
-            return 0; // Not authenticated, return 0
-        }
+        const rows = await sql`
+            SELECT current_streak FROM profiles WHERE id = ${session.user.id}
+        `;
 
-
-        // Fetch current profile
-        const { data: profile, error: fetchError } = await supabase
-            .from('profiles')
-            .select('current_streak')
-            .eq('id', user.id)
-            .single();
-
-        if (fetchError || !profile) {
-            return 0; // Profile not found, return 0
-        }
-
-        return profile.current_streak || 0;
+        return rows[0]?.current_streak ?? 0;
     } catch {
         return 0;
     }

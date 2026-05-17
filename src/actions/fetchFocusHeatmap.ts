@@ -1,6 +1,8 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { auth } from '@/lib/auth';
+import { sql } from '@/lib/db';
+import { headers } from 'next/headers';
 
 export interface FocusDay {
     date: string;
@@ -11,33 +13,28 @@ export interface FocusDay {
 
 export async function fetchFocusHeatmap(days: number = 365): Promise<FocusDay[]> {
     try {
-        const supabase = await createClient();
+        const session = await auth.api.getSession({ headers: await headers() });
 
-        // Get current user
-        const { data: { user } } = await supabase.auth.getUser();
+        if (!session?.user) return [];
 
-        if (!user) {
-            return [];
-        }
-
-        // Calculate start date (X days ago)
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
         const startDateStr = startDate.toISOString().split('T')[0];
 
-        // Fetch focus data
-        const { data, error } = await supabase
-            .from('daily_focus')
-            .select('date, focus_minutes, sessions_completed, tasks_completed')
-            .eq('user_id', user.id)
-            .gte('date', startDateStr)
-            .order('date', { ascending: true });
+        const rows = await sql`
+            SELECT date, focus_minutes, sessions_completed, tasks_completed
+            FROM daily_focus
+            WHERE user_id = ${session.user.id}
+              AND date >= ${startDateStr}
+            ORDER BY date ASC
+        `;
 
-        if (error) {
-            return [];
-        }
-
-        return data || [];
+        return rows.map(row => ({
+            date: String(row.date),
+            focus_minutes: Number(row.focus_minutes),
+            sessions_completed: Number(row.sessions_completed),
+            tasks_completed: Number(row.tasks_completed),
+        }));
     } catch {
         return [];
     }
