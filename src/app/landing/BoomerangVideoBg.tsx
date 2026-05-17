@@ -1,11 +1,13 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
-type Props = {
+interface BoomerangVideoBgProps {
   src: string;
   className?: string;
-};
+}
 
-export default function BoomerangVideoBg({ src, className }: Props) {
+export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const displayCanvasRef = useRef<HTMLCanvasElement>(null);
   const [framesReady, setFramesReady] = useState(false);
@@ -53,7 +55,6 @@ export default function BoomerangVideoBg({ src, className }: Props) {
       captureFrame();
       if (capturing) rafId = requestAnimationFrame(rafLoop);
     };
-
     const vfcLoop = () => {
       captureFrame();
       if (capturing && vfcVideo.requestVideoFrameCallback) {
@@ -106,21 +107,16 @@ export default function BoomerangVideoBg({ src, className }: Props) {
     let index = 0;
     let direction = 1;
     let last = performance.now();
-    const interval = 1000 / 30;
+    const FRAME_INTERVAL = 1000 / 30;
     let rafId = 0;
 
     const render = (now: number) => {
-      if (now - last >= interval) {
+      if (now - last >= FRAME_INTERVAL) {
         last = now;
         ctx.drawImage(frames[index], 0, 0);
         index += direction;
-        if (index >= frames.length - 1) {
-          index = frames.length - 1;
-          direction = -1;
-        } else if (index <= 0) {
-          index = 0;
-          direction = 1;
-        }
+        if (index >= frames.length - 1) { index = frames.length - 1; direction = -1; }
+        else if (index <= 0) { index = 0; direction = 1; }
       }
       rafId = requestAnimationFrame(render);
     };
