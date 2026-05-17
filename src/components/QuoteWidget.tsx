@@ -38,12 +38,13 @@ const loadStoredQuotes = (): string[] => {
 
 export function QuoteWidget() {
     const { isRunning } = useTimerStore();
-    const [quotes, setQuotes] = useState<string[]>(loadStoredQuotes);
+    const [quotes, setQuotes] = useState<string[]>(DEFAULT_QUOTES);
     const [quoteIndex, setQuoteIndex] = useState(0);
 
     useEffect(() => {
-        setQuoteIndex(Math.floor(Math.random() * loadStoredQuotes().length));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        const stored = loadStoredQuotes();
+        setQuotes(stored);
+        setQuoteIndex(Math.floor(Math.random() * stored.length));
     }, []);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMounted, setModalMounted] = useState(false);

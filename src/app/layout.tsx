@@ -11,8 +11,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "FocusWaqt",
-  description: "Master your time with FocusWaqt.",
+  title: {
+    default: 'FocusWaqt',
+    template: '%s | FocusWaqt',
+  },
+  description: 'Deep focus, every single day.',
 };
 
 export default function RootLayout({
