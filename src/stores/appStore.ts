@@ -20,6 +20,7 @@ interface AppState {
     isTaskModalOpen: boolean;
     isMusicModalOpen: boolean;
     isTimerSettingsOpen: boolean;
+    isStatsOpen: boolean;
     setCurrentBackground: (id: string, type: 'video' | 'image') => void;
     incrementStreak: () => void;
     setStreak: (days: number) => void;
@@ -38,6 +39,8 @@ interface AppState {
     toggleMusicModal: () => void;
     openTimerSettings: () => void;
     closeTimerSettings: () => void;
+    openStats: () => void;
+    closeStats: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -53,6 +56,7 @@ export const useAppStore = create<AppState>()(
             isTaskModalOpen: false,
             isMusicModalOpen: false,
             isTimerSettingsOpen: false,
+            isStatsOpen: false,
 
             setCurrentBackground: (id: string, type: 'video' | 'image') => set({ currentBackgroundId: id, currentBackgroundType: type }),
 
@@ -110,6 +114,10 @@ export const useAppStore = create<AppState>()(
             openTimerSettings: () => set({ isTimerSettingsOpen: true }),
 
             closeTimerSettings: () => set({ isTimerSettingsOpen: false }),
+
+            openStats: () => set({ isStatsOpen: true }),
+
+            closeStats: () => set({ isStatsOpen: false }),
         }),
         {
             name: 'pomodoro-app-storage',

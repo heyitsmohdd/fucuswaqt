@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudRain, Music, Image as ImageIcon, Coffee } from 'lucide-react';
+import { CloudRain, Music, Image as ImageIcon, Coffee, BarChart2 } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
@@ -74,15 +74,16 @@ function getLift(hoveredIdx: number | null, idx: number): number {
 }
 
 export function IconDock() {
-    const { openSoundMixer, openBackgroundPicker, toggleMusicModal } = useAppStore();
+    const { openSoundMixer, openBackgroundPicker, toggleMusicModal, openStats } = useAppStore();
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
     const sceneHint = useShortcutHint('hint-c', 'Press C for scene dock');
 
     const items = [
-        { label: 'Sounds',   icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
-        { label: 'Music',    icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
-        { label: 'Scene',    icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
-    ];
+        { label: 'Sounds', icon: <CloudRain className="w-4.5 h-4.5" />, onClick: openSoundMixer },
+        { label: 'Music',  icon: <Music className="w-4.5 h-4.5" />,     onClick: toggleMusicModal },
+        { label: 'Scene',  icon: <ImageIcon className="w-4.5 h-4.5" />, onClick: () => { openBackgroundPicker(); sceneHint.trigger(); } },
+        { label: 'Stats',  icon: <BarChart2 className="w-4.5 h-4.5" />, onClick: openStats },
+    ] as const;
 
     return (
         <div className="fixed bottom-6 left-6 z-20 animate-slide-up">
@@ -114,8 +115,8 @@ export function IconDock() {
                     external
                     label="Buy me a coffee"
                     className="hover:text-yellow-400 hover:bg-yellow-400/10"
-                    lift={getLift(hoveredIdx, 3)}
-                    onHover={() => setHoveredIdx(3)}
+                    lift={getLift(hoveredIdx, 4)}
+                    onHover={() => setHoveredIdx(4)}
                     onLeave={() => setHoveredIdx(null)}
                 >
                     <Coffee className="w-4.5 h-4.5" />
