@@ -7,13 +7,13 @@ import { useAppStore } from '@/stores/appStore';
 import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-// import { updateStreak } from '@/actions/updateStreak';        // Supabase paused
-// import { updateDailyFocus } from '@/actions/updateDailyFocus'; // Supabase paused
+import { updateStreak } from '@/actions/updateStreak';
+import { updateDailyFocus } from '@/actions/updateDailyFocus';
 import { TIMER_PRESETS } from '@/constants';
 
 export function Timer() {
     const { isRunning, timeLeft, mode, currentPreset, customDurations, startTimer, pauseTimer, resetTimer, tick, switchMode } = useTimerStore();
-    const { openTimerSettings } = useAppStore();
+    const { openTimerSettings, setStreak } = useAppStore();
     const streakUpdatedRef = useRef(false);
     const prevTimeLeftRef = useRef(timeLeft);
     const [pendingMode, setPendingMode] = useState<'focus' | 'break' | 'longBreak' | null>(null);
@@ -36,23 +36,22 @@ export function Timer() {
         streakUpdatedRef.current = false;
     }, [mode, isRunning]);
 
-    // Supabase paused — streak/focus tracking disabled
-    // useEffect(() => {
-    //     const handleSessionComplete = async () => {
-    //         if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
-    //             streakUpdatedRef.current = true;
-    //             try {
-    //                 const result = await updateStreak();
-    //                 if (result.success && result.profile) {
-    //                     setStreak(result.profile.current_streak);
-    //                 }
-    //                 const preset = currentPreset === 'custom' ? customDurations : TIMER_PRESETS[currentPreset];
-    //                 await updateDailyFocus(preset.focus);
-    //             } catch { /* silently handle */ }
-    //         }
-    //     };
-    //     handleSessionComplete();
-    // }, [timeLeft, mode, setStreak, currentPreset, customDurations]);
+    useEffect(() => {
+        const handleSessionComplete = async () => {
+            if (timeLeft === 0 && mode === 'focus' && !streakUpdatedRef.current) {
+                streakUpdatedRef.current = true;
+                try {
+                    const result = await updateStreak();
+                    if (result.success && result.profile) {
+                        setStreak(result.profile.current_streak);
+                    }
+                    const preset = currentPreset === 'custom' ? customDurations : TIMER_PRESETS[currentPreset];
+                    await updateDailyFocus(preset.focus);
+                } catch { /* silently handle */ }
+            }
+        };
+        handleSessionComplete();
+    }, [timeLeft, mode, setStreak, currentPreset, customDurations]);
 
     // Session complete toast + browser notification
     useEffect(() => {

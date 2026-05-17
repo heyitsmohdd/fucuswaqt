@@ -3,7 +3,7 @@
 import { BackgroundVideo } from '@/components/BackgroundVideo';
 import { Timer } from '@/components/Timer';
 import { TaskTrigger } from '@/components/TaskTrigger';
-// import { StreakCounter } from '@/components/StreakCounter';   // Supabase paused
+import { StreakCounter } from '@/components/StreakCounter';
 import { AuthButton } from '@/components/AuthButton';
 import { IconDock } from '@/components/IconDock';
 import { SoundMixerModal } from '@/components/SoundMixerModal';
@@ -12,16 +12,17 @@ import { TaskModal } from '@/components/TaskModal';
 import { MusicModal } from '@/components/MusicModal';
 import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
+import { StatsModal } from '@/components/StatsModal';
 import { QuoteWidget } from '@/components/QuoteWidget';
 import { Logo } from '@/components/Logo';
 import { useAppStore } from '@/stores/appStore';
 import { useTimerStore } from '@/stores/timerStore';
 import { VIDEO_BACKGROUNDS, IMAGE_BACKGROUNDS } from '@/constants';
 import { useEffect, useState, useRef } from 'react';
-// import { fetchUserStreak } from '@/actions/fetchUserStreak';  // Supabase paused
+import { fetchUserStreak } from '@/actions/fetchUserStreak';
 
 export default function Home() {
-  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, openBackgroundPicker } = useAppStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, isStatsOpen, closeStats, openBackgroundPicker, setStreak } = useAppStore();
   const { isRunning, startTimer, pauseTimer, resetTimer } = useTimerStore();
   const [switching, setSwitching] = useState(false);
   const switchingReady = useRef(false);
@@ -51,14 +52,9 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [currentBackgroundType]);
 
-  // Supabase paused — streak loading disabled
-  // useEffect(() => {
-  //   const loadStreak = async () => {
-  //     const streak = await fetchUserStreak();
-  //     setStreak(streak);
-  //   };
-  //   loadStreak();
-  // }, [setStreak]);
+  useEffect(() => {
+    fetchUserStreak().then(setStreak);
+  }, [setStreak]);
 
   const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentBackgroundId);
   const currentImage = IMAGE_BACKGROUNDS.find(i => i.id === currentBackgroundId);
@@ -94,6 +90,7 @@ export default function Home() {
       <TaskModal isOpen={isTaskModalOpen} onClose={closeTaskModal} />
       <MusicModal isOpen={isMusicModalOpen} onClose={closeMusicModal} />
       <TimerSettingsModal isOpen={isTimerSettingsOpen} onClose={closeTimerSettings} />
+      <StatsModal isOpen={isStatsOpen} onClose={closeStats} />
 
       {/* Icon Dock */}
       <IconDock />
@@ -103,13 +100,14 @@ export default function Home() {
 
 
       {/* Main layout */}
-      <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 py-6 md:px-8 md:py-8">
+      <div className="relative z-10 h-full w-full flex flex-col items-center justify-between px-6 pt-3 pb-6 md:px-8 md:pt-4 md:pb-8">
         {/* Top Bar */}
-        <div className="w-full flex justify-end items-center gap-2">
-          <AuthButton />
-        </div>
-        <div className="w-full flex justify-start items-center animate-fade-in" style={{ animationDelay: '100ms' }}>
+        <div className="w-full flex justify-between items-center animate-fade-in" style={{ animationDelay: '100ms' }}>
           <Logo />
+          <div className="flex items-center gap-2">
+            <StreakCounter />
+            <AuthButton />
+          </div>
         </div>
 
         {/* Center Content */}
