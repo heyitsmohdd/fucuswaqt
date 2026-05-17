@@ -15,11 +15,11 @@ import { toast } from 'sonner';
 import { QUOTE_MAX_LENGTH, QUOTE_LIMIT } from '@/constants';
 
 const DEFAULT_QUOTES = [
-    "Take it one step at a time.",
     "Verily, with hardship comes ease.",
-    "Focus on the process, not the outcome.",
-    "O Allah, increase me in knowledge.",
-    "Every small effort counts.",
+    "The secret of getting ahead is getting started.",
+    "You don't have to be great to start, but you have to start to be great.",
+    "Discipline is choosing between what you want now and what you want most.",
+    "Small steps every day lead to big results over time.",
 ];
 
 const STORAGE_KEY = 'focus-quotes';
