@@ -54,15 +54,15 @@ const nextConfig: NextConfig = {
               // Fonts
               "font-src 'self' https://fonts.gstatic.com",
               // Images: self + data URLs + external sources
-              "img-src 'self' data: blob: https://*.supabase.co https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://i.ytimg.com",
+              "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://i.ytimg.com",
               // Media (audio/video): self + blob
               "media-src 'self' blob: https://assets.mixkit.co",
               // Frames: YouTube embeds
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
               // Connect: API calls
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com",
+              "connect-src 'self' https://focuswaqt.space https://www.focuswaqt.space https://accounts.google.com https://oauth2.googleapis.com https://va.vercel-scripts.com",
               // Form actions
-              "form-action 'self'",
+              "form-action 'self' https://accounts.google.com",
               // Base URI
               "base-uri 'self'",
               // Object sources (disable plugins)
