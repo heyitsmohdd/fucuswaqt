@@ -7,23 +7,13 @@ export const contentType = 'image/png';
 export default function Icon() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          background: '#0e1710',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 8,
-        }}
-      >
-        <svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="16" cy="9"  r="8" fill="#C084FC" />
-          <circle cx="23" cy="16" r="8" fill="#C084FC" />
-          <circle cx="16" cy="23" r="8" fill="#C084FC" />
-          <circle cx="9"  cy="16" r="8" fill="#C084FC" />
-          <circle cx="16" cy="16" r="4" fill="#7C3AED" />
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="9"  r="8" fill="#85AB8B" />
+          <circle cx="23" cy="16" r="8" fill="#85AB8B" />
+          <circle cx="16" cy="23" r="8" fill="#85AB8B" />
+          <circle cx="9"  cy="16" r="8" fill="#85AB8B" />
+          <circle cx="16" cy="16" r="4" fill="#336443" />
         </svg>
       </div>
     ),
