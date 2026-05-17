@@ -21,10 +21,10 @@ export default function SimpleLogin() {
             <button
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
-                className="group relative flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-white text-gray-800 text-[15px] font-medium rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className="group relative flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-white/10 text-white text-[15px] font-medium rounded-xl border border-white/15 hover:bg-white/15 hover:border-white/25 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-gray-600" />
+                    <Loader2 className="w-5 h-5 animate-spin text-white/60" />
                 ) : (
                     <>
                         <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
