@@ -17,6 +17,8 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
     const video = videoRef.current;
     if (!video) return;
 
+    video.muted = true;
+
     const frames: HTMLCanvasElement[] = [];
     let capturing = true;
     let lastTime = -1;
