@@ -74,7 +74,7 @@ export default function OGImage() {
 
         {/* Pills */}
         <div style={{ display: 'flex', gap: 16 }}>
-          {['Pomodoro Timer', 'Streak Tracking', 'Ambient Sounds', 'Free Forever'].map(label => (
+          {['Pomodoro Timer', 'Streak Tracking', 'Ambient Sounds', 'Focus Heatmap'].map(label => (
             <div
               key={label}
               style={{
