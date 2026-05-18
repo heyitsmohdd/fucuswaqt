@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Menu, X, Timer, Flame, BarChart2,
-  Music, Image as ImageIcon, CheckCircle2, ArrowRight, ArrowDown,
+  Music, Image as ImageIcon, CheckCircle2, ArrowRight,
 } from 'lucide-react';
 import BoomerangVideoBg from '@/app/BoomerangVideoBg';
 import { Logo } from '@/components/Logo';
@@ -141,69 +141,6 @@ function FadeIn({ children, delay = 0, direction = 'up', className = '' }: FadeI
   );
 }
 
-function AppMockup() {
-  const miniHeatmap = useMemo(
-    () => MOCK_HEATMAP_SEED.slice(0, 3 * 18).map(v => v),
-    []
-  );
-
-  return (
-    <div className="relative w-full max-w-[320px] mx-auto lg:mx-0">
-      <div className="absolute -inset-8 bg-[#85AB8B]/10 blur-3xl rounded-full pointer-events-none" />
-      <div className="relative bg-[#0a0f0a]/70 backdrop-blur-2xl border border-white/12 rounded-3xl p-5 shadow-2xl">
-        <div className="flex items-center justify-between mb-5">
-          <span className="text-white/40 text-xs font-medium tracking-wide">FocusWaqt</span>
-          <div className="flex items-center gap-1.5 bg-orange-500/15 border border-orange-500/20 px-2.5 py-1 rounded-full">
-            <Flame className="w-3 h-3 text-orange-400" />
-            <span className="text-orange-400 text-xs font-semibold">7</span>
-          </div>
-        </div>
-
-        <div className="text-center mb-5">
-          <div
-            className="text-white font-extralight tabular-nums"
-            style={{ fontSize: '3.5rem', letterSpacing: '-0.04em', lineHeight: 1 }}
-          >
-            25:00
-          </div>
-          <div className="text-white/25 text-[10px] uppercase tracking-[0.2em] mt-2">Focus Session</div>
-        </div>
-
-        <div className="flex items-center justify-center gap-2 mb-5">
-          {['Focus', 'Short', 'Long'].map((label, i) => (
-            <div
-              key={label}
-              className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all ${
-                i === 0
-                  ? 'bg-[#85AB8B]/20 text-[#85AB8B] border border-[#85AB8B]/25'
-                  : 'text-white/25 hover:text-white/40'
-              }`}
-            >
-              {label}
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t border-white/5 pt-4">
-          <div className="text-white/30 text-[9px] uppercase tracking-widest mb-2">Activity</div>
-          <div className="grid grid-flow-col grid-rows-3 gap-[3px]">
-            {miniHeatmap.map((value, i) => (
-              <div
-                key={i}
-                className="w-2.5 h-2.5 rounded-[2px]"
-                style={{
-                  backgroundColor: value > 0.6
-                    ? `rgba(133, 171, 139, ${0.3 + value * 0.7})`
-                    : 'rgba(255,255,255,0.04)',
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function HeatmapShowcase() {
   const heatmapData = useMemo(
@@ -369,59 +306,26 @@ export default function LandingPage() {
       </div>
 
       {/* ── Hero ── */}
-      <section className="relative z-10 w-full min-h-[100svh]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-20 sm:pt-32 pb-12 sm:pb-24 flex flex-col lg:flex-row items-center gap-6 sm:gap-12 lg:gap-16 min-h-[100svh]">
-          {/* Left: copy */}
-          <div className="flex-1 text-center lg:text-left">
-            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-5 sm:mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#85AB8B] animate-pulse" />
-              Free forever · No install needed
-            </div>
+      <section className="relative z-10 w-full min-h-[100svh] flex items-center justify-center">
+        <div className="text-center px-5 sm:px-8">
+          <h1
+            className="font-normal leading-[0.93] text-[#c5dfc8]"
+            style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', letterSpacing: '-0.035em' }}
+          >
+            <span className="hero-line block">Deep focus,</span>
+            <span className="hero-line block text-[#85AB8B]">every single</span>
+            <span className="hero-line block">day.</span>
+          </h1>
 
-            <h1
-              className="font-normal leading-[0.93] text-[#c5dfc8]"
-              style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', letterSpacing: '-0.035em' }}
+          <div className="hero-cta mt-10">
+            <a
+              href={APP_URL}
+              className="inline-flex items-center gap-2 bg-[#336443] hover:bg-[#2d5a3b] text-white font-semibold px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-green-900/30 hover:shadow-green-900/50 hover:-translate-y-0.5"
             >
-              <span className="hero-line block">Deep focus,</span>
-              <span className="hero-line block text-[#85AB8B]">every single</span>
-              <span className="hero-line block">day.</span>
-            </h1>
-
-            <p className="hero-sub mt-5 sm:mt-7 text-white/45 leading-relaxed max-w-md mx-auto lg:mx-0"
-               style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
-              A beautiful Pomodoro timer with ambient sounds, streak tracking, and a GitHub-style focus heatmap.
-            </p>
-
-            <div className="hero-cta mt-7 sm:mt-10 flex items-center gap-3 flex-wrap justify-center lg:justify-start">
-              <a
-                href={APP_URL}
-                className="flex items-center gap-2 bg-[#336443] hover:bg-[#2d5a3b] text-white font-semibold px-6 py-3.5 rounded-full transition-all duration-200 shadow-lg shadow-green-900/30 hover:shadow-green-900/50 hover:-translate-y-0.5"
-              >
-                Start Focusing — it&apos;s free
-              </a>
-              <a
-                href="#features"
-                className="flex items-center gap-1.5 text-white/45 hover:text-white/70 transition-colors text-sm"
-              >
-                See features <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-
-          {/* Right: app preview */}
-          <div className="hero-mockup flex-shrink-0 w-full max-w-[260px] sm:max-w-xs lg:max-w-sm mx-auto lg:mx-0">
-            <AppMockup />
+              Get Started
+            </a>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <a
-          href="#features"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
-        >
-          <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-          <ArrowDown className="w-4 h-4 animate-bounce" />
-        </a>
       </section>
 
       {/* ── Marquee Strip ── */}
@@ -570,7 +474,7 @@ export default function LandingPage() {
                 <span className="text-white/35">starts right now</span>
               </h2>
               <p className="text-white/35 text-sm mb-10 max-w-sm mx-auto leading-relaxed">
-                Free to use. No install. Just open the app and start your first session.
+                No install. Just open the app and start your first session.
               </p>
               <a
                 href={APP_URL}
@@ -586,8 +490,8 @@ export default function LandingPage() {
       {/* ── Footer ── */}
       <footer className="relative z-10 border-t border-white/6 bg-black/30 px-5 sm:px-8 md:px-12 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-sm">
-          <span className="font-semibold text-white/40">FocusWaqt</span>
-          <span>© {new Date().getFullYear()} FocusWaqt. Free forever.</span>
+          <a href="https://github.com/heyitsmohdd/fucuswaqt" target="_blank" rel="noopener noreferrer" className="font-semibold text-white/40 hover:text-white/60 transition-colors">GitHub</a>
+          <span>© {new Date().getFullYear()} FocusWaqt.</span>
           <a href={APP_URL} className="hover:text-white/50 transition-colors">Open App →</a>
         </div>
       </footer>
