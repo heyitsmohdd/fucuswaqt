@@ -277,13 +277,13 @@ export default function LandingPage() {
 
 
   return (
-    <main className="text-white relative">
+    <main className="text-white relative overflow-x-hidden">
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        html, body { overflow: auto !important; scroll-behavior: smooth; }
+        html, body { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth; }
       `}</style>
 
       {/* Fixed video background — stays put while content scrolls */}

@@ -7,6 +7,9 @@ interface BoomerangVideoBgProps {
   className?: string;
 }
 
+const isTouchDevice = () =>
+  typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
 export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const displayCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,6 +19,12 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    if (isTouchDevice()) {
+      video.loop = true;
+      video.play().catch(() => {});
+      return;
+    }
 
     const frames: HTMLCanvasElement[] = [];
     let capturing = true;
@@ -67,6 +76,9 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
       if (frames.length > 0) {
         framesRef.current = frames;
         setFramesReady(true);
+      } else {
+        video.loop = true;
+        video.play().catch(() => {});
       }
     };
 
