@@ -213,9 +213,9 @@ function HeatmapShowcase() {
 
   return (
     <div className="bg-white/[0.04] border border-white/8 rounded-2xl p-6 w-full overflow-hidden">
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-wrap items-center justify-between gap-y-2 mb-5">
         <span className="text-white/60 text-sm font-medium">Focus Activity</span>
-        <div className="flex items-center gap-5 text-xs text-white/35">
+        <div className="flex items-center gap-3 sm:gap-5 text-xs text-white/35">
           <span>124h total</span>
           <span>38 days</span>
           <span className="flex items-center gap-1">
@@ -369,11 +369,11 @@ export default function LandingPage() {
       </div>
 
       {/* ── Hero ── */}
-      <section className="relative z-10 w-full min-h-screen">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-24 sm:pt-32 pb-16 sm:pb-24 flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16 min-h-screen">
+      <section className="relative z-10 w-full min-h-[100svh]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 pt-20 sm:pt-32 pb-12 sm:pb-24 flex flex-col lg:flex-row items-center gap-6 sm:gap-12 lg:gap-16 min-h-[100svh]">
           {/* Left: copy */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-8">
+            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/8 border border-white/10 text-white/60 text-xs font-medium mb-5 sm:mb-8">
               <div className="w-1.5 h-1.5 rounded-full bg-[#85AB8B] animate-pulse" />
               Free forever · No install needed
             </div>
@@ -387,12 +387,12 @@ export default function LandingPage() {
               <span className="hero-line block">day.</span>
             </h1>
 
-            <p className="hero-sub mt-7 text-white/45 leading-relaxed max-w-md mx-auto lg:mx-0"
+            <p className="hero-sub mt-5 sm:mt-7 text-white/45 leading-relaxed max-w-md mx-auto lg:mx-0"
                style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
               A beautiful Pomodoro timer with ambient sounds, streak tracking, and a GitHub-style focus heatmap.
             </p>
 
-            <div className="hero-cta mt-10 flex items-center gap-3 flex-wrap justify-center lg:justify-start">
+            <div className="hero-cta mt-7 sm:mt-10 flex items-center gap-3 flex-wrap justify-center lg:justify-start">
               <a
                 href={APP_URL}
                 className="flex items-center gap-2 bg-[#336443] hover:bg-[#2d5a3b] text-white font-semibold px-6 py-3.5 rounded-full transition-all duration-200 shadow-lg shadow-green-900/30 hover:shadow-green-900/50 hover:-translate-y-0.5"
@@ -408,8 +408,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Right: app preview — hidden on small mobile */}
-          <div className="hero-mockup hidden sm:block flex-shrink-0 w-full max-w-xs lg:max-w-sm">
+          {/* Right: app preview */}
+          <div className="hero-mockup flex-shrink-0 w-full max-w-[260px] sm:max-w-xs lg:max-w-sm mx-auto lg:mx-0">
             <AppMockup />
           </div>
         </div>
@@ -417,7 +417,7 @@ export default function LandingPage() {
         {/* Scroll indicator */}
         <a
           href="#features"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
         >
           <span className="text-[10px] uppercase tracking-widest">Scroll</span>
           <ArrowDown className="w-4 h-4 animate-bounce" />
@@ -440,7 +440,7 @@ export default function LandingPage() {
       </div>
 
       {/* ── Features ── */}
-      <section id="features" className="relative z-10 py-20 md:py-32 px-5 sm:px-8 md:px-12">
+      <section id="features" className="relative z-10 py-14 md:py-32 px-5 sm:px-8 md:px-12">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-12 md:mb-16">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">Features</p>
@@ -490,7 +490,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How It Works ── */}
-      <section id="how-it-works" className="relative z-10 py-20 md:py-32 px-5 sm:px-8 md:px-12 bg-black/25 border-y border-white/6">
+      <section id="how-it-works" className="relative z-10 py-14 md:py-32 px-5 sm:px-8 md:px-12 bg-black/25 border-y border-white/6">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-12 md:mb-20">
             <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">How It Works</p>
@@ -500,10 +500,10 @@ export default function LandingPage() {
               <span className="text-white/40">powerful by habit</span>
             </h2>
           </FadeIn>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
             {STEPS.map((step, i) => (
               <FadeIn key={step.number} delay={i * 80}>
-                <div className="font-bold tabular-nums text-[#336443]/30 mb-3 select-none" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}>
+                <div className="font-bold tabular-nums text-[#336443]/30 mb-2 sm:mb-3 select-none" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '-0.05em', lineHeight: 1 }}>
                   {step.number}
                 </div>
                 <div className="w-6 h-[2px] bg-[#85AB8B]/30 mb-3" />
@@ -516,9 +516,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Progress / Heatmap ── */}
-      <section id="progress" className="relative z-10 py-28 md:py-36 px-5 sm:px-8 md:px-12">
+      <section id="progress" className="relative z-10 py-16 md:py-36 px-5 sm:px-8 md:px-12">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <FadeIn direction="left">
               <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-4">Progress</p>
               <h2
@@ -555,9 +555,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="relative z-10 py-28 md:py-36 px-5 sm:px-8">
+      <section className="relative z-10 py-16 md:py-36 px-5 sm:px-8">
         <FadeIn>
-          <div className="max-w-4xl mx-auto text-center bg-white/[0.04] border border-white/8 rounded-3xl px-8 py-16 md:py-20 relative overflow-hidden">
+          <div className="max-w-4xl mx-auto text-center bg-white/[0.04] border border-white/8 rounded-2xl sm:rounded-3xl px-5 sm:px-8 py-12 sm:py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-[#336443]/10 to-transparent pointer-events-none" />
             <div className="relative z-10">
               <p className="text-[#85AB8B] text-xs font-semibold uppercase tracking-[0.2em] mb-5">Get Started</p>
