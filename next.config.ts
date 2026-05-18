@@ -47,8 +47,8 @@ const nextConfig: NextConfig = {
             value: [
               // Default: only allow same-origin
               "default-src 'self'",
-              // Scripts: self + inline (for Next.js) + eval (for dev)
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://va.vercel-scripts.com",
+              // Scripts: self + inline (for Next.js)
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''} https://www.youtube.com https://va.vercel-scripts.com`,
               // Styles: self + inline (for styled-jsx, emotion, etc.)
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               // Fonts

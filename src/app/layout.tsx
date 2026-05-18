@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   description: 'Deep focus, every single day.',
   metadataBase: new URL('https://focuswaqt.space'),
-  manifest: '/manifest.webmanifest',
+  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
