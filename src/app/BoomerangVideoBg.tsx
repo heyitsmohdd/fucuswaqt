@@ -11,20 +11,24 @@ const isTouchDevice = () =>
   typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
 export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const playbackVideoRef = useRef<HTMLVideoElement>(null);
+  const captureVideoRef = useRef<HTMLVideoElement>(null);
   const displayCanvasRef = useRef<HTMLCanvasElement>(null);
   const [framesReady, setFramesReady] = useState(false);
   const framesRef = useRef<HTMLCanvasElement[]>([]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const playbackVideo = playbackVideoRef.current;
+    if (!playbackVideo) return;
 
     if (isTouchDevice()) {
-      video.loop = true;
-      video.play().catch(() => {});
+      playbackVideo.loop = true;
+      playbackVideo.play().catch(() => {});
       return;
     }
+
+    const captureVideo = captureVideoRef.current;
+    if (!captureVideo) return;
 
     const frames: HTMLCanvasElement[] = [];
     let capturing = true;
@@ -32,31 +36,31 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
     const MAX_WIDTH = 960;
 
     const captureFrame = () => {
-      if (!capturing || video.readyState < 2) return;
-      if (video.currentTime === lastTime) return;
-      lastTime = video.currentTime;
+      if (!capturing || captureVideo.readyState < 2) return;
+      if (captureVideo.currentTime === lastTime) return;
+      lastTime = captureVideo.currentTime;
 
-      const vw = video.videoWidth;
-      const vh = video.videoHeight;
+      const vw = captureVideo.videoWidth;
+      const vh = captureVideo.videoHeight;
       if (!vw || !vh) return;
 
       const scale = Math.min(1, MAX_WIDTH / vw);
       const w = Math.round(vw * scale);
       const h = Math.round(vh * scale);
 
-      const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d');
+      const frameCanvas = document.createElement('canvas');
+      frameCanvas.width = w;
+      frameCanvas.height = h;
+      const ctx = frameCanvas.getContext('2d');
       if (!ctx) return;
-      ctx.drawImage(video, 0, 0, w, h);
-      frames.push(canvas);
+      ctx.drawImage(captureVideo, 0, 0, w, h);
+      frames.push(frameCanvas);
     };
 
     type VFCVideo = HTMLVideoElement & {
       requestVideoFrameCallback?: (cb: () => void) => number;
     };
-    const vfcVideo = video as VFCVideo;
+    const vfcVideo = captureVideo as VFCVideo;
     const hasVFC = typeof vfcVideo.requestVideoFrameCallback === 'function';
 
     let rafId = 0;
@@ -77,13 +81,13 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
         framesRef.current = frames;
         setFramesReady(true);
       } else {
-        video.loop = true;
-        video.play().catch(() => {});
+        playbackVideo.loop = true;
+        playbackVideo.play().catch(() => {});
       }
     };
 
     const onLoaded = () => {
-      video.play().catch(() => {});
+      captureVideo.play().catch(() => {});
       if (hasVFC) {
         vfcVideo.requestVideoFrameCallback!(vfcLoop);
       } else {
@@ -91,15 +95,15 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
       }
     };
 
-    video.addEventListener('loadedmetadata', onLoaded);
-    video.addEventListener('ended', onEnded);
-    if (video.readyState >= 1) onLoaded();
+    captureVideo.addEventListener('loadedmetadata', onLoaded);
+    captureVideo.addEventListener('ended', onEnded);
+    if (captureVideo.readyState >= 1) onLoaded();
 
     return () => {
       capturing = false;
       cancelAnimationFrame(rafId);
-      video.removeEventListener('loadedmetadata', onLoaded);
-      video.removeEventListener('ended', onEnded);
+      captureVideo.removeEventListener('loadedmetadata', onLoaded);
+      captureVideo.removeEventListener('ended', onEnded);
     };
   }, [src]);
 
@@ -138,11 +142,21 @@ export default function BoomerangVideoBg({ src, className }: BoomerangVideoBgPro
 
   return (
     <div className={className ?? 'absolute inset-0 w-full h-full'}>
+      {/* Visible video — no crossOrigin so iOS loads it without CORS restrictions */}
       <video
-        ref={videoRef}
+        ref={playbackVideoRef}
         src={src}
         className="w-full h-full object-cover"
         style={{ display: framesReady ? 'none' : 'block' }}
+        muted
+        playsInline
+        preload="auto"
+      />
+      {/* Capture video — crossOrigin needed for canvas drawImage on desktop only */}
+      <video
+        ref={captureVideoRef}
+        src={src}
+        style={{ display: 'none' }}
         muted
         playsInline
         preload="auto"
