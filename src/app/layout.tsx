@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     title: 'FocusWaqt',
   },
   formatDetection: { telephone: false },
+  verification: {
+    google: 'p6H5C9LUiMIC7F_o1zbsDxNXoUSs-ZcxAHQdNC1EEfk',
+  },
 };
 
 export default function RootLayout({
