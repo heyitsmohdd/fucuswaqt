@@ -201,6 +201,7 @@ const NAV_LINKS = [
   { href: '#features', label: 'Features' },
   { href: '#how-it-works', label: 'How It Works' },
   { href: '#progress', label: 'Progress' },
+  { href: '/blog', label: 'Blog' },
 ];
 
 export default function LandingPage() {
