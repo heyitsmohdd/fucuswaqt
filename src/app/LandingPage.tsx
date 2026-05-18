@@ -492,7 +492,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-sm">
           <a href="https://github.com/heyitsmohdd/fucuswaqt" target="_blank" rel="noopener noreferrer" className="font-semibold text-white/40 hover:text-white/60 transition-colors">GitHub</a>
           <span>© {new Date().getFullYear()} FocusWaqt.</span>
-          <a href={APP_URL} className="hover:text-white/50 transition-colors">Open App →</a>
+          <div className="flex items-center gap-5">
+            <a href="/blog" className="hover:text-white/50 transition-colors">Blog</a>
+            <a href={APP_URL} className="hover:text-white/50 transition-colors">Open App →</a>
+          </div>
         </div>
       </footer>
     </main>
