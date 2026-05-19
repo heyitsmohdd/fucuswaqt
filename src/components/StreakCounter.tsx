@@ -3,21 +3,34 @@
 import { useAppStore } from '@/stores/appStore';
 import { Flame } from 'lucide-react';
 
+const INK = '#0D2118';
+const SAGE = '#85AB8B';
+
 export function StreakCounter() {
     const { streakDays } = useAppStore();
 
     return (
         <div
-            className="rounded-full px-4 py-2 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm border border-white/8 hover:border-white/15 transition-colors"
+            style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: '#FFFFFF',
+                border: `2px solid ${INK}`,
+                boxShadow: `2px 2px 0px ${INK}`,
+                borderRadius: 999,
+                padding: '5px 14px',
+            }}
             aria-label={`Current streak: ${streakDays} day${streakDays !== 1 ? 's' : ''}`}
             role="status"
         >
             <Flame
-                className="w-3.5 h-3.5 text-orange-400"
+                style={{
+                    width: 14, height: 14, color: SAGE,
+                    filter: streakDays > 0 ? 'drop-shadow(0 0 4px rgba(133,171,139,0.7))' : undefined,
+                    flexShrink: 0,
+                }}
                 aria-hidden="true"
-                style={{ filter: streakDays > 0 ? 'drop-shadow(0 0 4px rgba(251,146,60,0.6))' : undefined }}
             />
-            <span className="text-orange-400 font-semibold text-sm tabular-nums">
+            <span style={{ color: INK, fontWeight: 700, fontSize: '0.875rem', fontVariantNumeric: 'tabular-nums' }}>
                 {streakDays}
             </span>
         </div>

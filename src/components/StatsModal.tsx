@@ -5,6 +5,9 @@ import { X } from 'lucide-react';
 import { FocusHeatmap } from './FocusHeatmap';
 import { cn } from '@/lib/utils';
 
+const INK = '#0D2118';
+const SAGE = '#85AB8B';
+
 interface StatsModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -41,24 +44,49 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
                 isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
             )}
         >
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
-            <div className={cn(
-                'relative w-full max-w-3xl bg-white/8 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl transition-all duration-300 overflow-hidden',
-                isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
-            )}>
-                <div className="flex items-center justify-between px-6 pt-6 pb-4">
-                    <h2 className="text-white font-semibold text-lg tracking-tight">Focus Stats</h2>
+            <div
+                className={cn(
+                    'relative w-full max-w-3xl overflow-hidden transition-all duration-300',
+                    isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+                )}
+                style={{
+                    background: INK,
+                    border: `2px solid ${SAGE}`,
+                    boxShadow: `6px 6px 0px ${SAGE}`,
+                    borderRadius: 0,
+                }}
+            >
+                <div
+                    style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '20px 24px 16px',
+                        borderBottom: `2px solid rgba(133,171,139,0.25)`,
+                    }}
+                >
+                    <h2 style={{ color: '#F0F7F1', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                        Focus Stats
+                    </h2>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors btn-press"
+                        style={{
+                            width: 32, height: 32,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            border: `2px solid rgba(133,171,139,0.4)`,
+                            borderRadius: 8,
+                            background: 'transparent',
+                            cursor: 'pointer',
+                            color: 'rgba(240,247,241,0.6)',
+                            padding: 0,
+                        }}
                         aria-label="Close stats"
                     >
-                        <X className="w-4 h-4 text-white/60" />
+                        <X style={{ width: 16, height: 16 }} />
                     </button>
                 </div>
 
-                <div className="px-6 pb-6">
+                <div style={{ padding: '20px 24px 24px' }}>
                     <FocusHeatmap />
                 </div>
             </div>

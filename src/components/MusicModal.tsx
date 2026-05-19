@@ -157,8 +157,6 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, onClose]);
 
-    const videoId = extractYouTubeId(videoUrl);
-
     const handleChangeClick = () => {
         setInputValue(videoUrl);
         setIsChangingUrl(true);
@@ -199,20 +197,38 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
             )}
         >
             {/* Modal */}
-            <div className="bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+            <div style={{
+                background: '#FFFFFF',
+                border: '2px solid #0D2118',
+                boxShadow: '4px 4px 0px #0D2118',
+                borderRadius: 0,
+                overflow: 'hidden',
+            }}>
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 pb-3">
-                    <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '14px 16px 12px',
+                    borderBottom: '2px solid #0D2118',
+                }}>
+                    <h2 style={{ color: '#0D2118', fontWeight: 800, fontSize: '0.95rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 8 }}>
                         YouTube
                         {musicHint.visible && (
-                            <kbd className="px-2 py-0.5 bg-white/15 border border-white/20 rounded-lg text-white/70 text-[11px] font-mono whitespace-nowrap animate-fade-in">
+                            <kbd style={{
+                                padding: '1px 7px',
+                                background: 'rgba(133,171,139,0.15)',
+                                border: '1.5px solid #0D2118',
+                                borderRadius: 5,
+                                color: '#0D2118',
+                                fontSize: '0.7rem',
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                            }} className="animate-fade-in">
                                 M
                             </kbd>
                         )}
                     </h2>
 
-                    {/* Change Button or Input Field */}
-                    <div className="flex items-center gap-2">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         {isChangingUrl ? (
                             <>
                                 <input
@@ -221,39 +237,77 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={handleInputKeyDown}
                                     placeholder="URL from YT..."
-                                    className="px-3 py-1.5 bg-black/60 text-white text-xs rounded-lg border border-white/20 outline-none focus:border-white/40 w-32"
+                                    style={{
+                                        padding: '5px 10px',
+                                        background: '#FFFFFF',
+                                        border: '2px solid #0D2118',
+                                        borderRadius: 0,
+                                        color: '#0D2118',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 600,
+                                        outline: 'none',
+                                        width: 128,
+                                    }}
                                     autoFocus
                                 />
                                 <button
                                     onClick={handleConfirmChange}
-                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                    style={{
+                                        width: 28, height: 28,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        border: '2px solid #0D2118',
+                                        background: '#85AB8B',
+                                        cursor: 'pointer', padding: 0, borderRadius: 6,
+                                    }}
                                     aria-label="Confirm"
                                 >
-                                    <Check className="w-4 h-4 text-white" />
+                                    <Check style={{ width: 13, height: 13, color: '#FFFFFF' }} />
                                 </button>
                                 <button
                                     onClick={handleCancelChange}
-                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                    style={{
+                                        width: 28, height: 28,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        border: '2px solid #0D2118',
+                                        background: '#FFFFFF',
+                                        cursor: 'pointer', padding: 0, borderRadius: 6,
+                                    }}
                                     aria-label="Cancel"
                                 >
-                                    <X className="w-4 h-4 text-white" />
+                                    <X style={{ width: 13, height: 13, color: '#0D2118' }} />
                                 </button>
                             </>
                         ) : (
                             <>
                                 <button
                                     onClick={handleChangeClick}
-                                    className="flex items-center gap-1.5 px-2 py-1 text-white/60 hover:text-white transition-colors"
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: 5,
+                                        padding: '4px 10px',
+                                        border: '1.5px solid rgba(13,33,24,0.35)',
+                                        background: 'transparent',
+                                        cursor: 'pointer',
+                                        color: '#0D2118', opacity: 0.6,
+                                        fontSize: '0.75rem', fontWeight: 700,
+                                        borderRadius: 6,
+                                    }}
                                 >
-                                    <Music className="w-3 h-3" />
-                                    <span className="text-xs">Change</span>
+                                    <Music style={{ width: 11, height: 11 }} />
+                                    Change
                                 </button>
                                 <button
                                     onClick={onClose}
-                                    className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                    style={{
+                                        width: 28, height: 28,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        border: '2px solid #0D2118',
+                                        background: '#FFFFFF',
+                                        cursor: 'pointer', padding: 0, borderRadius: 6,
+                                        color: '#0D2118',
+                                    }}
                                     aria-label="Close"
                                 >
-                                    <X className="w-4 h-4 text-white" />
+                                    <X style={{ width: 13, height: 13 }} />
                                 </button>
                             </>
                         )}
@@ -261,9 +315,9 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                 </div>
 
                 {/* Video Player */}
-                <div className="px-4 pb-4">
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/50">
-                        <div ref={ytContainerRef} className="absolute inset-0 w-full h-full" />
+                <div style={{ padding: '14px 16px 16px' }}>
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', border: '2px solid #0D2118' }}>
+                        <div ref={ytContainerRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
                     </div>
                 </div>
             </div>

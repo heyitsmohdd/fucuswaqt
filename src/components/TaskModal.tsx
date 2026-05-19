@@ -9,6 +9,9 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TASK_MAX_LENGTH, TASK_LIMIT } from '@/constants';
 
+const INK = '#0D2118';
+const SAGE = '#85AB8B';
+
 interface TaskModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -21,7 +24,6 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    // Animate in / out
     useEffect(() => {
         if (isOpen) {
             setMounted(true);
@@ -33,7 +35,6 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
         }
     }, [isOpen]);
 
-    // Close on Escape
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isOpen) onClose();
@@ -71,99 +72,145 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
         }
     };
 
+    const isAtLimit = tasks.length >= TASK_LIMIT;
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
+            <style>{`
+                .task-row:hover { background: rgba(133,171,139,0.08) !important; }
+                .task-del-btn { opacity: 0; transition: opacity 0.15s; }
+                .task-row:hover .task-del-btn { opacity: 1; }
+                .nb-add-btn:hover:not(:disabled) { transform: translateY(2px) !important; box-shadow: 2px 2px 0px ${INK} !important; }
+                .nb-add-btn:active:not(:disabled) { transform: translateY(3px) !important; box-shadow: 1px 1px 0px ${INK} !important; }
+            `}</style>
+
             <div
                 className={cn(
-                    'absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200',
+                    'absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-200',
                     visible ? 'opacity-100' : 'opacity-0'
                 )}
                 onClick={onClose}
             />
 
-            {/* Modal */}
             <div
                 className={cn(
-                    'relative w-full max-w-lg bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                    'relative w-full transition-all duration-220',
                     visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
                 )}
+                style={{
+                    maxWidth: 480,
+                    background: '#FFFFFF',
+                    border: `2px solid ${INK}`,
+                    boxShadow: `6px 6px 0px ${INK}`,
+                    borderRadius: 0,
+                }}
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="task-modal-title"
             >
-                {/* Header */}
-                <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/8">
-                    <h2 id="task-modal-title" className="text-lg font-semibold text-white tracking-tight">
+                <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '20px 24px 16px',
+                    borderBottom: `2px solid ${INK}`,
+                }}>
+                    <h2 id="task-modal-title" style={{ color: INK, fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                         Today&apos;s Tasks
                     </h2>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors btn-press"
+                        style={{
+                            width: 32, height: 32,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            border: `2px solid ${INK}`, borderRadius: 8,
+                            background: '#FFFFFF', cursor: 'pointer',
+                            color: INK, padding: 0,
+                        }}
                         aria-label="Close task manager"
                     >
-                        <X className="w-4 h-4 text-white/60" aria-hidden="true" />
+                        <X style={{ width: 16, height: 16 }} aria-hidden="true" />
                     </button>
                 </div>
 
-                {/* Body */}
-                <div className="px-6 py-5 min-h-[260px]">
-                    {/* Empty State */}
+                <div style={{ padding: '20px 24px', minHeight: 240 }}>
                     {tasks.length === 0 && !isAddingTask && (
-                        <div className="flex flex-col items-center justify-center py-10 gap-3 animate-fade-in">
-                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                                <CheckCircle2 className="w-5 h-5 text-white/20" />
+                        <div style={{
+                            display: 'flex', flexDirection: 'column', alignItems: 'center',
+                            justifyContent: 'center', padding: '32px 0', gap: 10,
+                        }}>
+                            <div style={{
+                                width: 40, height: 40,
+                                border: `2px solid ${INK}`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                background: 'rgba(133,171,139,0.1)',
+                            }}>
+                                <CheckCircle2 style={{ width: 20, height: 20, color: INK, opacity: 0.3 }} />
                             </div>
-                            <p className="text-white/40 text-sm text-center">
+                            <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 600, opacity: 0.45, textAlign: 'center' }}>
                                 No tasks yet. Add your first one below.
                             </p>
                         </div>
                     )}
 
-                    {/* Task List */}
                     {tasks.length > 0 && (
-                        <div className="space-y-2 mb-4">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
                             {tasks.map((task) => (
                                 <div
                                     key={task.id}
-                                    className="group flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 hover:bg-white/8 transition-colors border border-transparent hover:border-white/8"
+                                    className="task-row"
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: 10,
+                                        padding: '10px 12px',
+                                        border: `1.5px solid ${INK}`,
+                                        background: '#FFFFFF',
+                                        transition: 'background 0.12s',
+                                    }}
                                 >
                                     <button
                                         onClick={() => toggleTask(task.id)}
-                                        className="shrink-0 transition-all btn-press"
+                                        style={{ flexShrink: 0, background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}
                                         aria-label={`Mark "${DOMPurify.sanitize(task.title)}" as ${task.is_completed ? 'incomplete' : 'complete'}`}
                                     >
                                         {task.is_completed ? (
-                                            <CheckCircle2 className="w-5 h-5 text-white/60" />
+                                            <CheckCircle2 style={{ width: 18, height: 18, color: SAGE }} />
                                         ) : (
-                                            <Circle className="w-5 h-5 text-white/25 group-hover:text-white/40 transition-colors" />
+                                            <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3 }} />
                                         )}
                                     </button>
-                                    <span className={cn(
-                                        'text-sm flex-1 transition-all',
-                                        task.is_completed
-                                            ? 'line-through text-white/35'
-                                            : 'text-white/90'
-                                    )}>
+                                    <span style={{
+                                        fontSize: '0.875rem', fontWeight: 600, flex: 1, color: INK,
+                                        textDecoration: task.is_completed ? 'line-through' : 'none',
+                                        opacity: task.is_completed ? 0.4 : 1,
+                                    }}>
                                         {DOMPurify.sanitize(task.title)}
                                     </span>
                                     <button
                                         onClick={() => removeTask(task.id)}
-                                        className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all"
+                                        className="task-del-btn"
+                                        style={{
+                                            width: 24, height: 24,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            background: 'none', border: 'none', cursor: 'pointer',
+                                            color: INK, opacity: 0.4, padding: 0,
+                                        }}
                                         aria-label={`Delete task "${DOMPurify.sanitize(task.title)}"`}
                                     >
-                                        <X className="w-3.5 h-3.5 text-white/50 hover:text-white/80" aria-hidden="true" />
+                                        <X style={{ width: 13, height: 13 }} aria-hidden="true" />
                                     </button>
                                 </div>
                             ))}
                         </div>
                     )}
 
-                    {/* Add Task Input */}
                     {isAddingTask && (
-                        <div className="flex flex-col gap-1.5 mb-4 animate-slide-down">
-                            <div className="flex items-center gap-3 px-3 py-3 bg-white/10 rounded-xl border border-white/15">
-                                <Circle className="w-5 h-5 text-white/25 shrink-0" />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
+                            <div style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                padding: '10px 12px',
+                                border: `2px solid ${INK}`,
+                                background: '#FFFFFF',
+                                boxShadow: `3px 3px 0px ${INK}`,
+                            }}>
+                                <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3, flexShrink: 0 }} />
                                 <input
                                     type="text"
                                     value={currentTask}
@@ -172,36 +219,44 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     onBlur={handleAddTask}
                                     placeholder="Task name..."
                                     maxLength={TASK_MAX_LENGTH}
-                                    className="flex-1 bg-transparent text-white text-sm outline-none placeholder-white/30"
+                                    style={{
+                                        flex: 1, background: 'transparent',
+                                        border: 'none', outline: 'none',
+                                        color: INK, fontSize: '0.875rem', fontWeight: 600,
+                                    }}
                                     autoFocus
                                 />
                             </div>
-                            <span className={cn(
-                                'text-xs text-right pr-1',
-                                currentTask.length > TASK_MAX_LENGTH ? 'text-red-400' : 'text-white/30'
-                            )}>
+                            <span style={{
+                                fontSize: '0.7rem', textAlign: 'right', paddingRight: 4,
+                                color: currentTask.length > TASK_MAX_LENGTH ? '#dc2626' : INK,
+                                opacity: 0.4,
+                            }}>
                                 {currentTask.length}/{TASK_MAX_LENGTH}
                             </span>
                         </div>
                     )}
 
-                    {/* Add Task Button */}
                     <button
                         onClick={() => setIsAddingTask(true)}
-                        disabled={tasks.length >= TASK_LIMIT}
-                        className={cn(
-                            'w-full py-3 rounded-xl flex items-center justify-center gap-2 text-sm transition-all border-dashed border',
-                            tasks.length >= TASK_LIMIT
-                                ? 'border-white/8 text-white/20 cursor-not-allowed'
-                                : 'border-white/15 text-white/50 hover:text-white/80 hover:border-white/30 hover:bg-white/5'
-                        )}
+                        disabled={isAtLimit}
+                        className="nb-add-btn"
+                        style={{
+                            width: '100%', padding: '10px 0',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                            border: `2px dashed ${INK}`,
+                            background: 'transparent',
+                            color: INK,
+                            fontSize: '0.875rem', fontWeight: 700,
+                            cursor: isAtLimit ? 'not-allowed' : 'pointer',
+                            opacity: isAtLimit ? 0.35 : 0.65,
+                            transition: 'transform 0.07s ease, box-shadow 0.07s ease, opacity 0.15s',
+                            borderRadius: 0,
+                            boxShadow: `4px 4px 0px ${INK}`,
+                        }}
                     >
-                        <Plus className="w-4 h-4" />
-                        <span>
-                            {tasks.length >= TASK_LIMIT
-                                ? `Limit reached (${TASK_LIMIT} tasks)`
-                                : 'Add task'}
-                        </span>
+                        <Plus style={{ width: 16, height: 16 }} />
+                        {isAtLimit ? `Limit reached (${TASK_LIMIT} tasks)` : 'Add task'}
                     </button>
                 </div>
             </div>

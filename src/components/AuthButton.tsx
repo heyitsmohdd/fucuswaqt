@@ -8,6 +8,9 @@ import { useAppStore } from '@/stores/appStore';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
+const INK = '#0D2118';
+const SAGE = '#85AB8B';
+
 export function AuthButton() {
     const { data: session, isPending } = authClient.useSession();
     const { openAuthModal, closeAuthModal } = useAppStore();
@@ -43,28 +46,68 @@ export function AuthButton() {
 
     if (isPending) {
         return (
-            <div className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8" role="status" aria-label="Loading">
-                <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" aria-hidden="true" />
+            <div
+                style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    padding: '5px 14px',
+                    background: 'rgba(255,255,255,0.92)',
+                    border: `2px solid ${INK}`,
+                    boxShadow: `2px 2px 0px ${INK}`,
+                    borderRadius: 999,
+                }}
+                role="status"
+                aria-label="Loading"
+            >
+                <div className="w-3.5 h-3.5 border-2 border-t-transparent rounded-full animate-spin"
+                    style={{ borderColor: `${INK}40`, borderTopColor: INK }}
+                    aria-hidden="true"
+                />
             </div>
         );
     }
 
     if (!session) {
         return (
-            <button
-                onClick={openAuthModal}
-                className="rounded-full px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/8 hover:bg-black/55 hover:border-white/15 transition-all duration-200 text-white/90 font-medium text-sm btn-press"
-            >
-                Sign In
-            </button>
+            <>
+                <style>{`
+                    .signin-btn:hover { transform: translateY(2px) !important; box-shadow: 1px 1px 0px ${INK} !important; }
+                    .signin-btn:active { transform: translateY(3px) !important; box-shadow: 0px 0px 0px ${INK} !important; }
+                `}</style>
+                <button
+                    onClick={openAuthModal}
+                    className="signin-btn"
+                    style={{
+                        padding: '6px 16px',
+                        background: 'rgba(255,255,255,0.92)',
+                        border: `2px solid ${INK}`,
+                        boxShadow: `2px 2px 0px ${INK}`,
+                        borderRadius: 999,
+                        color: INK,
+                        fontWeight: 700,
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        transition: 'transform 0.07s ease, box-shadow 0.07s ease',
+                    }}
+                >
+                    Sign In
+                </button>
+            </>
         );
     }
 
     return (
-        <div className="relative">
+        <div style={{ position: 'relative' }}>
             <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="rounded-full p-1 bg-black/40 backdrop-blur-sm border border-white/8 hover:border-white/20 transition-all duration-200 btn-press"
+                style={{
+                    padding: 3,
+                    background: 'rgba(255,255,255,0.92)',
+                    border: `2px solid ${INK}`,
+                    boxShadow: `2px 2px 0px ${INK}`,
+                    borderRadius: 999,
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center',
+                }}
                 aria-label="Open user menu"
                 aria-expanded={showDropdown}
                 aria-haspopup="menu"
@@ -73,12 +116,17 @@ export function AuthButton() {
                     <Image
                         src={session.user.image}
                         alt={getFirstName()}
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full ring-1 ring-white/20"
+                        width={30}
+                        height={30}
+                        style={{ borderRadius: '50%', display: 'block' }}
                     />
                 ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold ring-1 ring-white/20">
+                    <div style={{
+                        width: 30, height: 30, borderRadius: '50%',
+                        background: SAGE,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: INK, fontSize: '0.75rem', fontWeight: 800,
+                    }}>
                         {getFirstName().charAt(0).toUpperCase()}
                     </div>
                 )}
@@ -88,50 +136,79 @@ export function AuthButton() {
                 <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
 
-                    <div className={cn(
-                        'absolute -right-2 top-full mt-2 w-60 rounded-2xl bg-black/90 backdrop-blur-2xl border border-white/10 shadow-2xl z-50 overflow-hidden transition-all duration-200',
-                        isDropdownVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95'
-                    )}>
-                        <div className="p-4 relative">
+                    <div
+                        className={cn(
+                            'absolute z-50 overflow-hidden transition-all duration-200',
+                            isDropdownVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95'
+                        )}
+                        style={{
+                            right: -4, top: 'calc(100% + 8px)',
+                            width: 240,
+                            background: '#FFFFFF',
+                            border: `2px solid ${INK}`,
+                            boxShadow: `4px 4px 0px ${INK}`,
+                            borderRadius: 0,
+                        }}
+                    >
+                        <div style={{ padding: '16px', position: 'relative', borderBottom: `2px solid ${INK}` }}>
                             <button
                                 onClick={() => setShowDropdown(false)}
-                                className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors btn-press"
+                                style={{
+                                    position: 'absolute', top: 10, right: 10,
+                                    width: 24, height: 24,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    border: `1.5px solid ${INK}`, borderRadius: 6,
+                                    background: '#FFFFFF', cursor: 'pointer',
+                                    color: INK, padding: 0,
+                                }}
                                 aria-label="Close user menu"
                             >
-                                <X className="w-3.5 h-3.5 text-white/50" aria-hidden="true" />
+                                <X style={{ width: 12, height: 12 }} aria-hidden="true" />
                             </button>
-                            <p className="text-white font-semibold text-sm pr-8">{getFullName()}</p>
-                            <p className="text-white/40 text-xs mt-0.5 truncate">
+                            <p style={{ color: INK, fontWeight: 800, fontSize: '0.875rem', paddingRight: 28 }}>
+                                {getFullName()}
+                            </p>
+                            <p style={{ color: INK, fontSize: '0.75rem', marginTop: 2, opacity: 0.45, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {session.user.email ?? 'Guest Account'}
                             </p>
                         </div>
 
-                        <div className="border-t border-white/8" />
-
-                        <div className="py-1.5">
+                        <div>
                             <button
-                                onClick={() => {
-                                    setShowDropdown(false);
-                                    toast.info('Settings coming soon!');
+                                onClick={() => { setShowDropdown(false); toast.info('Settings coming soon!'); }}
+                                style={{
+                                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                    padding: '10px 16px',
+                                    background: 'transparent', border: 'none', cursor: 'pointer',
+                                    borderBottom: `1px solid rgba(13,33,24,0.1)`,
+                                    color: INK,
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/6 transition-colors text-sm text-white/80"
+                                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(133,171,139,0.1)')}
+                                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                             >
-                                <div className="flex items-center gap-3">
-                                    <Settings className="w-4 h-4 text-white/50" />
-                                    <span>App settings</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <Settings style={{ width: 15, height: 15, opacity: 0.5 }} />
+                                    <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>App settings</span>
                                 </div>
-                                <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+                                <ChevronRight style={{ width: 14, height: 14, opacity: 0.3 }} />
                             </button>
 
                             <button
                                 onClick={handleSignOut}
-                                className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/6 transition-colors text-sm text-white/80"
+                                style={{
+                                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                    padding: '10px 16px',
+                                    background: 'transparent', border: 'none', cursor: 'pointer',
+                                    color: INK,
+                                }}
+                                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(133,171,139,0.1)')}
+                                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                             >
-                                <div className="flex items-center gap-3">
-                                    <LogOut className="w-4 h-4 text-white/50" />
-                                    <span>Sign out</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <LogOut style={{ width: 15, height: 15, opacity: 0.5 }} />
+                                    <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Sign out</span>
                                 </div>
-                                <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+                                <ChevronRight style={{ width: 14, height: 14, opacity: 0.3 }} />
                             </button>
                         </div>
                     </div>

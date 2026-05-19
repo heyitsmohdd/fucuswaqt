@@ -232,24 +232,55 @@ export function Timer() {
             </div>
 
             {pendingMode && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl animate-scale-in flex flex-col items-center text-center relative overflow-hidden">
-                        <div className="absolute -top-12 -left-12 w-32 h-32 bg-rose-500/20 blur-3xl rounded-full" />
-                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/20 blur-3xl rounded-full" />
-                        
-                        <div className="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center mb-4 relative z-10">
-                            <span className="text-3xl">🥺</span>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+                    <style>{`
+                        .nb-cancel:hover { background: rgba(13,33,24,0.06) !important; }
+                        .nb-switch:hover { transform: translateY(2px) !important; box-shadow: 2px 2px 0px #0D2118 !important; }
+                        .nb-switch:active { transform: translateY(3px) !important; box-shadow: 1px 1px 0px #0D2118 !important; }
+                    `}</style>
+                    <div
+                        className="animate-scale-in w-full"
+                        style={{
+                            maxWidth: 360,
+                            background: '#FFFFFF',
+                            border: '2px solid #0D2118',
+                            boxShadow: '6px 6px 0px #0D2118',
+                            borderRadius: 0,
+                            padding: 28,
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+                        }}
+                    >
+                        <div style={{
+                            width: 52, height: 52,
+                            border: '2px solid #0D2118',
+                            background: 'rgba(133,171,139,0.12)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            marginBottom: 16, fontSize: '1.5rem',
+                        }}>
+                            🥺
                         </div>
-                        
-                        <h3 className="text-xl font-semibold text-white mb-2 relative z-10">Hold on!</h3>
-                        <p className="text-white/60 text-sm mb-6 relative z-10">
-                            You're in the middle of a session. If you switch modes now, you'll lose your current progress.
+
+                        <h3 style={{ color: '#0D2118', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: 8 }}>
+                            Hold on!
+                        </h3>
+                        <p style={{ color: '#0D2118', opacity: 0.55, fontSize: '0.875rem', fontWeight: 600, lineHeight: 1.55, marginBottom: 24 }}>
+                            You&apos;re mid-session. Switching now loses current progress.
                         </p>
-                        
-                        <div className="flex gap-3 w-full relative z-10">
+
+                        <div style={{ display: 'flex', gap: 10, width: '100%' }}>
                             <button
                                 onClick={() => setPendingMode(null)}
-                                className="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium transition-colors"
+                                className="nb-cancel"
+                                style={{
+                                    flex: 1, padding: '10px 0',
+                                    border: '2px solid #0D2118',
+                                    background: '#FFFFFF',
+                                    color: '#0D2118',
+                                    fontWeight: 700, fontSize: '0.875rem',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.12s',
+                                    borderRadius: 0,
+                                }}
                             >
                                 Cancel
                             </button>
@@ -260,7 +291,18 @@ export function Timer() {
                                         setPendingMode(null);
                                     }
                                 }}
-                                className="flex-1 py-3 px-4 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-medium transition-colors shadow-lg shadow-rose-500/20"
+                                className="nb-switch"
+                                style={{
+                                    flex: 1, padding: '10px 0',
+                                    border: '2px solid #0D2118',
+                                    background: '#0D2118',
+                                    boxShadow: '4px 4px 0px #0D2118',
+                                    color: '#FFFFFF',
+                                    fontWeight: 700, fontSize: '0.875rem',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.07s ease, box-shadow 0.07s ease',
+                                    borderRadius: 0,
+                                }}
                             >
                                 Switch anyway
                             </button>

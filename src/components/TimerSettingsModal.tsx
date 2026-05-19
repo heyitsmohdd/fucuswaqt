@@ -6,6 +6,9 @@ import { useTimerStore } from '@/stores/timerStore';
 import { TIMER_PRESETS, type TimerPresetKey } from '@/constants';
 import { cn } from '@/lib/utils';
 
+const INK = '#0D2118';
+const SAGE = '#85AB8B';
+
 interface TimerSettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -23,7 +26,6 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    // Animate in / out
     useEffect(() => {
         if (isOpen) {
             setMounted(true);
@@ -40,7 +42,6 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         }
     }, [isOpen, customDurations]);
 
-    // Close on Escape
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isOpen) onClose();
@@ -79,95 +80,158 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
+            <style>{`
+                .nb-preset:hover { background: rgba(133,171,139,0.15) !important; }
+                .nb-save-btn:hover { transform: translateY(2px) !important; box-shadow: 2px 2px 0px ${INK} !important; }
+                .nb-save-btn:active { transform: translateY(3px) !important; box-shadow: 1px 1px 0px ${INK} !important; }
+                .nb-settings-input:focus { outline: none; box-shadow: 3px 3px 0px ${INK}; }
+                .nb-settings-input::-webkit-outer-spin-button,
+                .nb-settings-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+                .nb-settings-input[type=number] { -moz-appearance: textfield; }
+            `}</style>
+
             <div
                 className={cn(
-                    'absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200',
+                    'absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-200',
                     visible ? 'opacity-100' : 'opacity-0'
                 )}
                 onClick={onClose}
             />
 
-            {/* Modal */}
             <div
                 className={cn(
-                    'relative w-full max-w-sm bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl p-6 transition-all duration-220',
+                    'relative w-full transition-all duration-220',
                     visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
                 )}
+                style={{
+                    maxWidth: 340,
+                    background: '#FFFFFF',
+                    border: `2px solid ${INK}`,
+                    boxShadow: `6px 6px 0px ${INK}`,
+                    borderRadius: 0,
+                    padding: 24,
+                }}
             >
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold text-white tracking-tight">Timer Settings</h2>
+                <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginBottom: 24,
+                }}>
+                    <h2 style={{ color: INK, fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                        Timer Settings
+                    </h2>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors btn-press"
+                        style={{
+                            width: 32, height: 32,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            border: `2px solid ${INK}`, borderRadius: 8,
+                            background: '#FFFFFF', cursor: 'pointer',
+                            color: INK, padding: 0,
+                        }}
                         aria-label="Close"
                     >
-                        <X className="w-4 h-4 text-white/60" />
+                        <X style={{ width: 16, height: 16 }} />
                     </button>
                 </div>
 
-                {/* Presets */}
-                <div className="mb-5">
-                    <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-3">
+                <div style={{ marginBottom: 20 }}>
+                    <p style={{
+                        fontSize: '0.7rem', fontWeight: 700,
+                        textTransform: 'uppercase', letterSpacing: '0.1em',
+                        color: INK, opacity: 0.45, marginBottom: 10,
+                    }}>
                         Presets — Focus / Break / Long
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
-                        {presetButtons.map(({ key, focus, breakMin, long }) => (
-                            <button
-                                key={key}
-                                onClick={() => handlePresetSelect(key)}
-                                className={cn(
-                                    'p-3 rounded-xl text-xs font-medium transition-all btn-press border',
-                                    localCustom.focus === String(focus) && localCustom.break === String(breakMin) && localCustom.longBreak === String(long)
-                                        ? 'bg-white/15 border-white/30 text-white'
-                                        : 'bg-white/4 border-white/8 text-white/50 hover:bg-white/8 hover:text-white/80'
-                                )}
-                            >
-                                <div className="font-semibold text-sm mb-0.5">{focus}m</div>
-                                <div className="opacity-60">{breakMin} / {long}</div>
-                            </button>
-                        ))}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                        {presetButtons.map(({ key, focus, breakMin, long }) => {
+                            const isActive = localCustom.focus === String(focus) && localCustom.break === String(breakMin) && localCustom.longBreak === String(long);
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => handlePresetSelect(key)}
+                                    className="nb-preset"
+                                    style={{
+                                        padding: '10px 6px',
+                                        border: `2px solid ${INK}`,
+                                        background: isActive ? `rgba(133,171,139,0.2)` : '#FFFFFF',
+                                        cursor: 'pointer',
+                                        boxShadow: isActive ? `2px 2px 0px ${INK}` : `2px 2px 0px ${INK}`,
+                                        transition: 'background 0.12s',
+                                    }}
+                                >
+                                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: INK, marginBottom: 2 }}>
+                                        {focus}m
+                                    </div>
+                                    <div style={{ fontSize: '0.7rem', fontWeight: 600, color: INK, opacity: 0.5 }}>
+                                        {breakMin} / {long}
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* Divider */}
-                <div className="border-t border-white/8 my-4" />
+                <div style={{ borderTop: `2px solid ${INK}`, margin: '16px 0' }} />
 
-                {/* Custom */}
                 <div>
-                    <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-3">
+                    <p style={{
+                        fontSize: '0.7rem', fontWeight: 700,
+                        textTransform: 'uppercase', letterSpacing: '0.1em',
+                        color: INK, opacity: 0.45, marginBottom: 10,
+                    }}>
                         Custom (minutes)
                     </p>
-                    <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
                         {[
                             { field: 'focus' as const, label: 'Focus', max: 180 },
                             { field: 'break' as const, label: 'Break', max: 60 },
                             { field: 'longBreak' as const, label: 'Long', max: 90 },
                         ].map(({ field, label, max }) => (
                             <div key={field}>
-                                <label className="text-xs text-white/35 mb-1.5 block">{label}</label>
+                                <label style={{
+                                    display: 'block', fontSize: '0.7rem',
+                                    fontWeight: 700, color: INK, opacity: 0.45, marginBottom: 6,
+                                }}>
+                                    {label}
+                                </label>
                                 <input
                                     type="number"
                                     min={1}
                                     max={max}
                                     value={localCustom[field]}
                                     onChange={(e) => setLocalCustom({ ...localCustom, [field]: e.target.value })}
-                                    className="w-full px-2 py-2 bg-white/8 border border-white/10 rounded-lg text-white text-sm text-center focus:outline-none focus:ring-1 focus:ring-white/20 transition-all [color-scheme:dark] appearance-none"
+                                    className="nb-settings-input"
+                                    style={{
+                                        width: '100%', padding: '8px 6px',
+                                        border: `2px solid ${INK}`,
+                                        background: '#FFFFFF',
+                                        borderRadius: 0,
+                                        color: INK,
+                                        fontSize: '0.875rem', fontWeight: 700,
+                                        textAlign: 'center',
+                                        transition: 'box-shadow 0.07s ease',
+                                    }}
                                 />
                             </div>
                         ))}
                     </div>
                     <button
                         onClick={handleCustomSave}
-                        className={cn(
-                            'w-full py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 btn-press',
-                            currentPreset === 'custom'
-                                ? 'bg-white/15 text-white border border-white/25'
-                                : 'bg-white/8 text-white/70 hover:bg-white/12 hover:text-white border border-white/10'
-                        )}
+                        className="nb-save-btn"
+                        style={{
+                            width: '100%', padding: '10px 0',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                            background: currentPreset === 'custom' ? SAGE : INK,
+                            border: `2px solid ${INK}`,
+                            boxShadow: `4px 4px 0px ${INK}`,
+                            borderRadius: 0,
+                            color: '#FFFFFF',
+                            fontWeight: 800, fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            transition: 'transform 0.07s ease, box-shadow 0.07s ease',
+                        }}
                     >
-                        <Check className="w-4 h-4" />
+                        <Check style={{ width: 16, height: 16 }} />
                         {currentPreset === 'custom' ? 'Custom active' : 'Use custom'}
                     </button>
                 </div>

@@ -119,46 +119,68 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                     {/* Modal */}
                     <div
                         className={cn(
-                            'relative w-full max-w-3xl bg-white/8 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl transition-all duration-220',
+                            'relative w-full max-w-3xl transition-all duration-220',
                             visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
+                        style={{
+                            background: '#FFFFFF',
+                            border: '2px solid #0D2118',
+                            boxShadow: '6px 6px 0px #0D2118',
+                            borderRadius: 0,
+                        }}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="background-picker-title"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-4 sm:px-6 pt-5 sm:pt-6 pb-4">
-                            <h2 id="background-picker-title" className="text-lg font-semibold text-white tracking-tight">
+                        <div style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            padding: '20px 24px 16px',
+                            borderBottom: '2px solid #0D2118',
+                        }}>
+                            <h2 id="background-picker-title" style={{ color: '#0D2118', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                                 Set your scene
                             </h2>
                             <button
                                 onClick={onClose}
-                                className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors btn-press"
+                                style={{
+                                    width: 32, height: 32,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    border: '2px solid #0D2118', borderRadius: 8,
+                                    background: '#FFFFFF', cursor: 'pointer',
+                                    color: '#0D2118', padding: 0,
+                                }}
                                 aria-label="Close background picker"
                             >
-                                <X className="w-4 h-4 text-white/60" aria-hidden="true" />
+                                <X style={{ width: 16, height: 16 }} aria-hidden="true" />
                             </button>
                         </div>
 
                         {/* Tab Navigation */}
-                        <div className="px-4 sm:px-6">
-                            <div className="relative flex gap-1 border-b border-white/8">
+                        <div style={{ padding: '0 24px' }}>
+                            <div style={{ position: 'relative', display: 'flex', gap: 4, borderBottom: '2px solid #0D2118' }}>
                                 {(['motion', 'stills'] as const).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={cn(
-                                            'relative pb-3 px-3 text-sm font-medium transition-colors duration-200 capitalize',
-                                            activeTab === tab ? 'text-white' : 'text-white/40 hover:text-white/70'
-                                        )}
+                                        style={{
+                                            padding: '10px 12px',
+                                            background: 'transparent', border: 'none',
+                                            cursor: 'pointer',
+                                            fontSize: '0.875rem', fontWeight: 700,
+                                            color: activeTab === tab ? '#0D2118' : 'rgba(13,33,24,0.35)',
+                                            textTransform: 'capitalize',
+                                            transition: 'color 0.15s',
+                                        }}
                                     >
                                         {tab}
                                     </button>
                                 ))}
-                                {/* Sliding indicator */}
                                 <span
-                                    className="absolute bottom-0 h-px bg-white rounded-full transition-all duration-250 ease-out"
                                     style={{
+                                        position: 'absolute', bottom: -2, height: 2,
+                                        background: '#85AB8B',
+                                        transition: 'left 0.25s ease, width 0.25s ease',
                                         left: activeTab === 'motion' ? '12px' : 'calc(12px + 75px)',
                                         width: activeTab === 'motion' ? '46px' : '34px',
                                     }}
