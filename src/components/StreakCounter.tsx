@@ -4,7 +4,6 @@ import { useAppStore } from '@/stores/appStore';
 import { Flame } from 'lucide-react';
 
 const INK = '#0D2118';
-const SAGE = '#85AB8B';
 
 export function StreakCounter() {
     const { streakDays } = useAppStore();
@@ -24,8 +23,8 @@ export function StreakCounter() {
         >
             <Flame
                 style={{
-                    width: 14, height: 14, color: SAGE,
-                    filter: streakDays > 0 ? 'drop-shadow(0 0 4px rgba(133,171,139,0.7))' : undefined,
+                    width: 14, height: 14, color: '#FB923C',
+                    filter: streakDays > 0 ? 'drop-shadow(0 0 4px rgba(251,146,60,0.7))' : undefined,
                     flexShrink: 0,
                 }}
                 aria-hidden="true"

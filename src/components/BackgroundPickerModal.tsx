@@ -123,10 +123,10 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                             visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
                         style={{
-                            background: '#FFFFFF',
+                            background: '#E8F5EC',
                             border: '2px solid #0D2118',
                             boxShadow: '6px 6px 0px #0D2118',
-                            borderRadius: 0,
+                            borderRadius: 20,
                         }}
                         role="dialog"
                         aria-modal="true"
@@ -147,7 +147,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     width: 32, height: 32,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     border: '2px solid #0D2118', borderRadius: 8,
-                                    background: '#FFFFFF', cursor: 'pointer',
+                                    background: '#E8F5EC', cursor: 'pointer',
                                     color: '#0D2118', padding: 0,
                                 }}
                                 aria-label="Close background picker"
@@ -157,34 +157,32 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                         </div>
 
                         {/* Tab Navigation */}
-                        <div style={{ padding: '0 24px' }}>
-                            <div style={{ position: 'relative', display: 'flex', gap: 4, borderBottom: '2px solid #0D2118' }}>
-                                {(['motion', 'stills'] as const).map((tab) => (
-                                    <button
-                                        key={tab}
-                                        onClick={() => setActiveTab(tab)}
-                                        style={{
-                                            padding: '10px 12px',
-                                            background: 'transparent', border: 'none',
-                                            cursor: 'pointer',
-                                            fontSize: '0.875rem', fontWeight: 700,
-                                            color: activeTab === tab ? '#0D2118' : 'rgba(13,33,24,0.35)',
-                                            textTransform: 'capitalize',
-                                            transition: 'color 0.15s',
-                                        }}
-                                    >
-                                        {tab}
-                                    </button>
-                                ))}
-                                <span
-                                    style={{
-                                        position: 'absolute', bottom: -2, height: 2,
-                                        background: '#85AB8B',
-                                        transition: 'left 0.25s ease, width 0.25s ease',
-                                        left: activeTab === 'motion' ? '12px' : 'calc(12px + 75px)',
-                                        width: activeTab === 'motion' ? '46px' : '34px',
-                                    }}
-                                />
+                        <div style={{ padding: '16px 24px 0' }}>
+                            <div style={{ display: 'flex', gap: 8 }}>
+                                {(['motion', 'stills'] as const).map((tab) => {
+                                    const isActive = activeTab === tab;
+                                    return (
+                                        <button
+                                            key={tab}
+                                            onClick={() => setActiveTab(tab)}
+                                            style={{
+                                                padding: '7px 20px',
+                                                background: isActive ? '#0D2118' : 'transparent',
+                                                border: '2px solid #0D2118',
+                                                boxShadow: isActive ? '3px 3px 0px #0D2118' : 'none',
+                                                borderRadius: 8,
+                                                cursor: 'pointer',
+                                                fontSize: '0.875rem', fontWeight: 700,
+                                                color: isActive ? '#E8F5EC' : '#0D2118',
+                                                textTransform: 'capitalize',
+                                                transition: 'background 0.12s, color 0.12s, box-shadow 0.12s',
+                                                opacity: isActive ? 1 : 0.45,
+                                            }}
+                                        >
+                                            {tab}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 

@@ -99,10 +99,10 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                 )}
                 style={{
                     maxWidth: 480,
-                    background: '#FFFFFF',
+                    background: '#E8F5EC',
                     border: `2px solid ${INK}`,
                     boxShadow: `6px 6px 0px ${INK}`,
-                    borderRadius: 0,
+                    borderRadius: 16,
                 }}
                 role="dialog"
                 aria-modal="true"
@@ -122,7 +122,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#FFFFFF', cursor: 'pointer',
+                            background: '#E8F5EC', cursor: 'pointer',
                             color: INK, padding: 0,
                         }}
                         aria-label="Close task manager"
@@ -161,7 +161,8 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                         display: 'flex', alignItems: 'center', gap: 10,
                                         padding: '10px 12px',
                                         border: `1.5px solid ${INK}`,
-                                        background: '#FFFFFF',
+                                        borderRadius: 8,
+                                        background: '#E8F5EC',
                                         transition: 'background 0.12s',
                                     }}
                                 >
@@ -207,7 +208,8 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                 display: 'flex', alignItems: 'center', gap: 10,
                                 padding: '10px 12px',
                                 border: `2px solid ${INK}`,
-                                background: '#FFFFFF',
+                                borderRadius: 8,
+                                background: '#E8F5EC',
                                 boxShadow: `3px 3px 0px ${INK}`,
                             }}>
                                 <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3, flexShrink: 0 }} />
@@ -251,7 +253,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                             cursor: isAtLimit ? 'not-allowed' : 'pointer',
                             opacity: isAtLimit ? 0.35 : 0.65,
                             transition: 'transform 0.07s ease, box-shadow 0.07s ease, opacity 0.15s',
-                            borderRadius: 0,
+                            borderRadius: 8,
                             boxShadow: `4px 4px 0px ${INK}`,
                         }}
                     >

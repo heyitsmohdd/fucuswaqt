@@ -4,7 +4,6 @@ import { X } from 'lucide-react';
 import SimpleLogin from './SimpleLogin';
 
 const INK = '#0D2118';
-const SAGE = '#85AB8B';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -27,10 +26,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         background: '#FFFFFF',
                         border: `2px solid ${INK}`,
                         boxShadow: `6px 6px 0px ${INK}`,
-                        borderRadius: 0,
+                        borderRadius: 20,
                         width: '100%',
-                        maxWidth: 400,
-                        padding: '48px 36px 40px',
+                        maxWidth: 380,
+                        padding: '40px 32px 36px',
                         pointerEvents: 'auto',
                     }}
                     role="dialog"
@@ -40,8 +39,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     <button
                         onClick={onClose}
                         style={{
-                            position: 'absolute', top: 16, right: 16,
-                            width: 32, height: 32,
+                            position: 'absolute', top: 14, right: 14,
+                            width: 30, height: 30,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             border: `2px solid ${INK}`, borderRadius: 8,
                             background: '#FFFFFF', cursor: 'pointer',
@@ -49,32 +48,18 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         }}
                         aria-label="Close authentication modal"
                     >
-                        <X style={{ width: 16, height: 16 }} />
+                        <X style={{ width: 14, height: 14 }} />
                     </button>
 
-                    <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                        <div style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 8,
-                            marginBottom: 12,
-                        }}>
-                            <svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <circle cx="16" cy="9"  r="8" fill={SAGE} opacity="0.85" />
-                                <circle cx="23" cy="16" r="8" fill={SAGE} opacity="0.85" />
-                                <circle cx="16" cy="23" r="8" fill={SAGE} opacity="0.85" />
-                                <circle cx="9"  cy="16" r="8" fill={SAGE} opacity="0.85" />
-                                <circle cx="16" cy="16" r="4" fill={INK} />
-                            </svg>
-                            <span id="auth-modal-title" style={{
-                                fontWeight: 800, fontSize: '1.25rem',
-                                letterSpacing: '-0.03em', color: INK,
-                            }}>
-                                FocusWaqt
-                            </span>
-                        </div>
-                        <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 600, opacity: 0.55 }}>
-                            Sign in to track streaks &amp; progress
-                        </p>
-                    </div>
+                    <p id="auth-modal-title" style={{
+                        color: INK, fontSize: '1.05rem', fontWeight: 800,
+                        letterSpacing: '-0.02em', marginBottom: 6,
+                    }}>
+                        Sign in
+                    </p>
+                    <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 600, opacity: 0.5, marginBottom: 28 }}>
+                        Track streaks &amp; focus history
+                    </p>
 
                     <SimpleLogin />
                 </div>
