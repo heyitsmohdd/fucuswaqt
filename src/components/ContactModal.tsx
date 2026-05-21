@@ -5,7 +5,7 @@ import { X, Mail, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GITHUB_URL, CONTACT_EMAIL } from '@/constants';
 
-const INK = '#0D2118';
+const INK = '#D4EDD8';
 
 interface ContactModalProps {
     isOpen: boolean;
@@ -66,9 +66,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 )}
                 style={{
                     maxWidth: 400,
-                    background: '#D4EDD8',
-                    border: `2px solid ${INK}`,
-                    boxShadow: `6px 6px 0px ${INK}`,
+                    background: '#0A0A0A',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    boxShadow: 'none',
                     borderRadius: 16,
                 }}
                 role="dialog"
@@ -78,13 +78,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '20px 24px 16px',
-                    borderBottom: `2px solid ${INK}`,
+                    borderBottom: '1px solid rgba(255,255,255,0.08)',
                 }}>
                     <div>
-                        <h2 id="contact-modal-title" style={{ color: INK, fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                        <h2 id="contact-modal-title" style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                             Get in touch
                         </h2>
-                        <p style={{ color: INK, fontSize: '0.75rem', opacity: 0.45, marginTop: 2 }}>
+                        <p style={{ color: '#FFFFFF', fontSize: '0.75rem', opacity: 0.45, marginTop: 2 }}>
                             Questions, bugs, or just saying hi
                         </p>
                     </div>
@@ -93,9 +93,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         style={{
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#D4EDD8', cursor: 'pointer',
-                            color: INK, padding: 0,
+                            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                            background: '#0A0A0A', cursor: 'pointer',
+                            color: '#FFFFFF', padding: 0,
                         }}
                         aria-label="Close contact"
                     >
@@ -112,11 +112,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         style={{
                             display: 'flex', alignItems: 'center', gap: 12,
                             padding: '12px 14px',
-                            border: `1.5px solid ${INK}`,
+                            border: '1px solid rgba(255,255,255,0.1)',
                             borderRadius: 10,
-                            background: '#D4EDD8',
+                            background: '#0A0A0A',
                             textDecoration: 'none',
-                            boxShadow: `3px 3px 0px ${INK}`,
+                            boxShadow: 'none',
                             transition: 'transform 0.08s ease, box-shadow 0.08s ease, background 0.12s',
                             cursor: 'pointer',
                         }}
@@ -124,18 +124,18 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         <div style={{
                             width: 36, height: 36, flexShrink: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `1.5px solid ${INK}`,
+                            border: '1px solid rgba(255,255,255,0.1)',
                             borderRadius: 8,
                             background: `rgba(133,171,139,0.2)`,
-                            color: INK,
+                            color: '#FFFFFF',
                         }}>
                             <GitHubIcon className="w-4.5 h-4.5" />
                         </div>
                         <div style={{ flex: 1 }}>
-                            <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 700, margin: 0 }}>GitHub</p>
-                            <p style={{ color: INK, fontSize: '0.72rem', opacity: 0.5, margin: 0, marginTop: 1 }}>Open an issue or browse source</p>
+                            <p style={{ color: '#FFFFFF', fontSize: '0.875rem', fontWeight: 700, margin: 0 }}>GitHub</p>
+                            <p style={{ color: '#FFFFFF', fontSize: '0.72rem', opacity: 0.5, margin: 0, marginTop: 1 }}>Open an issue or browse source</p>
                         </div>
-                        <ArrowUpRight style={{ width: 15, height: 15, color: INK, opacity: 0.35, flexShrink: 0 }} />
+                        <ArrowUpRight style={{ width: 15, height: 15, color: '#FFFFFF', opacity: 0.35, flexShrink: 0 }} />
                     </a>
 
                     <a
@@ -144,11 +144,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         style={{
                             display: 'flex', alignItems: 'center', gap: 12,
                             padding: '12px 14px',
-                            border: `1.5px solid ${INK}`,
+                            border: '1px solid rgba(255,255,255,0.1)',
                             borderRadius: 10,
-                            background: '#D4EDD8',
+                            background: '#0A0A0A',
                             textDecoration: 'none',
-                            boxShadow: `3px 3px 0px ${INK}`,
+                            boxShadow: 'none',
                             transition: 'transform 0.08s ease, box-shadow 0.08s ease, background 0.12s',
                             cursor: 'pointer',
                         }}
@@ -156,17 +156,17 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         <div style={{
                             width: 36, height: 36, flexShrink: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `1.5px solid ${INK}`,
+                            border: '1px solid rgba(255,255,255,0.1)',
                             borderRadius: 8,
                             background: `rgba(133,171,139,0.2)`,
                         }}>
-                            <Mail style={{ width: 18, height: 18, color: INK }} />
+                            <Mail style={{ width: 18, height: 18, color: '#FFFFFF' }} />
                         </div>
                         <div style={{ flex: 1 }}>
-                            <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 700, margin: 0 }}>Email</p>
-                            <p style={{ color: INK, fontSize: '0.72rem', opacity: 0.5, margin: 0, marginTop: 1 }}>{CONTACT_EMAIL}</p>
+                            <p style={{ color: '#FFFFFF', fontSize: '0.875rem', fontWeight: 700, margin: 0 }}>Email</p>
+                            <p style={{ color: '#FFFFFF', fontSize: '0.72rem', opacity: 0.5, margin: 0, marginTop: 1 }}>{CONTACT_EMAIL}</p>
                         </div>
-                        <ArrowUpRight style={{ width: 15, height: 15, color: INK, opacity: 0.35, flexShrink: 0 }} />
+                        <ArrowUpRight style={{ width: 15, height: 15, color: '#FFFFFF', opacity: 0.35, flexShrink: 0 }} />
                     </a>
                 </div>
             </div>

@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TASK_MAX_LENGTH, TASK_LIMIT } from '@/constants';
 
-const INK = '#0D2118';
+const INK = '#D4EDD8';
 const SAGE = '#85AB8B';
 
 interface TaskModalProps {
@@ -99,9 +99,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                 )}
                 style={{
                     maxWidth: 480,
-                    background: '#D4EDD8',
-                    border: `2px solid ${INK}`,
-                    boxShadow: `6px 6px 0px ${INK}`,
+                    background: '#0A0A0A',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    boxShadow: 'none',
                     borderRadius: 16,
                 }}
                 role="dialog"
@@ -111,9 +111,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                 <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '20px 24px 16px',
-                    borderBottom: `2px solid ${INK}`,
+                    borderBottom: '1px solid rgba(255,255,255,0.08)',
                 }}>
-                    <h2 id="task-modal-title" style={{ color: INK, fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                    <h2 id="task-modal-title" style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                         Today&apos;s Tasks
                     </h2>
                     <button
@@ -121,9 +121,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                         style={{
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#D4EDD8', cursor: 'pointer',
-                            color: INK, padding: 0,
+                            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                            background: 'transparent', cursor: 'pointer',
+                            color: '#FFFFFF', padding: 0,
                         }}
                         aria-label="Close task manager"
                     >
@@ -139,13 +139,13 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                         }}>
                             <div style={{
                                 width: 40, height: 40,
-                                border: `2px solid ${INK}`,
+                                border: '1px solid rgba(255,255,255,0.1)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                background: 'rgba(133,171,139,0.1)',
+                                background: 'rgba(255,255,255,0.04)',
                             }}>
-                                <CheckCircle2 style={{ width: 20, height: 20, color: INK, opacity: 0.3 }} />
+                                <CheckCircle2 style={{ width: 20, height: 20, color: '#FFFFFF', opacity: 0.3 }} />
                             </div>
-                            <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 600, opacity: 0.45, textAlign: 'center' }}>
+                            <p style={{ color: '#FFFFFF', fontSize: '0.875rem', fontWeight: 600, opacity: 0.45, textAlign: 'center' }}>
                                 No tasks yet. Add your first one below.
                             </p>
                         </div>
@@ -160,9 +160,9 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     style={{
                                         display: 'flex', alignItems: 'center', gap: 10,
                                         padding: '10px 12px',
-                                        border: `1.5px solid ${INK}`,
+                                        border: '1px solid rgba(255,255,255,0.1)',
                                         borderRadius: 8,
-                                        background: '#D4EDD8',
+                                        background: '#0A0A0A',
                                         transition: 'background 0.12s',
                                     }}
                                 >
@@ -174,11 +174,11 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                         {task.is_completed ? (
                                             <CheckCircle2 style={{ width: 18, height: 18, color: SAGE }} />
                                         ) : (
-                                            <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3 }} />
+                                            <Circle style={{ width: 18, height: 18, color: '#FFFFFF', opacity: 0.3 }} />
                                         )}
                                     </button>
                                     <span style={{
-                                        fontSize: '0.875rem', fontWeight: 600, flex: 1, color: INK,
+                                        fontSize: '0.875rem', fontWeight: 600, flex: 1, color: '#FFFFFF',
                                         textDecoration: task.is_completed ? 'line-through' : 'none',
                                         opacity: task.is_completed ? 0.4 : 1,
                                     }}>
@@ -191,7 +191,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                             width: 24, height: 24,
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             background: 'none', border: 'none', cursor: 'pointer',
-                                            color: INK, opacity: 0.4, padding: 0,
+                                            color: '#FFFFFF', opacity: 0.4, padding: 0,
                                         }}
                                         aria-label={`Delete task "${DOMPurify.sanitize(task.title)}"`}
                                     >
@@ -207,12 +207,11 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                             <div style={{
                                 display: 'flex', alignItems: 'center', gap: 10,
                                 padding: '10px 12px',
-                                border: `2px solid ${INK}`,
+                                border: '1px solid rgba(255,255,255,0.15)',
                                 borderRadius: 8,
-                                background: '#D4EDD8',
-                                boxShadow: `3px 3px 0px ${INK}`,
+                                background: '#0A0A0A',
                             }}>
-                                <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3, flexShrink: 0 }} />
+                                <Circle style={{ width: 18, height: 18, color: '#FFFFFF', opacity: 0.3, flexShrink: 0 }} />
                                 <input
                                     type="text"
                                     value={currentTask}
@@ -223,7 +222,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     style={{
                                         flex: 1, background: 'transparent',
                                         border: 'none', outline: 'none',
-                                        color: INK, fontSize: '0.875rem', fontWeight: 600,
+                                        color: '#FFFFFF', fontSize: '0.875rem', fontWeight: 600,
                                     }}
                                     autoFocus
                                 />
@@ -245,15 +244,14 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                         style={{
                             width: '100%', padding: '10px 0',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                            border: `2px dashed ${INK}`,
+                            border: '1px dashed rgba(255,255,255,0.2)',
                             background: 'transparent',
-                            color: INK,
+                            color: '#FFFFFF',
                             fontSize: '0.875rem', fontWeight: 700,
                             cursor: isAtLimit ? 'not-allowed' : 'pointer',
                             opacity: isAtLimit ? 0.35 : 0.65,
                             transition: 'transform 0.07s ease, box-shadow 0.07s ease, opacity 0.15s',
                             borderRadius: 8,
-                            boxShadow: `4px 4px 0px ${INK}`,
                         }}
                     >
                         <Plus style={{ width: 16, height: 16 }} />

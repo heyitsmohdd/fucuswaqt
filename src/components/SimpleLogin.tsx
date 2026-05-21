@@ -4,8 +4,6 @@ import { authClient } from '@/lib/auth-client';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const INK = '#0D2118';
-
 export default function SimpleLogin() {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -21,8 +19,7 @@ export default function SimpleLogin() {
     return (
         <div className="w-full">
             <style>{`
-                .google-btn:hover:not(:disabled) { transform: translateY(2px) !important; box-shadow: 2px 2px 0px ${INK} !important; }
-                .google-btn:active:not(:disabled) { transform: translateY(3px) !important; box-shadow: 1px 1px 0px ${INK} !important; }
+                .google-btn:hover:not(:disabled) { background: #f5f5f5 !important; }
             `}</style>
             <button
                 onClick={handleGoogleLogin}
@@ -32,18 +29,17 @@ export default function SimpleLogin() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
                     width: '100%', padding: '14px 20px',
                     background: '#FFFFFF',
-                    border: `2px solid ${INK}`,
-                    boxShadow: `4px 4px 0px ${INK}`,
+                    border: '1px solid rgba(255,255,255,0.15)',
                     borderRadius: 10,
-                    color: INK,
+                    color: '#111111',
                     fontSize: '0.95rem', fontWeight: 700,
                     cursor: isLoading ? 'not-allowed' : 'pointer',
                     opacity: isLoading ? 0.6 : 1,
-                    transition: 'transform 0.07s ease, box-shadow 0.07s ease',
+                    transition: 'background 0.12s ease',
                 }}
             >
                 {isLoading ? (
-                    <Loader2 style={{ width: 20, height: 20, color: INK }} className="animate-spin" />
+                    <Loader2 style={{ width: 20, height: 20, color: '#111111' }} className="animate-spin" />
                 ) : (
                     <>
                         <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

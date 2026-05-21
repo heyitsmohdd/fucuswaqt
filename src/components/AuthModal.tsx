@@ -3,7 +3,6 @@
 import { X } from 'lucide-react';
 import SimpleLogin from './SimpleLogin';
 
-const INK = '#0D2118';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -23,9 +22,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <div
                     style={{
                         position: 'relative',
-                        background: '#FFFFFF',
-                        border: `2px solid ${INK}`,
-                        boxShadow: `6px 6px 0px ${INK}`,
+                        background: '#0A0A0A',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        boxShadow: 'none',
                         borderRadius: 20,
                         width: '100%',
                         maxWidth: 380,
@@ -42,9 +41,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                             position: 'absolute', top: 14, right: 14,
                             width: 30, height: 30,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#FFFFFF', cursor: 'pointer',
-                            color: INK, padding: 0,
+                            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                            background: '#0A0A0A', cursor: 'pointer',
+                            color: '#FFFFFF', padding: 0,
                         }}
                         aria-label="Close authentication modal"
                     >
@@ -52,12 +51,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </button>
 
                     <p id="auth-modal-title" style={{
-                        color: INK, fontSize: '1.05rem', fontWeight: 800,
+                        color: '#FFFFFF', fontSize: '1.05rem', fontWeight: 800,
                         letterSpacing: '-0.02em', marginBottom: 6,
                     }}>
                         Sign in
                     </p>
-                    <p style={{ color: INK, fontSize: '0.875rem', fontWeight: 600, opacity: 0.5, marginBottom: 28 }}>
+                    <p style={{ color: '#FFFFFF', fontSize: '0.875rem', fontWeight: 600, opacity: 0.5, marginBottom: 28 }}>
                         Track streaks &amp; focus history
                     </p>
 

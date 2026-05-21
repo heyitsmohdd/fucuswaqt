@@ -123,9 +123,9 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                             visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
                         style={{
-                            background: '#D4EDD8',
-                            border: '2px solid #0D2118',
-                            boxShadow: '6px 6px 0px #0D2118',
+                            background: '#0A0A0A',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            boxShadow: 'none',
                             borderRadius: 20,
                         }}
                         role="dialog"
@@ -136,9 +136,9 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                         <div style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                             padding: '20px 24px 16px',
-                            borderBottom: '2px solid #0D2118',
+                            borderBottom: '1px solid rgba(255,255,255,0.08)',
                         }}>
-                            <h2 id="background-picker-title" style={{ color: '#0D2118', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                            <h2 id="background-picker-title" style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                                 Set your scene
                             </h2>
                             <button
@@ -146,9 +146,9 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                 style={{
                                     width: 32, height: 32,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    border: '2px solid #0D2118', borderRadius: 8,
-                                    background: '#D4EDD8', cursor: 'pointer',
-                                    color: '#0D2118', padding: 0,
+                                    border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                                    background: '#0A0A0A', cursor: 'pointer',
+                                    color: '#FFFFFF', padding: 0,
                                 }}
                                 aria-label="Close background picker"
                             >
@@ -167,16 +167,15 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                             onClick={() => setActiveTab(tab)}
                                             style={{
                                                 padding: '7px 20px',
-                                                background: isActive ? '#0D2118' : 'transparent',
-                                                border: '2px solid #0D2118',
-                                                boxShadow: isActive ? '3px 3px 0px #0D2118' : 'none',
+                                                background: isActive ? 'rgba(255,255,255,0.9)' : 'transparent',
+                                                border: '1px solid rgba(255,255,255,0.15)',
+                                                boxShadow: 'none',
                                                 borderRadius: 8,
                                                 cursor: 'pointer',
                                                 fontSize: '0.875rem', fontWeight: 700,
-                                                color: isActive ? '#D4EDD8' : '#0D2118',
+                                                color: isActive ? '#0A0A0A' : 'rgba(255,255,255,0.5)',
                                                 textTransform: 'capitalize',
-                                                transition: 'background 0.12s, color 0.12s, box-shadow 0.12s',
-                                                opacity: isActive ? 1 : 0.45,
+                                                transition: 'background 0.12s, color 0.12s',
                                             }}
                                         >
                                             {tab}
