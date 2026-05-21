@@ -50,3 +50,13 @@ next-env.d.ts
 # AI agent instructions (local only)
 CLAUDE.md
 AGENTS.md
+.claude/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
