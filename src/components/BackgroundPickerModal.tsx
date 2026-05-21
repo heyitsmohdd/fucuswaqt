@@ -123,7 +123,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                             visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
                         )}
                         style={{
-                            background: '#E8F5EC',
+                            background: '#D4EDD8',
                             border: '2px solid #0D2118',
                             boxShadow: '6px 6px 0px #0D2118',
                             borderRadius: 20,
@@ -147,7 +147,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     width: 32, height: 32,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     border: '2px solid #0D2118', borderRadius: 8,
-                                    background: '#E8F5EC', cursor: 'pointer',
+                                    background: '#D4EDD8', cursor: 'pointer',
                                     color: '#0D2118', padding: 0,
                                 }}
                                 aria-label="Close background picker"
@@ -158,7 +158,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
 
                         {/* Tab Navigation */}
                         <div style={{ padding: '16px 24px 0' }}>
-                            <div style={{ display: 'flex', gap: 8 }}>
+                            <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                                 {(['motion', 'stills'] as const).map((tab) => {
                                     const isActive = activeTab === tab;
                                     return (
@@ -173,7 +173,7 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                                 borderRadius: 8,
                                                 cursor: 'pointer',
                                                 fontSize: '0.875rem', fontWeight: 700,
-                                                color: isActive ? '#E8F5EC' : '#0D2118',
+                                                color: isActive ? '#D4EDD8' : '#0D2118',
                                                 textTransform: 'capitalize',
                                                 transition: 'background 0.12s, color 0.12s, box-shadow 0.12s',
                                                 opacity: isActive ? 1 : 0.45,

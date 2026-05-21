@@ -66,7 +66,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 )}
                 style={{
                     maxWidth: 400,
-                    background: '#E8F5EC',
+                    background: '#D4EDD8',
                     border: `2px solid ${INK}`,
                     boxShadow: `6px 6px 0px ${INK}`,
                     borderRadius: 16,
@@ -94,7 +94,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#E8F5EC', cursor: 'pointer',
+                            background: '#D4EDD8', cursor: 'pointer',
                             color: INK, padding: 0,
                         }}
                         aria-label="Close contact"
@@ -114,7 +114,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                             padding: '12px 14px',
                             border: `1.5px solid ${INK}`,
                             borderRadius: 10,
-                            background: '#E8F5EC',
+                            background: '#D4EDD8',
                             textDecoration: 'none',
                             boxShadow: `3px 3px 0px ${INK}`,
                             transition: 'transform 0.08s ease, box-shadow 0.08s ease, background 0.12s',
@@ -146,7 +146,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                             padding: '12px 14px',
                             border: `1.5px solid ${INK}`,
                             borderRadius: 10,
-                            background: '#E8F5EC',
+                            background: '#D4EDD8',
                             textDecoration: 'none',
                             boxShadow: `3px 3px 0px ${INK}`,
                             transition: 'transform 0.08s ease, box-shadow 0.08s ease, background 0.12s',
