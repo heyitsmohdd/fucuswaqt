@@ -47,7 +47,9 @@ export function Timer() {
                     }
                     const preset = currentPreset === 'custom' ? customDurations : TIMER_PRESETS[currentPreset];
                     await updateDailyFocus(preset.focus);
-                } catch { /* silently handle */ }
+                } catch {
+                    toast.error('Session saved locally — sync failed. Check your connection.');
+                }
             }
         };
         handleSessionComplete();
