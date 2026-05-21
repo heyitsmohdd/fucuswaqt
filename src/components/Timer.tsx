@@ -81,7 +81,8 @@ export function Timer() {
         const seconds = timeLeft % 60;
         const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         const modeText = mode === 'focus' ? 'Focus' : mode === 'break' ? 'Break' : 'Long Break';
-        document.title = isRunning ? `(${timeString}) ${modeText}` : `Pomodoro Timer - ${modeText}`;
+        const nextTitle = isRunning ? `(${timeString}) ${modeText}` : `Pomodoro Timer - ${modeText}`;
+        if (document.title !== nextTitle) document.title = nextTitle;
     }, [timeLeft, isRunning, mode]);
 
     const minutes = Math.floor(timeLeft / 60);
