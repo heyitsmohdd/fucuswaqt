@@ -1,5 +1,5 @@
 ---
-title: "Better Auth and Neon in Next.js 15: the setup nobody documented properly"
+title: "Better Auth + Neon in Next.js 15 — the setup nobody documented properly"
 description: "I replaced Supabase Auth with Better Auth and Neon Postgres in my Next.js 15 app. Here's what actually changed, why it was worth it, and the exact setup that works with App Router."
 date: "2026-05-21"
 tags: ["better auth", "neon", "next.js", "authentication", "postgres"]
@@ -17,15 +17,11 @@ That was my nudge to look at alternatives.
 
 Supabase Auth isn't bad. But for my use case, it had a few problems.
 
-The one that actually stopped me cold: Supabase's free tier only allows 2 active projects. I was running focuswaqt alongside another side project and hit that limit. I had to pause the streak tracking and authentication features for weeks while I figured out a path forward. Not because of a technical problem. Because of a project count limit.
-
-That's when I started looking for alternatives that wouldn't gate me on arbitrary account limits.
-
-The long redirect URLs were the next thing I noticed. Supabase encodes the entire session token into the callback URL, which works but looks suspicious to users who pay attention to their address bar.
+The long redirect URLs were the first thing I noticed. Supabase encodes the entire session token into the callback URL, which works but looks suspicious to users who pay attention to their address bar.
 
 The bigger issue was data ownership. Supabase Auth stores users in its own internal schema, separate from your application tables. Want to join a user with your `profiles` table? You're querying across two different ownership models. It works, but it's friction.
 
-And then there's the pricing question. Supabase's free tier is generous until you hit those project limits, and once you're on a paid plan, you're paying for a lot of infrastructure you might not need if all you want is Google OAuth and sessions.
+And then there's the pricing question. Supabase's free tier is generous, but once you're on a paid plan, you're paying for a lot of infrastructure you might not need if all you want is Google OAuth and sessions.
 
 ## What Better Auth Gets Right
 
