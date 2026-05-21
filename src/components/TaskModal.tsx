@@ -218,7 +218,6 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                     value={currentTask}
                                     onChange={(e) => setCurrentTask(e.target.value)}
                                     onKeyDown={handleKeyDown}
-                                    onBlur={handleAddTask}
                                     placeholder="Task name..."
                                     maxLength={TASK_MAX_LENGTH}
                                     style={{
