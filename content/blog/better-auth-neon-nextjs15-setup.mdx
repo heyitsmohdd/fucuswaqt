@@ -1,0 +1,164 @@
+---
+title: "Replacing Supabase Auth with Better Auth and Neon in Next.js 15"
+description: "Why I migrated auth mid-project, what actually broke, and the exact setup that works with App Router Server Actions."
+date: "2026-05-21"
+tags: ["better auth", "neon", "next.js", "authentication", "postgres"]
+---
+
+Halfway through building focuswaqt I switched auth providers. Not because the original stopped working — because I hit a constraint that forced me to rethink how I was managing the project, and that pause was long enough to look at alternatives properly.
+
+Here is what I found, what I changed, and what the setup actually looks like in 2026.
+
+## Why I Migrated
+
+I was running focuswaqt alongside another project on Supabase's free tier. The free tier caps you at two active projects. When I hit that limit, I had to restructure how both projects were managed, which interrupted development for a few weeks while auth-related features sat half-finished.
+
+That interruption was frustrating enough to make me evaluate whether I needed Supabase at all.
+
+The other thing I noticed: Supabase Auth stores users in its own internal schema, separate from your application tables. Joining a user record with a `profiles` table means querying across two different ownership models. It works, but it adds friction every time you extend the user.
+
+## What Better Auth Changes
+
+Better Auth stores users, sessions, and accounts as regular tables in your own database. There is no separate auth service. Your `users` table lives next to your `profiles` table in the same Neon instance, queryable the same way.
+
+Sessions use short opaque tokens in httpOnly cookies. The callback URL after OAuth is clean — no token blobs in the address bar, which is better for UX and easier to reason about when debugging redirect flows.
+
+It is also built with Next.js App Router in mind. Server Actions, `headers()`, and middleware all work without workarounds.
+
+## The Core Setup
+
+```bash
+pnpm add better-auth @neondatabase/serverless
+```
+
+**`lib/auth.ts`**
+
+```typescript
+import { betterAuth } from 'better-auth';
+import { Pool } from '@neondatabase/serverless';
+
+export const auth = betterAuth({
+    database: new Pool({ connectionString: process.env.DATABASE_URL }),
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        },
+    },
+});
+```
+
+**`lib/auth-client.ts`**
+
+```typescript
+import { createAuthClient } from 'better-auth/react';
+
+export const authClient = createAuthClient({
+    baseURL: process.env.NEXT_PUBLIC_APP_URL,
+});
+```
+
+**`app/api/auth/[...all]/route.ts`**
+
+```typescript
+import { auth } from '@/lib/auth';
+import { toNextJsHandler } from 'better-auth/next-js';
+
+export const { GET, POST } = toNextJsHandler(auth.handler);
+```
+
+Better Auth can generate and manage the required auth tables depending on your setup — check the docs for whether you want auto-migration or explicit schema control via Drizzle.
+
+## Sessions in Server Actions
+
+```typescript
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+
+export async function updateStreak() {
+    const session = await auth.api.getSession({ headers: await headers() });
+
+    if (!session?.user) return { success: false, error: 'Not authenticated' };
+
+    // session.user.id is the same ID that lives in your profiles table
+}
+```
+
+No token decoding. No client-side passing. One call and you have the session.
+
+## Extending Users with a Profiles Table
+
+```sql
+CREATE TABLE profiles (
+    id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    current_streak INTEGER DEFAULT 0,
+    longest_streak INTEGER DEFAULT 0,
+    last_study_date DATE,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+Create the profile on first sign-in using a Better Auth hook:
+
+```typescript
+hooks: {
+    after: [
+        {
+            matcher: (context) => context.path === '/sign-in/social',
+            handler: async (context) => {
+                const userId = context.context.newSession?.userId;
+                if (userId) {
+                    await sql`
+                        INSERT INTO profiles (id)
+                        VALUES (${userId})
+                        ON CONFLICT (id) DO NOTHING
+                    `;
+                }
+            },
+        },
+    ],
+},
+```
+
+## The Redirect Fix
+
+The original setup used `callbackURL: '/'` which created a race between the OAuth cookie being set and the middleware redirect. Some users landed back on the landing page instead of the app.
+
+```typescript
+await authClient.signIn.social({
+    provider: 'google',
+    callbackURL: '/app',
+});
+```
+
+Pointing directly to `/app` resolved it.
+
+## Adding Drizzle ORM
+
+If you want type-safe queries instead of raw SQL, the Drizzle adapter is a separate package that integrates cleanly. The Drizzle team joined PlanetScale in early 2026 and the tooling has matured significantly.
+
+```bash
+pnpm add drizzle-orm drizzle-kit @better-auth/drizzle-adapter
+```
+
+```typescript
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from '@better-auth/drizzle-adapter';
+import { db } from '@/lib/db';
+
+export const auth = betterAuth({
+    database: drizzleAdapter(db, {
+        provider: 'pg',
+        experimental: { joins: true },
+    }),
+    socialProviders: { google: { clientId: '...', clientSecret: '...' } },
+});
+```
+
+Migrations are generated with `drizzle-kit generate`. Schema lives in version control alongside the app. If you want MySQL instead of Postgres, PlanetScale works with the same adapter using `provider: 'mysql'`.
+
+## The Result
+
+The architecture got simpler. Auth data sits in the same Neon database as everything else. Session checks are one function call in any Server Action. The schema is version-controlled. There are no project count limits, no MAU thresholds, and nothing that requires a separate dashboard to debug.
+
+That is what actually changed.
