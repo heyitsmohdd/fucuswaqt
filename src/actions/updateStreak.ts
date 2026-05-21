@@ -70,10 +70,14 @@ export async function updateStreak(): Promise<UpdateStreakResult> {
                 last_study_date = ${todayStr},
                 updated_at = NOW()
             WHERE id = ${session.user.id}
+              AND (last_study_date IS NULL OR last_study_date < ${todayStr})
             RETURNING *
         `;
 
-        if (!updatedRows[0]) return { success: false, error: 'Failed to update profile' };
+        if (!updatedRows[0]) {
+            const currentRows = await sql`SELECT * FROM profiles WHERE id = ${session.user.id}`;
+            return { success: true, profile: currentRows[0] as Profile };
+        }
 
         return { success: true, profile: updatedRows[0] as Profile };
     } catch (error) {
