@@ -65,15 +65,18 @@ export function Timer() {
             if (isFocus) toast.success(title, { description: body });
             else toast(title, { description: body });
 
-            const notify = () => new Notification(title, { body, icon: '/icon.png' });
             if (Notification.permission === 'granted') {
-                notify();
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(p => { if (p === 'granted') notify(); });
+                new Notification(title, { body, icon: '/icon.png' });
             }
         }
         prevTimeLeftRef.current = timeLeft;
     }, [timeLeft, mode]);
+
+    useEffect(() => {
+        if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
 
     // Update document title
     useEffect(() => {
@@ -81,7 +84,8 @@ export function Timer() {
         const seconds = timeLeft % 60;
         const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         const modeText = mode === 'focus' ? 'Focus' : mode === 'break' ? 'Break' : 'Long Break';
-        document.title = isRunning ? `(${timeString}) ${modeText}` : `Pomodoro Timer - ${modeText}`;
+        const nextTitle = isRunning ? `(${timeString}) ${modeText}` : `Pomodoro Timer - ${modeText}`;
+        if (document.title !== nextTitle) document.title = nextTitle;
     }, [timeLeft, isRunning, mode]);
 
     const minutes = Math.floor(timeLeft / 60);
