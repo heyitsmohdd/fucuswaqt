@@ -65,15 +65,18 @@ export function Timer() {
             if (isFocus) toast.success(title, { description: body });
             else toast(title, { description: body });
 
-            const notify = () => new Notification(title, { body, icon: '/icon.png' });
             if (Notification.permission === 'granted') {
-                notify();
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(p => { if (p === 'granted') notify(); });
+                new Notification(title, { body, icon: '/icon.png' });
             }
         }
         prevTimeLeftRef.current = timeLeft;
     }, [timeLeft, mode]);
+
+    useEffect(() => {
+        if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
 
     // Update document title
     useEffect(() => {
