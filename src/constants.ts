@@ -22,6 +22,8 @@ export const QUOTE_LIMIT = 5;
 
 // Links
 export const BUY_ME_COFFEE_URL = 'https://buymeacoffee.com/heyitsmohdd';
+export const GITHUB_URL = 'PLACEHOLDER_GITHUB_URL';
+export const CONTACT_EMAIL = 'PLACEHOLDER_EMAIL';
 
 // Video backgrounds - using local custom videos
 export const VIDEO_BACKGROUNDS: VideoBackground[] = [

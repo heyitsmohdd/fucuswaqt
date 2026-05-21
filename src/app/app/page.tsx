@@ -14,6 +14,8 @@ import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { StatsModal } from '@/components/StatsModal';
 import { AuthModal } from '@/components/AuthModal';
+import { ContactModal } from '@/components/ContactModal';
+import { PixelMascot } from '@/components/PixelMascot';
 import { QuoteWidget } from '@/components/QuoteWidget';
 import { Logo } from '@/components/Logo';
 import { useAppStore } from '@/stores/appStore';
@@ -23,7 +25,7 @@ import { useEffect, useState, useRef } from 'react';
 import { fetchUserStreak } from '@/actions/fetchUserStreak';
 
 export default function Home() {
-  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, isStatsOpen, closeStats, isAuthModalOpen, closeAuthModal, openBackgroundPicker, setStreak } = useAppStore();
+  const { currentBackgroundId, currentBackgroundType, isSoundMixerOpen, closeSoundMixer, isBackgroundPickerOpen, closeBackgroundPicker, isTaskModalOpen, closeTaskModal, isMusicModalOpen, closeMusicModal, isTimerSettingsOpen, closeTimerSettings, isStatsOpen, closeStats, isAuthModalOpen, closeAuthModal, isContactModalOpen, closeContactModal, openBackgroundPicker, setStreak } = useAppStore();
   const { isRunning, startTimer, pauseTimer, resetTimer } = useTimerStore();
   const [switching, setSwitching] = useState(false);
   const switchingReady = useRef(false);
@@ -93,9 +95,11 @@ export default function Home() {
       <TimerSettingsModal isOpen={isTimerSettingsOpen} onClose={closeTimerSettings} />
       <StatsModal isOpen={isStatsOpen} onClose={closeStats} />
       <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+      <ContactModal isOpen={isContactModalOpen} onClose={closeContactModal} />
 
       {/* Icon Dock */}
       <IconDock />
+      <PixelMascot />
 
       {/* Quote Widget */}
       <QuoteWidget />
