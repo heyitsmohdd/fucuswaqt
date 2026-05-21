@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypePrettyCode from 'rehype-pretty-code';
 import { getAllPosts, getPostBySlug } from '@/lib/blog';
 
 interface BlogPostPageProps {
@@ -63,7 +64,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         .prose-body ul, .prose-body ol { padding-left: 1.5rem; margin: 0 0 1.25rem; }
         .prose-body li { font-size: 1.05rem; line-height: 1.75; color: rgba(240,247,241,0.75); margin-bottom: 0.4rem; font-weight: 600; }
         .prose-body hr { border: none; border-top: 2px solid rgba(240,247,241,0.1); margin: 2.5rem 0; }
-        .prose-body code { color: ${SAGE}; background: rgba(133,171,139,0.12); padding: 2px 7px; font-size: 0.9em; border: 1px solid rgba(133,171,139,0.2); }
+        .prose-body code { color: ${SAGE}; background: rgba(133,171,139,0.12); padding: 2px 7px; font-size: 0.9em; border: 1px solid rgba(133,171,139,0.2); border-radius: 4px; }
+        .prose-body pre { background: #0d1117 !important; border: 1.5px solid rgba(240,247,241,0.1); border-radius: 10px; padding: 20px 24px; overflow-x: auto; margin: 1.75rem 0; }
+        .prose-body pre code { background: transparent !important; border: none !important; padding: 0 !important; font-size: 0.88rem; line-height: 1.7; color: inherit; }
         .prose-body blockquote { border-left: 3px solid ${SAGE}; margin: 1.5rem 0; padding: 0.5rem 0 0.5rem 1.25rem; color: rgba(240,247,241,0.6); font-style: italic; }
       `}</style>
 
@@ -149,7 +152,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         {/* Body */}
         <div className="prose-body">
-          <MDXRemote source={post.content} />
+          <MDXRemote
+            source={post.content}
+            options={{
+              mdxOptions: {
+                rehypePlugins: [[rehypePrettyCode as never, { theme: 'github-dark' }]],
+              },
+            }}
+          />
         </div>
 
         {/* Footer nav */}
