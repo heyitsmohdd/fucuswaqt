@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudRain, Music, Image as ImageIcon, Coffee, BarChart2 } from 'lucide-react';
+import { CloudRain, Music, Image as ImageIcon, Coffee, BarChart2, AtSign } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { BUY_ME_COFFEE_URL } from '@/constants';
 import { useShortcutHint } from '@/hooks/useShortcutHint';
@@ -74,7 +74,7 @@ function getLift(hoveredIdx: number | null, idx: number): number {
 }
 
 export function IconDock() {
-    const { openSoundMixer, openBackgroundPicker, toggleMusicModal, openStats } = useAppStore();
+    const { openSoundMixer, openBackgroundPicker, toggleMusicModal, openStats, openContactModal } = useAppStore();
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
     const sceneHint = useShortcutHint('hint-c', 'Press C for scene dock');
 
@@ -120,6 +120,17 @@ export function IconDock() {
                     onLeave={() => setHoveredIdx(null)}
                 >
                     <Coffee className="w-4.5 h-4.5" />
+                </DockButton>
+
+                <DockButton
+                    onClick={openContactModal}
+                    label="Contact"
+                    className="hover:text-pink-400 hover:bg-pink-400/10"
+                    lift={getLift(hoveredIdx, 5)}
+                    onHover={() => setHoveredIdx(5)}
+                    onLeave={() => setHoveredIdx(null)}
+                >
+                    <AtSign className="w-4.5 h-4.5" />
                 </DockButton>
             </div>
         </div>
