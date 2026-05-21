@@ -22,7 +22,7 @@ export const QUOTE_LIMIT = 5;
 
 // Links
 export const BUY_ME_COFFEE_URL = 'https://buymeacoffee.com/heyitsmohdd';
-export const GITHUB_URL = 'https://github.com/heyitsmohdd/fucuswaqt';
+export const GITHUB_URL = 'https://github.com/heyitsmohdd/focuswaqt';
 export const CONTACT_EMAIL = 'heyitsmohdd@gmail.com';
 
 // Video backgrounds - using local custom videos
