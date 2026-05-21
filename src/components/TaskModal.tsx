@@ -99,7 +99,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                 )}
                 style={{
                     maxWidth: 480,
-                    background: '#E8F5EC',
+                    background: '#D4EDD8',
                     border: `2px solid ${INK}`,
                     boxShadow: `6px 6px 0px ${INK}`,
                     borderRadius: 16,
@@ -122,7 +122,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#E8F5EC', cursor: 'pointer',
+                            background: '#D4EDD8', cursor: 'pointer',
                             color: INK, padding: 0,
                         }}
                         aria-label="Close task manager"
@@ -162,7 +162,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                         padding: '10px 12px',
                                         border: `1.5px solid ${INK}`,
                                         borderRadius: 8,
-                                        background: '#E8F5EC',
+                                        background: '#D4EDD8',
                                         transition: 'background 0.12s',
                                     }}
                                 >
@@ -209,7 +209,7 @@ export function TaskModal({ isOpen, onClose }: TaskModalProps) {
                                 padding: '10px 12px',
                                 border: `2px solid ${INK}`,
                                 borderRadius: 8,
-                                background: '#E8F5EC',
+                                background: '#D4EDD8',
                                 boxShadow: `3px 3px 0px ${INK}`,
                             }}>
                                 <Circle style={{ width: 18, height: 18, color: INK, opacity: 0.3, flexShrink: 0 }} />

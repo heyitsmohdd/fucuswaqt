@@ -198,7 +198,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         >
             {/* Modal */}
             <div style={{
-                background: '#E8F5EC',
+                background: '#D4EDD8',
                 border: '2px solid #0D2118',
                 boxShadow: '4px 4px 0px #0D2118',
                 borderRadius: 16,
@@ -239,7 +239,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     placeholder="URL from YT..."
                                     style={{
                                         padding: '5px 10px',
-                                        background: '#E8F5EC',
+                                        background: '#D4EDD8',
                                         border: '2px solid #0D2118',
                                         borderRadius: 0,
                                         color: '#0D2118',
@@ -269,7 +269,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                         width: 28, height: 28,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                         border: '2px solid #0D2118',
-                                        background: '#E8F5EC',
+                                        background: '#D4EDD8',
                                         cursor: 'pointer', padding: 0, borderRadius: 6,
                                     }}
                                     aria-label="Cancel"
@@ -301,7 +301,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                         width: 28, height: 28,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                         border: '2px solid #0D2118',
-                                        background: '#E8F5EC',
+                                        background: '#D4EDD8',
                                         cursor: 'pointer', padding: 0, borderRadius: 6,
                                         color: '#0D2118',
                                     }}
