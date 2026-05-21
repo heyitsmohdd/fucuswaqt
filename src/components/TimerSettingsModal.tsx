@@ -6,7 +6,6 @@ import { useTimerStore } from '@/stores/timerStore';
 import { TIMER_PRESETS, type TimerPresetKey } from '@/constants';
 import { cn } from '@/lib/utils';
 
-const INK = '#0D2118';
 const SAGE = '#85AB8B';
 
 interface TimerSettingsModalProps {
@@ -82,9 +81,8 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <style>{`
                 .nb-preset:hover { background: rgba(133,171,139,0.15) !important; }
-                .nb-save-btn:hover { transform: translateY(2px) !important; box-shadow: 2px 2px 0px ${INK} !important; }
-                .nb-save-btn:active { transform: translateY(3px) !important; box-shadow: 1px 1px 0px ${INK} !important; }
-                .nb-settings-input:focus { outline: none; box-shadow: 3px 3px 0px ${INK}; }
+                .nb-save-btn:hover { transform: translateY(1px) !important; opacity: 0.85 !important; }
+                .nb-settings-input:focus { outline: none; border-color: rgba(255,255,255,0.4) !important; }
                 .nb-settings-input::-webkit-outer-spin-button,
                 .nb-settings-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
                 .nb-settings-input[type=number] { -moz-appearance: textfield; }
@@ -105,9 +103,9 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                 )}
                 style={{
                     maxWidth: 340,
-                    background: '#FFFFFF',
-                    border: `2px solid ${INK}`,
-                    boxShadow: `6px 6px 0px ${INK}`,
+                    background: '#0A0A0A',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    boxShadow: 'none',
                     borderRadius: 0,
                     padding: 24,
                 }}
@@ -116,7 +114,7 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     marginBottom: 24,
                 }}>
-                    <h2 style={{ color: INK, fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
+                    <h2 style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>
                         Timer Settings
                     </h2>
                     <button
@@ -124,9 +122,9 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                         style={{
                             width: 32, height: 32,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: `2px solid ${INK}`, borderRadius: 8,
-                            background: '#FFFFFF', cursor: 'pointer',
-                            color: INK, padding: 0,
+                            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                            background: '#0A0A0A', cursor: 'pointer',
+                            color: '#FFFFFF', padding: 0,
                         }}
                         aria-label="Close"
                     >
@@ -138,7 +136,7 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                     <p style={{
                         fontSize: '0.7rem', fontWeight: 700,
                         textTransform: 'uppercase', letterSpacing: '0.1em',
-                        color: INK, opacity: 0.45, marginBottom: 10,
+                        color: '#FFFFFF', opacity: 0.45, marginBottom: 10,
                     }}>
                         Presets — Focus / Break / Long
                     </p>
@@ -152,17 +150,16 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                                     className="nb-preset"
                                     style={{
                                         padding: '10px 6px',
-                                        border: `2px solid ${INK}`,
-                                        background: isActive ? `rgba(133,171,139,0.2)` : '#FFFFFF',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        background: isActive ? `rgba(133,171,139,0.2)` : 'transparent',
                                         cursor: 'pointer',
-                                        boxShadow: isActive ? `2px 2px 0px ${INK}` : `2px 2px 0px ${INK}`,
                                         transition: 'background 0.12s',
                                     }}
                                 >
-                                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: INK, marginBottom: 2 }}>
+                                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#FFFFFF', marginBottom: 2 }}>
                                         {focus}m
                                     </div>
-                                    <div style={{ fontSize: '0.7rem', fontWeight: 600, color: INK, opacity: 0.5 }}>
+                                    <div style={{ fontSize: '0.7rem', fontWeight: 600, color: '#FFFFFF', opacity: 0.5 }}>
                                         {breakMin} / {long}
                                     </div>
                                 </button>
@@ -171,13 +168,13 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                     </div>
                 </div>
 
-                <div style={{ borderTop: `2px solid ${INK}`, margin: '16px 0' }} />
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', margin: '16px 0' }} />
 
                 <div>
                     <p style={{
                         fontSize: '0.7rem', fontWeight: 700,
                         textTransform: 'uppercase', letterSpacing: '0.1em',
-                        color: INK, opacity: 0.45, marginBottom: 10,
+                        color: '#FFFFFF', opacity: 0.45, marginBottom: 10,
                     }}>
                         Custom (minutes)
                     </p>
@@ -190,7 +187,7 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                             <div key={field}>
                                 <label style={{
                                     display: 'block', fontSize: '0.7rem',
-                                    fontWeight: 700, color: INK, opacity: 0.45, marginBottom: 6,
+                                    fontWeight: 700, color: '#FFFFFF', opacity: 0.45, marginBottom: 6,
                                 }}>
                                     {label}
                                 </label>
@@ -203,10 +200,10 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                                     className="nb-settings-input"
                                     style={{
                                         width: '100%', padding: '8px 6px',
-                                        border: `2px solid ${INK}`,
-                                        background: '#FFFFFF',
+                                        border: '1px solid rgba(255,255,255,0.15)',
+                                        background: '#0A0A0A',
                                         borderRadius: 0,
-                                        color: INK,
+                                        color: '#FFFFFF',
                                         fontSize: '0.875rem', fontWeight: 700,
                                         textAlign: 'center',
                                         transition: 'box-shadow 0.07s ease',
@@ -221,9 +218,9 @@ export function TimerSettingsModal({ isOpen, onClose }: TimerSettingsModalProps)
                         style={{
                             width: '100%', padding: '10px 0',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                            background: currentPreset === 'custom' ? SAGE : INK,
-                            border: `2px solid ${INK}`,
-                            boxShadow: `4px 4px 0px ${INK}`,
+                            background: currentPreset === 'custom' ? SAGE : 'rgba(255,255,255,0.1)',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            boxShadow: 'none',
                             borderRadius: 0,
                             color: '#FFFFFF',
                             fontWeight: 800, fontSize: '0.875rem',

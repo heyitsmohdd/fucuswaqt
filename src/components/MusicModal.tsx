@@ -198,9 +198,9 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
         >
             {/* Modal */}
             <div style={{
-                background: '#D4EDD8',
-                border: '2px solid #0D2118',
-                boxShadow: '4px 4px 0px #0D2118',
+                background: '#0A0A0A',
+                border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: 'none',
                 borderRadius: 16,
                 overflow: 'hidden',
             }}>
@@ -208,17 +208,17 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                 <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '14px 16px 12px',
-                    borderBottom: '2px solid #0D2118',
+                    borderBottom: '1px solid rgba(255,255,255,0.08)',
                 }}>
-                    <h2 style={{ color: '#0D2118', fontWeight: 800, fontSize: '0.95rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <h2 style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '0.95rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 8 }}>
                         YouTube
                         {musicHint.visible && (
                             <kbd style={{
                                 padding: '1px 7px',
                                 background: 'rgba(133,171,139,0.15)',
-                                border: '1.5px solid #0D2118',
+                                border: '1px solid rgba(255,255,255,0.1)',
                                 borderRadius: 5,
-                                color: '#0D2118',
+                                color: '#FFFFFF',
                                 fontSize: '0.7rem',
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
@@ -239,10 +239,10 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     placeholder="URL from YT..."
                                     style={{
                                         padding: '5px 10px',
-                                        background: '#D4EDD8',
-                                        border: '2px solid #0D2118',
+                                        background: '#0A0A0A',
+                                        border: '1px solid rgba(255,255,255,0.1)',
                                         borderRadius: 0,
-                                        color: '#0D2118',
+                                        color: '#FFFFFF',
                                         fontSize: '0.75rem',
                                         fontWeight: 600,
                                         outline: 'none',
@@ -255,7 +255,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     style={{
                                         width: 28, height: 28,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        border: '2px solid #0D2118',
+                                        border: '1px solid rgba(255,255,255,0.1)',
                                         background: '#85AB8B',
                                         cursor: 'pointer', padding: 0, borderRadius: 6,
                                     }}
@@ -268,13 +268,13 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     style={{
                                         width: 28, height: 28,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        border: '2px solid #0D2118',
-                                        background: '#D4EDD8',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        background: '#0A0A0A',
                                         cursor: 'pointer', padding: 0, borderRadius: 6,
                                     }}
                                     aria-label="Cancel"
                                 >
-                                    <X style={{ width: 13, height: 13, color: '#0D2118' }} />
+                                    <X style={{ width: 13, height: 13, color: '#FFFFFF' }} />
                                 </button>
                             </>
                         ) : (
@@ -284,10 +284,10 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     style={{
                                         display: 'flex', alignItems: 'center', gap: 5,
                                         padding: '4px 10px',
-                                        border: '1.5px solid rgba(13,33,24,0.35)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
                                         background: 'transparent',
                                         cursor: 'pointer',
-                                        color: '#0D2118', opacity: 0.6,
+                                        color: '#FFFFFF', opacity: 0.6,
                                         fontSize: '0.75rem', fontWeight: 700,
                                         borderRadius: 6,
                                     }}
@@ -300,10 +300,10 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
                                     style={{
                                         width: 28, height: 28,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        border: '2px solid #0D2118',
-                                        background: '#D4EDD8',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        background: '#0A0A0A',
                                         cursor: 'pointer', padding: 0, borderRadius: 6,
-                                        color: '#0D2118',
+                                        color: '#FFFFFF',
                                     }}
                                     aria-label="Close"
                                 >
@@ -316,7 +316,7 @@ export function MusicModal({ isOpen, onClose }: MusicModalProps) {
 
                 {/* Video Player */}
                 <div style={{ padding: '14px 16px 16px' }}>
-                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', border: '2px solid #0D2118' }}>
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000' }}>
                         <div ref={ytContainerRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
                     </div>
                 </div>

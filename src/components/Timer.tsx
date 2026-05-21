@@ -240,17 +240,17 @@ export function Timer() {
             {pendingMode && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
                     <style>{`
-                        .nb-cancel:hover { background: rgba(13,33,24,0.06) !important; }
-                        .nb-switch:hover { transform: translateY(2px) !important; box-shadow: 2px 2px 0px #0D2118 !important; }
-                        .nb-switch:active { transform: translateY(3px) !important; box-shadow: 1px 1px 0px #0D2118 !important; }
+                        .nb-cancel:hover { background: rgba(212,237,216,0.06) !important; }
+                        .nb-switch:hover { transform: translateY(2px) !important; box-shadow: none !important; }
+                        .nb-switch:active { transform: translateY(3px) !important; box-shadow: none !important; }
                     `}</style>
                     <div
                         className="animate-scale-in w-full"
                         style={{
                             maxWidth: 360,
-                            background: '#FFFFFF',
-                            border: '2px solid #0D2118',
-                            boxShadow: '6px 6px 0px #0D2118',
+                            background: '#0A0A0A',
+                            border: '1px solid rgba(255,255,255,0.15)',
+                            boxShadow: 'none',
                             borderRadius: 0,
                             padding: 28,
                             display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
@@ -258,18 +258,18 @@ export function Timer() {
                     >
                         <div style={{
                             width: 52, height: 52,
-                            border: '2px solid #0D2118',
-                            background: 'rgba(133,171,139,0.12)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            background: 'rgba(212,237,216,0.08)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             marginBottom: 16, fontSize: '1.5rem',
                         }}>
                             🥺
                         </div>
 
-                        <h3 style={{ color: '#0D2118', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: 8 }}>
+                        <h3 style={{ color: '#FFFFFF', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: 8 }}>
                             Hold on!
                         </h3>
-                        <p style={{ color: '#0D2118', opacity: 0.55, fontSize: '0.875rem', fontWeight: 600, lineHeight: 1.55, marginBottom: 24 }}>
+                        <p style={{ color: '#FFFFFF', opacity: 0.55, fontSize: '0.875rem', fontWeight: 600, lineHeight: 1.55, marginBottom: 24 }}>
                             You&apos;re mid-session. Switching now loses current progress.
                         </p>
 
@@ -279,9 +279,9 @@ export function Timer() {
                                 className="nb-cancel"
                                 style={{
                                     flex: 1, padding: '10px 0',
-                                    border: '2px solid #0D2118',
-                                    background: '#FFFFFF',
-                                    color: '#0D2118',
+                                    border: '1px solid rgba(255,255,255,0.15)',
+                                    background: '#0A0A0A',
+                                    color: '#FFFFFF',
                                     fontWeight: 700, fontSize: '0.875rem',
                                     cursor: 'pointer',
                                     transition: 'background 0.12s',
@@ -300,10 +300,10 @@ export function Timer() {
                                 className="nb-switch"
                                 style={{
                                     flex: 1, padding: '10px 0',
-                                    border: '2px solid #0D2118',
-                                    background: '#0D2118',
-                                    boxShadow: '4px 4px 0px #0D2118',
-                                    color: '#FFFFFF',
+                                    border: '1px solid rgba(255,255,255,0.15)',
+                                    background: '#D4EDD8',
+                                    boxShadow: 'none',
+                                    color: '#0A0A0A',
                                     fontWeight: 700, fontSize: '0.875rem',
                                     cursor: 'pointer',
                                     transition: 'transform 0.07s ease, box-shadow 0.07s ease',
