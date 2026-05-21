@@ -14,6 +14,7 @@ import { FullScreenToggle } from '@/components/FullScreenToggle';
 import { TimerSettingsModal } from '@/components/TimerSettingsModal';
 import { StatsModal } from '@/components/StatsModal';
 import { AuthModal } from '@/components/AuthModal';
+import { PixelMascot } from '@/components/PixelMascot';
 import { QuoteWidget } from '@/components/QuoteWidget';
 import { Logo } from '@/components/Logo';
 import { useAppStore } from '@/stores/appStore';
@@ -96,6 +97,7 @@ export default function Home() {
 
       {/* Icon Dock */}
       <IconDock />
+      <PixelMascot />
 
       {/* Quote Widget */}
       <QuoteWidget />
