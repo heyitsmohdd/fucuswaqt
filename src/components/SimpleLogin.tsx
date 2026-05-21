@@ -12,7 +12,7 @@ export default function SimpleLogin() {
     const handleGoogleLogin = async () => {
         try {
             setIsLoading(true);
-            await authClient.signIn.social({ provider: 'google', callbackURL: '/' });
+            await authClient.signIn.social({ provider: 'google', callbackURL: '/app' });
         } catch {
             setIsLoading(false);
         }
