@@ -19,7 +19,7 @@ export default function SimpleLogin() {
     return (
         <div className="w-full">
             <style>{`
-                .google-btn:hover:not(:disabled) { background: #f5f5f5 !important; }
+                .google-btn:hover:not(:disabled) { background: #222222 !important; }
             `}</style>
             <button
                 onClick={handleGoogleLogin}
@@ -28,10 +28,10 @@ export default function SimpleLogin() {
                 style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
                     width: '100%', padding: '14px 20px',
-                    background: '#FFFFFF',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    background: '#1A1A1A',
+                    border: '1px solid rgba(255,255,255,0.12)',
                     borderRadius: 10,
-                    color: '#111111',
+                    color: '#FFFFFF',
                     fontSize: '0.95rem', fontWeight: 700,
                     cursor: isLoading ? 'not-allowed' : 'pointer',
                     opacity: isLoading ? 0.6 : 1,
@@ -39,7 +39,7 @@ export default function SimpleLogin() {
                 }}
             >
                 {isLoading ? (
-                    <Loader2 style={{ width: 20, height: 20, color: '#111111' }} className="animate-spin" />
+                    <Loader2 style={{ width: 20, height: 20, color: '#FFFFFF' }} className="animate-spin" />
                 ) : (
                     <>
                         <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
