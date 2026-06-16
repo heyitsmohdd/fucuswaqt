@@ -45,6 +45,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
         <link rel="dns-prefetch" href="https://d8j0ntlcm91z4.cloudfront.net" />
+        <link rel="preload" as="video" href="/videos/catt.mp4" />
       </head>
       <body className={`${inter.variable} antialiased`}>
         <ErrorBoundary>
