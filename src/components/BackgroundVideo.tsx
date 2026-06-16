@@ -7,9 +7,10 @@ import { Loader2, AlertCircle } from 'lucide-react';
 interface BackgroundVideoProps {
     videoUrl: string;
     posterUrl?: string;
+    webmUrl?: string;
 }
 
-export function BackgroundVideo({ videoUrl, posterUrl }: BackgroundVideoProps) {
+export function BackgroundVideo({ videoUrl, posterUrl, webmUrl }: BackgroundVideoProps) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -100,6 +101,7 @@ export function BackgroundVideo({ videoUrl, posterUrl }: BackgroundVideoProps) {
                     onLoadedData={handleVideoLoad}
                     onError={handleVideoError}
                 >
+                    {webmUrl && <source src={webmUrl} type="video/webm" />}
                     <source src={currentUrl} type="video/mp4" />
                 </video>
             )}

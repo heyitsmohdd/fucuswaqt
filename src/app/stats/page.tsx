@@ -19,11 +19,12 @@ export default function StatsPage() {
         ? resolvedVideo.url
         : (currentImage?.url ?? IMAGE_BACKGROUNDS[0].url);
     const backgroundPoster = currentBackgroundType === 'video' ? resolvedVideo.thumbnail : undefined;
+    const backgroundWebmUrl = currentBackgroundType === 'video' ? resolvedVideo.webmUrl : undefined;
 
     return (
         <div className="relative h-screen w-screen overflow-hidden">
             {currentBackgroundType === 'video' ? (
-                <BackgroundVideo videoUrl={backgroundUrl} posterUrl={backgroundPoster} />
+                <BackgroundVideo videoUrl={backgroundUrl} posterUrl={backgroundPoster} webmUrl={backgroundWebmUrl} />
             ) : (
                 <>
                     <div

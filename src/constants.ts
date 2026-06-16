@@ -4,6 +4,7 @@ export interface VideoBackground {
   id: string;
   name: string;
   url: string;
+  webmUrl?: string;
   thumbnail?: string;
 }
 
