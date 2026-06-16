@@ -14,14 +14,16 @@ export default function StatsPage() {
 
     const currentVideo = VIDEO_BACKGROUNDS.find(v => v.id === currentBackgroundId);
     const currentImage = IMAGE_BACKGROUNDS.find(i => i.id === currentBackgroundId);
+    const resolvedVideo = currentVideo ?? VIDEO_BACKGROUNDS[0];
     const backgroundUrl = currentBackgroundType === 'video'
-        ? (currentVideo?.url || VIDEO_BACKGROUNDS[0].url)
-        : (currentImage?.url || IMAGE_BACKGROUNDS[0].url);
+        ? resolvedVideo.url
+        : (currentImage?.url ?? IMAGE_BACKGROUNDS[0].url);
+    const backgroundPoster = currentBackgroundType === 'video' ? resolvedVideo.thumbnail : undefined;
 
     return (
         <div className="relative h-screen w-screen overflow-hidden">
             {currentBackgroundType === 'video' ? (
-                <BackgroundVideo videoUrl={backgroundUrl} />
+                <BackgroundVideo videoUrl={backgroundUrl} posterUrl={backgroundPoster} />
             ) : (
                 <>
                     <div

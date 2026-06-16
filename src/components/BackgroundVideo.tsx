@@ -6,9 +6,10 @@ import { Loader2, AlertCircle } from 'lucide-react';
 
 interface BackgroundVideoProps {
     videoUrl: string;
+    posterUrl?: string;
 }
 
-export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
+export function BackgroundVideo({ videoUrl, posterUrl }: BackgroundVideoProps) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -91,6 +92,7 @@ export function BackgroundVideo({ videoUrl }: BackgroundVideoProps) {
                     loop
                     muted
                     playsInline
+                    poster={posterUrl}
                     className={cn(
                         'fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-500',
                         isLoaded ? 'opacity-100' : 'opacity-0'
