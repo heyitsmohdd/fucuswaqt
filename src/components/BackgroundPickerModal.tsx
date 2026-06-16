@@ -25,6 +25,7 @@ type TabType = 'motion' | 'stills';
 export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModalProps) {
     const [activeTab, setActiveTab] = useState<TabType>('motion');
     const [loadedVideos, setLoadedVideos] = useState<Set<string>>(new Set());
+    const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [heroTransition, setHeroTransition] = useState<HeroTransition | null>(null);
@@ -196,11 +197,14 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                     {VIDEO_BACKGROUNDS.map((video) => {
                                         const isLoaded = loadedVideos.has(video.id);
                                         const isSelected = currentBackgroundType === 'video' && currentBackgroundId === video.id;
+                                        const isHovered = hoveredVideoId === video.id;
 
                                         return (
                                             <button
                                                 key={video.id}
                                                 onClick={(e) => startHero(video.id, 'video', video.url, e)}
+                                                onMouseEnter={() => setHoveredVideoId(video.id)}
+                                                onMouseLeave={() => setHoveredVideoId(null)}
                                                 className={cn(
                                                     'group relative aspect-video rounded-xl overflow-hidden border transition-all duration-200 hover:scale-[1.03]',
                                                     isSelected
@@ -209,24 +213,28 @@ export function BackgroundPickerModal({ isOpen, onClose }: BackgroundPickerModal
                                                 )}
                                                 aria-label={`Select ${video.name} background`}
                                             >
-                                                {!isLoaded && (
-                                                    <div className="absolute inset-0 bg-white/5 animate-pulse" />
-                                                )}
+                                                <div className={cn(
+                                                    'absolute inset-0 bg-white/5 transition-opacity duration-300',
+                                                    isHovered && isLoaded ? 'opacity-0' : isHovered ? 'animate-pulse' : 'opacity-100'
+                                                )} />
 
-                                                <video
-                                                    src={video.url}
-                                                    className={cn(
-                                                        'w-full h-full object-cover transition-opacity duration-300',
-                                                        isLoaded ? 'opacity-100' : 'opacity-0'
-                                                    )}
-                                                    autoPlay
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                    preload="auto"
-                                                    aria-hidden="true"
-                                                    onLoadedMetadata={() => handleVideoLoad(video.id)}
-                                                />
+                                                {isHovered && (
+                                                    <video
+                                                        key={video.id}
+                                                        src={video.url}
+                                                        className={cn(
+                                                            'w-full h-full object-cover transition-opacity duration-300',
+                                                            isLoaded ? 'opacity-100' : 'opacity-0'
+                                                        )}
+                                                        autoPlay
+                                                        muted
+                                                        loop
+                                                        playsInline
+                                                        preload="auto"
+                                                        aria-hidden="true"
+                                                        onLoadedMetadata={() => handleVideoLoad(video.id)}
+                                                    />
+                                                )}
 
                                                 <div className={cn(
                                                     'absolute inset-0 flex items-center justify-center transition-all duration-200',
