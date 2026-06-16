@@ -31,41 +31,49 @@ export const VIDEO_BACKGROUNDS: VideoBackground[] = [
     id: 'catt',
     name: 'Lofi Dock',
     url: '/videos/catt.mp4',
+    thumbnail: '/videos/thumbnails/catt.jpg',
   },
   {
     id: 'night',
     name: 'Starlit Night',
     url: '/videos/night.mp4',
+    thumbnail: '/videos/thumbnails/night.jpg',
   },
   {
     id: 'cozy',
     name: 'Cozy Fireplace',
     url: '/videos/cozy.mp4',
+    thumbnail: '/videos/thumbnails/cozy.jpg',
   },
   {
     id: 'good',
     name: 'Mountain Lake',
     url: '/videos/good.mp4',
+    thumbnail: '/videos/thumbnails/good.jpg',
   },
   {
     id: 'working',
     name: 'Night Grind',
     url: '/videos/working.mp4',
+    thumbnail: '/videos/thumbnails/working.jpg',
   },
   {
     id: 'rain',
     name: 'Rainy Window',
     url: '/videos/rain.mp4',
+    thumbnail: '/videos/thumbnails/rain.jpg',
   },
   {
     id: 'sky',
     name: 'Cave Fire',
     url: '/videos/sky.mp4',
+    thumbnail: '/videos/thumbnails/sky.jpg',
   },
   {
     id: 'city',
     name: 'City Lights',
     url: '/videos/city.mp4',
+    thumbnail: '/videos/thumbnails/city.jpg',
   },
 ];
 
